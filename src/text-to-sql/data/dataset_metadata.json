@@ -1,0 +1,36 @@
+{
+  "db_path": "/Users/ghrodri/Local/Final_Project/src/db/financial.duckdb",
+  "counts": {
+    "total": 8836,
+    "train": 7068,
+    "val": 883,
+    "test": 885
+  },
+  "intents": [
+    "adjusted_price",
+    "avg_between_dates",
+    "calendar_filter",
+    "corporate_actions",
+    "delta_window",
+    "dividend_yield",
+    "join_dividends",
+    "join_splits",
+    "latest_point",
+    "membership",
+    "point_lookup",
+    "profile",
+    "resample_monthly",
+    "resample_weekly",
+    "sector_aggregate",
+    "top_k",
+    "ytd"
+  ],
+  "seed": 321,
+  "per_intent_requested": 750,
+  "validation_stats": {
+    "raw": 12750,
+    "kept": 8836,
+    "failed_runtime": 0,
+    "failed_empty_or_disallowed": 3
+  }
+}

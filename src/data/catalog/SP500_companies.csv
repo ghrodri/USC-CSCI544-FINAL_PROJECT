@@ -1,0 +1,471 @@
+Exchange,Symbol,Shortname,Longname,Sector,Industry,City,State,Country
+NMS,AAPL,Apple Inc.,Apple Inc.,Technology,Consumer Electronics,Cupertino,CA,United States
+NMS,NVDA,NVIDIA Corporation,NVIDIA Corporation,Technology,Semiconductors,Santa Clara,CA,United States
+NMS,MSFT,Microsoft Corporation,Microsoft Corporation,Technology,Software - Infrastructure,Redmond,WA,United States
+NMS,AMZN,"Amazon.com, Inc.","Amazon.com, Inc.",Consumer Cyclical,Internet Retail,Seattle,WA,United States
+NMS,GOOGL,Alphabet Inc.,Alphabet Inc.,Communication Services,Internet Content & Information,Mountain View,CA,United States
+NMS,GOOG,Alphabet Inc.,Alphabet Inc.,Communication Services,Internet Content & Information,Mountain View,CA,United States
+NMS,META,"Meta Platforms, Inc.","Meta Platforms, Inc.",Communication Services,Internet Content & Information,Menlo Park,CA,United States
+NMS,TSLA,"Tesla, Inc.","Tesla, Inc.",Consumer Cyclical,Auto Manufacturers,Austin,TX,United States
+NMS,AVGO,Broadcom Inc.,Broadcom Inc.,Technology,Semiconductors,Palo Alto,CA,United States
+NYQ,WMT,Walmart Inc.,Walmart Inc.,Consumer Defensive,Discount Stores,Bentonville,AR,United States
+NYQ,LLY,Eli Lilly and Company,Eli Lilly and Company,Healthcare,Drug Manufacturers - General,Indianapolis,IN,United States
+NYQ,JPM,JP Morgan Chase & Co.,JPMorgan Chase & Co.,Financial Services,Banks - Diversified,New York,NY,United States
+NYQ,V,Visa Inc.,Visa Inc.,Financial Services,Credit Services,San Francisco,CA,United States
+NYQ,MA,Mastercard Incorporated,Mastercard Incorporated,Financial Services,Credit Services,Purchase,NY,United States
+NYQ,ORCL,Oracle Corporation,Oracle Corporation,Technology,Software - Infrastructure,Austin,TX,United States
+NYQ,XOM,Exxon Mobil Corporation,Exxon Mobil Corporation,Energy,Oil & Gas Integrated,Spring,TX,United States
+NYQ,UNH,UnitedHealth Group Incorporated,UnitedHealth Group Incorporated,Healthcare,Healthcare Plans,Minnetonka,MN,United States
+NMS,COST,Costco Wholesale Corporation,Costco Wholesale Corporation,Consumer Defensive,Discount Stores,Issaquah,WA,United States
+NYQ,PG,Procter & Gamble Company (The),The Procter & Gamble Company,Consumer Defensive,Household & Personal Products,Cincinnati,OH,United States
+NYQ,HD,"Home Depot, Inc. (The)","The Home Depot, Inc.",Consumer Cyclical,Home Improvement Retail,Atlanta,GA,United States
+NMS,NFLX,"Netflix, Inc.","Netflix, Inc.",Communication Services,Entertainment,Los Gatos,CA,United States
+NYQ,JNJ,Johnson & Johnson,Johnson & Johnson,Healthcare,Drug Manufacturers - General,New Brunswick,NJ,United States
+NYQ,BAC,Bank of America Corporation,Bank of America Corporation,Financial Services,Banks - Diversified,Charlotte,NC,United States
+NYQ,CRM,"Salesforce, Inc.","Salesforce, Inc.",Technology,Software - Application,San Francisco,CA,United States
+NYQ,ABBV,AbbVie Inc.,AbbVie Inc.,Healthcare,Drug Manufacturers - General,North Chicago,IL,United States
+NYQ,KO,Coca-Cola Company (The),The Coca-Cola Company,Consumer Defensive,Beverages - Non-Alcoholic,Atlanta,GA,United States
+NMS,TMUS,"T-Mobile US, Inc.","T-Mobile US, Inc.",Communication Services,Telecom Services,Bellevue,WA,United States
+NYQ,CVX,Chevron Corporation,Chevron Corporation,Energy,Oil & Gas Integrated,San Ramon,CA,United States
+NYQ,MRK,"Merck & Company, Inc.","Merck & Co., Inc.",Healthcare,Drug Manufacturers - General,Rahway,NJ,United States
+NYQ,WFC,Wells Fargo & Company,Wells Fargo & Company,Financial Services,Banks - Diversified,San Francisco,CA,United States
+NMS,CSCO,"Cisco Systems, Inc.","Cisco Systems, Inc.",Technology,Communication Equipment,San Jose,CA,United States
+NYQ,NOW,"ServiceNow, Inc.","ServiceNow, Inc.",Technology,Software - Application,Santa Clara,CA,United States
+NYQ,AXP,American Express Company,American Express Company,Financial Services,Credit Services,New York,NY,United States
+NYQ,MCD,McDonald's Corporation,McDonald's Corporation,Consumer Cyclical,Restaurants,Chicago,IL,United States
+NMS,PEP,"Pepsico, Inc.","PepsiCo, Inc.",Consumer Defensive,Beverages - Non-Alcoholic,Purchase,NY,United States
+NYQ,BX,Blackstone Inc.,Blackstone Inc.,Financial Services,Asset Management,New York,NY,United States
+NYQ,IBM,International Business Machines,International Business Machines Corporation,Technology,Information Technology Services,Armonk,NY,United States
+NYQ,DIS,Walt Disney Company (The),The Walt Disney Company,Communication Services,Entertainment,Burbank,CA,United States
+NYQ,TMO,Thermo Fisher Scientific Inc,Thermo Fisher Scientific Inc.,Healthcare,Diagnostics & Research,Waltham,MA,United States
+NYQ,MS,Morgan Stanley,Morgan Stanley,Financial Services,Capital Markets,New York,NY,United States
+NYQ,ABT,Abbott Laboratories,Abbott Laboratories,Healthcare,Medical Devices,North Chicago,IL,United States
+NMS,ADBE,Adobe Inc.,Adobe Inc.,Technology,Software - Infrastructure,San Jose,CA,United States
+NMS,AMD,"Advanced Micro Devices, Inc.","Advanced Micro Devices, Inc.",Technology,Semiconductors,Santa Clara,CA,United States
+NYQ,PM,Philip Morris International Inc,Philip Morris International Inc.,Consumer Defensive,Tobacco,Stamford,CT,United States
+NMS,ISRG,"Intuitive Surgical, Inc.","Intuitive Surgical, Inc.",Healthcare,Medical Instruments & Supplies,Sunnyvale,CA,United States
+NMS,PLTR,Palantir Technologies Inc.,Palantir Technologies Inc.,Technology,Software - Infrastructure,Denver,CO,United States
+NYQ,GE,GE Aerospace,GE Aerospace,Industrials,Aerospace & Defense,Evendale,OH,United States
+NMS,INTU,Intuit Inc.,Intuit Inc.,Technology,Software - Application,Mountain View,CA,United States
+NYQ,GS,"Goldman Sachs Group, Inc. (The)","The Goldman Sachs Group, Inc.",Financial Services,Capital Markets,New York,NY,United States
+NYQ,CAT,"Caterpillar, Inc.",Caterpillar Inc.,Industrials,Farm & Heavy Construction Machinery,Irving,TX,United States
+NMS,TXN,Texas Instruments Incorporated,Texas Instruments Incorporated,Technology,Semiconductors,Dallas,TX,United States
+NMS,QCOM,QUALCOMM Incorporated,QUALCOMM Incorporated,Technology,Semiconductors,San Diego,CA,United States
+NYQ,VZ,Verizon Communications Inc.,Verizon Communications Inc.,Communication Services,Telecom Services,New York,NY,United States
+NMS,BKNG,Booking Holdings Inc. Common St,Booking Holdings Inc.,Consumer Cyclical,Travel Services,Norwalk,CT,United States
+NYQ,DHR,Danaher Corporation,Danaher Corporation,Healthcare,Diagnostics & Research,Washington,DC,United States
+NYQ,T,AT&T Inc.,AT&T Inc.,Communication Services,Telecom Services,Dallas,TX,United States
+NYQ,BLK,"BlackRock, Inc.","BlackRock, Inc.",Financial Services,Asset Management,New York,NY,United States
+NYQ,RTX,RTX Corporation,RTX Corporation,Industrials,Aerospace & Defense,Arlington,VA,United States
+NYQ,SPGI,S&P Global Inc.,S&P Global Inc.,Financial Services,Financial Data & Stock Exchanges,New York,NY,United States
+NYQ,PFE,"Pfizer, Inc.",Pfizer Inc.,Healthcare,Drug Manufacturers - General,New York,NY,United States
+NMS,HON,Honeywell International Inc.,Honeywell International Inc.,Industrials,Conglomerates,Charlotte,NC,United States
+NYQ,NEE,"NextEra Energy, Inc.","NextEra Energy, Inc.",Utilities,Utilities - Regulated Electric,Juno Beach,FL,United States
+NMS,CMCSA,Comcast Corporation,Comcast Corporation,Communication Services,Telecom Services,Philadelphia,PA,United States
+NYQ,ANET,"Arista Networks, Inc.",Arista Networks Inc,Technology,Computer Hardware,Santa Clara,CA,United States
+NMS,AMGN,Amgen Inc.,Amgen Inc.,Healthcare,Drug Manufacturers - General,Thousand Oaks,CA,United States
+NYQ,PGR,Progressive Corporation (The),The Progressive Corporation,Financial Services,Insurance - Property & Casualty,Mayfield Village,OH,United States
+NYQ,LOW,"Lowe's Companies, Inc.","Lowe's Companies, Inc.",Consumer Cyclical,Home Improvement Retail,Mooresville,NC,United States
+NYQ,SYK,Stryker Corporation,Stryker Corporation,Healthcare,Medical Devices,Portage,MI,United States
+NYQ,UNP,Union Pacific Corporation,Union Pacific Corporation,Industrials,Railroads,Omaha,NE,United States
+NYQ,TJX,"TJX Companies, Inc. (The)","The TJX Companies, Inc.",Consumer Cyclical,Apparel Retail,Framingham,MA,United States
+NYQ,KKR,KKR & Co. Inc.,KKR & Co. Inc.,Financial Services,Asset Management,New York,NY,United States
+NYQ,SCHW,Charles Schwab Corporation (The,The Charles Schwab Corporation,Financial Services,Capital Markets,Westlake,TX,United States
+NMS,AMAT,"Applied Materials, Inc.","Applied Materials, Inc.",Technology,Semiconductor Equipment & Materials,Santa Clara,CA,United States
+NYQ,BA,Boeing Company (The),The Boeing Company,Industrials,Aerospace & Defense,Arlington,VA,United States
+NYQ,BSX,Boston Scientific Corporation,Boston Scientific Corporation,Healthcare,Medical Devices,Marlborough,MA,United States
+NYQ,C,"Citigroup, Inc.",Citigroup Inc.,Financial Services,Banks - Diversified,New York,NY,United States
+NYQ,UBER,"Uber Technologies, Inc.","Uber Technologies, Inc.",Technology,Software - Application,San Francisco,CA,United States
+NYQ,COP,ConocoPhillips,ConocoPhillips,Energy,Oil & Gas E&P,Houston,TX,United States
+NMS,PANW,"Palo Alto Networks, Inc.","Palo Alto Networks, Inc.",Technology,Software - Infrastructure,Santa Clara,CA,United States
+NMS,ADP,"Automatic Data Processing, Inc.","Automatic Data Processing, Inc.",Technology,Software - Application,Roseland,NJ,United States
+NYQ,DE,Deere & Company,Deere & Company,Industrials,Farm & Heavy Construction Machinery,Moline,IL,United States
+NYQ,FI,"Fiserv, Inc.","Fiserv, Inc.",Technology,Information Technology Services,Milwaukee,WI,United States
+NYQ,BMY,Bristol-Myers Squibb Company,Bristol-Myers Squibb Company,Healthcare,Drug Manufacturers - General,Princeton,NJ,United States
+NYQ,LMT,Lockheed Martin Corporation,Lockheed Martin Corporation,Industrials,Aerospace & Defense,Bethesda,MD,United States
+NMS,GILD,"Gilead Sciences, Inc.","Gilead Sciences, Inc.",Healthcare,Drug Manufacturers - General,Foster City,CA,United States
+NYQ,NKE,"Nike, Inc.","NIKE, Inc.",Consumer Cyclical,Footwear & Accessories,Beaverton,OR,United States
+NYQ,UPS,"United Parcel Service, Inc.","United Parcel Service, Inc.",Industrials,Integrated Freight & Logistics,Atlanta,GA,United States
+NMS,ADI,"Analog Devices, Inc.","Analog Devices, Inc.",Technology,Semiconductors,Wilmington,MA,United States
+NYQ,MMC,"Marsh & McLennan Companies, Inc","Marsh & McLennan Companies, Inc.",Financial Services,Insurance Brokers,New York,NY,United States
+NMS,VRTX,Vertex Pharmaceuticals Incorpor,Vertex Pharmaceuticals Incorporated,Healthcare,Biotechnology,Boston,MA,United States
+NMS,MU,"Micron Technology, Inc.","Micron Technology, Inc.",Technology,Semiconductors,Boise,ID,United States
+NMS,SBUX,Starbucks Corporation,Starbucks Corporation,Consumer Cyclical,Restaurants,Seattle,WA,United States
+NYQ,PLD,"Prologis, Inc.","Prologis, Inc.",Real Estate,REIT - Industrial,San Francisco,CA,United States
+NYQ,GEV,GE Vernova Inc.,GE Vernova Inc.,Utilities,Utilities - Renewable,Cambridge,MA,United States
+NMS,LRCX,Lam Research Corporation,Lam Research Corporation,Technology,Semiconductor Equipment & Materials,Fremont,CA,United States
+NYQ,MO,"Altria Group, Inc.","Altria Group, Inc.",Consumer Defensive,Tobacco,Richmond,VA,United States
+NYQ,SO,Southern Company (The),The Southern Company,Utilities,Utilities - Regulated Electric,Atlanta,GA,United States
+NMS,EQIX,"Equinix, Inc.","Equinix, Inc.",Real Estate,REIT - Specialty,Redwood City,CA,United States
+NMS,CRWD,"CrowdStrike Holdings, Inc.","CrowdStrike Holdings, Inc.",Technology,Software - Infrastructure,Austin,TX,United States
+NMS,PYPL,"PayPal Holdings, Inc.","PayPal Holdings, Inc.",Financial Services,Credit Services,San Jose,CA,United States
+NYQ,SHW,Sherwin-Williams Company (The),The Sherwin-Williams Company,Basic Materials,Specialty Chemicals,Cleveland,OH,United States
+NYQ,ICE,Intercontinental Exchange Inc.,"Intercontinental Exchange, Inc.",Financial Services,Financial Data & Stock Exchanges,Atlanta,GA,United States
+NMS,CME,CME Group Inc.,CME Group Inc.,Financial Services,Financial Data & Stock Exchanges,Chicago,IL,United States
+NYQ,AMT,American Tower Corporation (REI,American Tower Corporation,Real Estate,REIT - Specialty,Boston,MA,United States
+NYQ,APH,Amphenol Corporation,Amphenol Corporation,Technology,Electronic Components,Wallingford,CT,United States
+NYQ,ELV,"Elevance Health, Inc.","Elevance Health, Inc.",Healthcare,Healthcare Plans,Indianapolis,IN,United States
+NYQ,MCO,Moody's Corporation,Moody's Corporation,Financial Services,Financial Data & Stock Exchanges,New York,NY,United States
+NYQ,CMG,"Chipotle Mexican Grill, Inc.","Chipotle Mexican Grill, Inc.",Consumer Cyclical,Restaurants,Newport Beach,CA,United States
+NMS,INTC,Intel Corporation,Intel Corporation,Technology,Semiconductors,Santa Clara,CA,United States
+NMS,KLAC,KLA Corporation,KLA Corporation,Technology,Semiconductor Equipment & Materials,Milpitas,CA,United States
+NMS,ABNB,"Airbnb, Inc.","Airbnb, Inc.",Consumer Cyclical,Travel Services,San Francisco,CA,United States
+NYQ,DUK,Duke Energy Corporation (Holdin,Duke Energy Corporation,Utilities,Utilities - Regulated Electric,Charlotte,NC,United States
+NYQ,PH,Parker-Hannifin Corporation,Parker-Hannifin Corporation,Industrials,Specialty Industrial Machinery,Cleveland,OH,United States
+NMS,CDNS,"Cadence Design Systems, Inc.","Cadence Design Systems, Inc.",Technology,Software - Application,San Jose,CA,United States
+NYQ,WM,"Waste Management, Inc.","Waste Management, Inc.",Industrials,Waste Management,Houston,TX,United States
+NYQ,DELL,Dell Technologies Inc.,Dell Technologies Inc.,Technology,Computer Hardware,Round Rock,TX,United States
+NMS,MDLZ,"Mondelez International, Inc.","Mondelez International, Inc.",Consumer Defensive,Confectioners,Chicago,IL,United States
+NMS,MAR,Marriott International,"Marriott International, Inc.",Consumer Cyclical,Lodging,Bethesda,MD,United States
+NYQ,MSI,"Motorola Solutions, Inc.","Motorola Solutions, Inc.",Technology,Communication Equipment,Chicago,IL,United States
+NYQ,WELL,Welltower Inc.,Welltower Inc.,Real Estate,REIT - Healthcare Facilities,Toledo,OH,United States
+NMS,REGN,"Regeneron Pharmaceuticals, Inc.","Regeneron Pharmaceuticals, Inc.",Healthcare,Biotechnology,Tarrytown,NY,United States
+NYQ,CI,The Cigna Group,The Cigna Group,Healthcare,Healthcare Plans,Bloomfield,CT,United States
+NYQ,HCA,"HCA Healthcare, Inc.","HCA Healthcare, Inc.",Healthcare,Medical Care Facilities,Nashville,TN,United States
+NYQ,PNC,"PNC Financial Services Group, I","The PNC Financial Services Group, Inc.",Financial Services,Banks - Regional,Pittsburgh,PA,United States
+NYQ,ITW,Illinois Tool Works Inc.,Illinois Tool Works Inc.,Industrials,Specialty Industrial Machinery,Glenview,IL,United States
+NMS,SNPS,"Synopsys, Inc.","Synopsys, Inc.",Technology,Software - Infrastructure,Sunnyvale,CA,United States
+NMS,CTAS,Cintas Corporation,Cintas Corporation,Industrials,Specialty Business Services,Cincinnati,OH,United States
+NYQ,CL,Colgate-Palmolive Company,Colgate-Palmolive Company,Consumer Defensive,Household & Personal Products,New York,NY,United States
+NYQ,USB,U.S. Bancorp,U.S. Bancorp,Financial Services,Banks - Regional,Minneapolis,MN,United States
+NMS,FTNT,"Fortinet, Inc.","Fortinet, Inc.",Technology,Software - Infrastructure,Sunnyvale,CA,United States
+NYQ,MCK,McKesson Corporation,McKesson Corporation,Healthcare,Medical Distribution,Irving,TX,United States
+NYQ,GD,General Dynamics Corporation,General Dynamics Corporation,Industrials,Aerospace & Defense,Reston,VA,United States
+NYQ,TDG,Transdigm Group Incorporated,TransDigm Group Incorporated,Industrials,Aerospace & Defense,Cleveland,OH,United States
+NMS,CEG,Constellation Energy Corporatio,Constellation Energy Corporation,Utilities,Utilities - Renewable,Baltimore,MD,United States
+NYQ,AJG,Arthur J. Gallagher & Co.,Arthur J. Gallagher & Co.,Financial Services,Insurance Brokers,Rolling Meadows,IL,United States
+NYQ,EMR,Emerson Electric Company,Emerson Electric Co.,Industrials,Specialty Industrial Machinery,Saint Louis,MO,United States
+NYQ,MMM,3M Company,3M Company,Industrials,Conglomerates,Saint Paul,MN,United States
+NMS,ORLY,"O'Reilly Automotive, Inc.","O'Reilly Automotive, Inc.",Consumer Cyclical,Specialty Retail,Springfield,MO,United States
+NYQ,NOC,Northrop Grumman Corporation,Northrop Grumman Corporation,Industrials,Aerospace & Defense,Falls Church,VA,United States
+NYQ,COF,Capital One Financial Corporati,Capital One Financial Corporation,Financial Services,Credit Services,McLean,VA,United States
+NYQ,ECL,Ecolab Inc.,Ecolab Inc.,Basic Materials,Specialty Chemicals,Saint Paul,MN,United States
+NYQ,EOG,"EOG Resources, Inc.","EOG Resources, Inc.",Energy,Oil & Gas E&P,Houston,TX,United States
+NYQ,FDX,FedEx Corporation,FedEx Corporation,Industrials,Integrated Freight & Logistics,Memphis,TN,United States
+NYQ,BDX,"Becton, Dickinson and Company","Becton, Dickinson and Company",Healthcare,Medical Instruments & Supplies,Franklin Lakes,NJ,United States
+NYQ,APD,"Air Products and Chemicals, Inc","Air Products and Chemicals, Inc.",Basic Materials,Specialty Chemicals,Allentown,PA,United States
+NYQ,WMB,"Williams Companies, Inc. (The)","The Williams Companies, Inc.",Energy,Oil & Gas Midstream,Tulsa,OK,United States
+NYQ,SPG,"Simon Property Group, Inc.","Simon Property Group, Inc.",Real Estate,REIT - Retail,Indianapolis,IN,United States
+NMS,ADSK,"Autodesk, Inc.","Autodesk, Inc.",Technology,Software - Application,San Francisco,CA,United States
+NYQ,RCL,Royal Caribbean Cruises Ltd.,Royal Caribbean Cruises Ltd.,Consumer Cyclical,Travel Services,Miami,FL,United States
+NYQ,RSG,"Republic Services, Inc.","Republic Services, Inc.",Industrials,Waste Management,Phoenix,AZ,United States
+NYQ,CARR,Carrier Global Corporation,Carrier Global Corporation,Industrials,Building Products & Equipment,Palm Beach Gardens,FL,United States
+NMS,CSX,CSX Corporation,CSX Corporation,Industrials,Railroads,Jacksonville,FL,United States
+NYQ,HLT,Hilton Worldwide Holdings Inc.,Hilton Worldwide Holdings Inc.,Consumer Cyclical,Lodging,McLean,VA,United States
+NYQ,DLR,"Digital Realty Trust, Inc.","Digital Realty Trust, Inc.",Real Estate,REIT - Specialty,Austin,TX,United States
+NYQ,TGT,Target Corporation,Target Corporation,Consumer Defensive,Discount Stores,Minneapolis,MN,United States
+NYQ,KMI,"Kinder Morgan, Inc.","Kinder Morgan, Inc.",Energy,Oil & Gas Midstream,Houston,TX,United States
+NYQ,OKE,"ONEOK, Inc.","ONEOK, Inc.",Energy,Oil & Gas Midstream,Tulsa,OK,United States
+NYQ,TFC,Truist Financial Corporation,Truist Financial Corporation,Financial Services,Banks - Regional,Charlotte,NC,United States
+NYQ,AFL,AFLAC Incorporated,Aflac Incorporated,Financial Services,Insurance - Life,Columbus,GA,United States
+NYQ,GM,General Motors Company,General Motors Company,Consumer Cyclical,Auto Manufacturers,Detroit,MI,United States
+NYQ,BK,The Bank of New York Mellon Cor,The Bank of New York Mellon Corporation,Financial Services,Banks - Diversified,New York,NY,United States
+NMS,ROP,"Roper Technologies, Inc.","Roper Technologies, Inc.",Technology,Software - Application,Sarasota,FL,United States
+NYQ,MET,"MetLife, Inc.","MetLife, Inc.",Financial Services,Insurance - Life,New York,NY,United States
+NMS,CPRT,"Copart, Inc.","Copart, Inc.",Industrials,Specialty Business Services,Dallas,TX,United States
+NYQ,FCX,"Freeport-McMoRan, Inc.",Freeport-McMoRan Inc.,Basic Materials,Copper,Phoenix,AZ,United States
+NYQ,CVS,CVS Health Corporation,CVS Health Corporation,Healthcare,Healthcare Plans,Woonsocket,RI,United States
+NMS,PCAR,PACCAR Inc.,PACCAR Inc,Industrials,Farm & Heavy Construction Machinery,Bellevue,WA,United States
+NYQ,SRE,DBA Sempra,Sempra,Utilities,Utilities - Diversified,San Diego,CA,United States
+NYQ,AZO,"AutoZone, Inc.","AutoZone, Inc.",Consumer Cyclical,Specialty Retail,Memphis,TN,United States
+NYQ,TRV,"The Travelers Companies, Inc.","The Travelers Companies, Inc.",Financial Services,Insurance - Property & Casualty,New York,NY,United States
+NYQ,GWW,"W.W. Grainger, Inc.","W.W. Grainger, Inc.",Industrials,Industrial Distribution,Lake Forest,IL,United States
+NYQ,NSC,Norfolk Southern Corporation,Norfolk Southern Corporation,Industrials,Railroads,Atlanta,GA,United States
+NYQ,PSA,Public Storage,Public Storage,Real Estate,REIT - Industrial,Glendale,CA,United States
+NYQ,SLB,Schlumberger N.V.,Schlumberger Limited,Energy,Oil & Gas Equipment & Services,Houston,TX,United States
+NYQ,AMP,"Ameriprise Financial, Inc.","Ameriprise Financial, Inc.",Financial Services,Asset Management,Minneapolis,MN,United States
+NYQ,ALL,Allstate Corporation (The),The Allstate Corporation,Financial Services,Insurance - Property & Casualty,Northbrook,IL,United States
+NYQ,FICO,Fair Isaac Corporation,Fair Isaac Corporation,Technology,Software - Application,Bozeman,MT,United States
+NMS,MNST,Monster Beverage Corporation,Monster Beverage Corporation,Consumer Defensive,Beverages - Non-Alcoholic,Corona,CA,United States
+NMS,PAYX,"Paychex, Inc.","Paychex, Inc.",Technology,Software - Application,Rochester,NY,United States
+NMS,CHTR,"Charter Communications, Inc.","Charter Communications, Inc.",Communication Services,Telecom Services,Stamford,CT,United States
+NMS,AEP,American Electric Power Company,"American Electric Power Company, Inc.",Utilities,Utilities - Regulated Electric,Columbus,OH,United States
+NMS,ROST,"Ross Stores, Inc.","Ross Stores, Inc.",Consumer Cyclical,Apparel Retail,Dublin,CA,United States
+NYQ,PWR,"Quanta Services, Inc.","Quanta Services, Inc.",Industrials,Engineering & Construction,Houston,TX,United States
+NYQ,CMI,Cummins Inc.,Cummins Inc.,Industrials,Specialty Industrial Machinery,Columbus,IN,United States
+NMS,AXON,"Axon Enterprise, Inc.","Axon Enterprise, Inc.",Industrials,Aerospace & Defense,Scottsdale,AZ,United States
+NYQ,VST,Vistra Corp.,Vistra Corp.,Utilities,Utilities - Independent Power Producers,Irving,TX,United States
+NYQ,URI,"United Rentals, Inc.","United Rentals, Inc.",Industrials,Rental & Leasing Services,Stamford,CT,United States
+NYQ,MSCI,MSCI Inc.,MSCI Inc.,Financial Services,Financial Data & Stock Exchanges,New York,NY,United States
+NYQ,O,Realty Income Corporation,Realty Income Corporation,Real Estate,REIT - Retail,San Diego,CA,United States
+NYQ,PSX,Phillips 66,Phillips 66,Energy,Oil & Gas Refining & Marketing,Houston,TX,United States
+NYQ,AIG,"American International Group, I","American International Group, Inc.",Financial Services,Insurance - Diversified,New York,NY,United States
+NMS,FANG,"Diamondback Energy, Inc.","Diamondback Energy, Inc.",Energy,Oil & Gas E&P,Midland,TX,United States
+NYQ,D,"Dominion Energy, Inc.","Dominion Energy, Inc.",Utilities,Utilities - Regulated Electric,Richmond,VA,United States
+NYQ,HWM,Howmet Aerospace Inc.,Howmet Aerospace Inc.,Industrials,Aerospace & Defense,Pittsburgh,PA,United States
+NYQ,DHI,"D.R. Horton, Inc.","D.R. Horton, Inc.",Consumer Cyclical,Residential Construction,Arlington,TX,United States
+NYQ,KR,Kroger Company (The),The Kroger Co.,Consumer Defensive,Grocery Stores,Cincinnati,OH,United States
+NMS,NDAQ,"Nasdaq, Inc.","Nasdaq, Inc.",Financial Services,Financial Data & Stock Exchanges,New York,NY,United States
+NYQ,OXY,Occidental Petroleum Corporatio,Occidental Petroleum Corporation,Energy,Oil & Gas E&P,Houston,TX,United States
+NYQ,EW,Edwards Lifesciences Corporatio,Edwards Lifesciences Corporation,Healthcare,Medical Devices,Irvine,CA,United States
+NYQ,COR,"Cencora, Inc.","Cencora, Inc.",Healthcare,Medical Distribution,Conshohocken,PA,United States
+NMS,KDP,Keurig Dr Pepper Inc.,Keurig Dr Pepper Inc.,Consumer Defensive,Beverages - Non-Alcoholic,Burlington,MA,United States
+NYQ,FIS,Fidelity National Information S,"Fidelity National Information Services, Inc.",Technology,Information Technology Services,Jacksonville,FL,United States
+NYQ,KMB,Kimberly-Clark Corporation,Kimberly-Clark Corporation,Consumer Defensive,Household & Personal Products,Dallas,TX,United States
+NYQ,NEM,Newmont Corporation,Newmont Corporation,Basic Materials,Gold,Denver,CO,United States
+NYQ,PCG,Pacific Gas & Electric Co.,PG&E Corporation,Utilities,Utilities - Regulated Electric,Oakland,CA,United States
+NYQ,MPC,Marathon Petroleum Corporation,Marathon Petroleum Corporation,Energy,Oil & Gas Refining & Marketing,Findlay,OH,United States
+NMS,FAST,Fastenal Company,Fastenal Company,Industrials,Industrial Distribution,Winona,MN,United States
+NYQ,AME,"AMETEK, Inc.","AMETEK, Inc.",Industrials,Specialty Industrial Machinery,Berwyn,PA,United States
+NYQ,PEG,Public Service Enterprise Group,Public Service Enterprise Group Incorporated,Utilities,Utilities - Regulated Electric,Newark,NJ,United States
+NYQ,PRU,"Prudential Financial, Inc.","Prudential Financial, Inc.",Financial Services,Insurance - Life,Newark,NJ,United States
+NYQ,KVUE,Kenvue Inc.,Kenvue Inc.,Consumer Defensive,Household & Personal Products,Skillman,NJ,United States
+NYQ,STZ,"Constellation Brands, Inc.","Constellation Brands, Inc.",Consumer Defensive,Beverages - Brewers,Victor,NY,United States
+NYQ,GLW,Corning Incorporated,Corning Incorporated,Technology,Electronic Components,Corning,NY,United States
+NYQ,LHX,"L3Harris Technologies, Inc.","L3Harris Technologies, Inc.",Industrials,Aerospace & Defense,Melbourne,FL,United States
+NMS,BKR,Baker Hughes Company,Baker Hughes Company,Energy,Oil & Gas Equipment & Services,Houston,TX,United States
+NYQ,CBRE,CBRE Group Inc,"CBRE Group, Inc.",Real Estate,Real Estate Services,Dallas,TX,United States
+NYQ,CTVA,"Corteva, Inc.","Corteva, Inc.",Basic Materials,Agricultural Inputs,Indianapolis,IN,United States
+NYQ,CCI,Crown Castle Inc.,Crown Castle Inc.,Real Estate,REIT - Specialty,Houston,TX,United States
+NYQ,DAL,"Delta Air Lines, Inc.","Delta Air Lines, Inc.",Industrials,Airlines,Atlanta,GA,United States
+NMS,CTSH,Cognizant Technology Solutions ,Cognizant Technology Solutions Corporation,Technology,Information Technology Services,Teaneck,NJ,United States
+NYQ,F,Ford Motor Company,Ford Motor Company,Consumer Cyclical,Auto Manufacturers,Dearborn,MI,United States
+NMS,VRSK,"Verisk Analytics, Inc.","Verisk Analytics, Inc.",Industrials,Consulting Services,Jersey City,NJ,United States
+NMS,EA,Electronic Arts Inc.,Electronic Arts Inc.,Communication Services,Electronic Gaming & Multimedia,Redwood City,CA,United States
+NMS,ODFL,"Old Dominion Freight Line, Inc.","Old Dominion Freight Line, Inc.",Industrials,Trucking,Thomasville,NC,United States
+NMS,XEL,Xcel Energy Inc.,Xcel Energy Inc.,Utilities,Utilities - Regulated Electric,Minneapolis,MN,United States
+NYQ,TRGP,"Targa Resources, Inc.",Targa Resources Corp.,Energy,Oil & Gas Midstream,Houston,TX,United States
+NYQ,A,"Agilent Technologies, Inc.","Agilent Technologies, Inc.",Healthcare,Diagnostics & Research,Santa Clara,CA,United States
+NYQ,IT,"Gartner, Inc.","Gartner, Inc.",Technology,Information Technology Services,Stamford,CT,United States
+NYQ,LVS,Las Vegas Sands Corp.,Las Vegas Sands Corp.,Consumer Cyclical,Resorts & Casinos,Las Vegas,NV,United States
+NYQ,SYY,Sysco Corporation,Sysco Corporation,Consumer Defensive,Food Distribution,Houston,TX,United States
+NYQ,VLO,Valero Energy Corporation,Valero Energy Corporation,Energy,Oil & Gas Refining & Marketing,San Antonio,TX,United States
+NYQ,OTIS,Otis Worldwide Corporation,Otis Worldwide Corporation,Industrials,Specialty Industrial Machinery,Farmington,CT,United States
+NYQ,LEN,Lennar Corporation,Lennar Corporation,Consumer Cyclical,Residential Construction,Miami,FL,United States
+NMS,EXC,Exelon Corporation,Exelon Corporation,Utilities,Utilities - Regulated Electric,Chicago,IL,United States
+NYQ,IR,Ingersoll Rand Inc.,Ingersoll Rand Inc.,Industrials,Specialty Industrial Machinery,Davidson,NC,United States
+NYQ,YUM,"Yum! Brands, Inc.","Yum! Brands, Inc.",Consumer Cyclical,Restaurants,Louisville,KY,United States
+NMS,KHC,The Kraft Heinz Company,The Kraft Heinz Company,Consumer Defensive,Packaged Foods,Pittsburgh,PA,United States
+NMS,GEHC,GE HealthCare Technologies Inc.,GE HealthCare Technologies Inc.,Healthcare,Health Information Services,Chicago,IL,United States
+NYQ,IQV,"IQVIA Holdings, Inc.",IQVIA Holdings Inc.,Healthcare,Diagnostics & Research,Durham,NC,United States
+NYQ,GIS,"General Mills, Inc.","General Mills, Inc.",Consumer Defensive,Packaged Foods,Minneapolis,MN,United States
+NYQ,CCL,Carnival Corporation,Carnival Corporation & plc,Consumer Cyclical,Travel Services,Miami,FL,United States
+NYQ,RMD,ResMed Inc.,ResMed Inc.,Healthcare,Medical Instruments & Supplies,San Diego,CA,United States
+NYQ,VMC,Vulcan Materials Company (Holdi,Vulcan Materials Company,Basic Materials,Building Materials,Birmingham,AL,United States
+NYQ,HSY,The Hershey Company,The Hershey Company,Consumer Defensive,Confectioners,Hershey,PA,United States
+NMS,IDXX,"IDEXX Laboratories, Inc.","IDEXX Laboratories, Inc.",Healthcare,Diagnostics & Research,Westbrook,ME,United States
+NYQ,WAB,Westinghouse Air Brake Technolo,Westinghouse Air Brake Technologies Corporation,Industrials,Railroads,Pittsburgh,PA,United States
+NYQ,ROK,"Rockwell Automation, Inc.","Rockwell Automation, Inc.",Industrials,Specialty Industrial Machinery,Milwaukee,WI,United States
+NYQ,MLM,"Martin Marietta Materials, Inc.","Martin Marietta Materials, Inc.",Basic Materials,Building Materials,Raleigh,NC,United States
+NYQ,EXR,Extra Space Storage Inc,Extra Space Storage Inc.,Real Estate,REIT - Industrial,Salt Lake City,UT,United States
+NYQ,DD,"DuPont de Nemours, Inc.","DuPont de Nemours, Inc.",Basic Materials,Specialty Chemicals,Wilmington,DE,United States
+NYQ,ETR,Entergy Corporation,Entergy Corporation,Utilities,Utilities - Regulated Electric,New Orleans,LA,United States
+NYQ,DECK,Deckers Outdoor Corporation,Deckers Outdoor Corporation,Consumer Cyclical,Footwear & Accessories,Goleta,CA,United States
+NMS,UAL,"United Airlines Holdings, Inc.","United Airlines Holdings, Inc.",Industrials,Airlines,Chicago,IL,United States
+NMS,TTWO,"Take-Two Interactive Software, ","Take-Two Interactive Software, Inc.",Communication Services,Electronic Gaming & Multimedia,New York,NY,United States
+NYQ,HIG,Hartford Financial Services Gro,"The Hartford Financial Services Group, Inc.",Financial Services,Insurance - Property & Casualty,Hartford,CT,United States
+NYQ,RJF,"Raymond James Financial, Inc.","Raymond James Financial, Inc.",Financial Services,Asset Management,Saint Petersburg,FL,United States
+NYQ,AVB,"AvalonBay Communities, Inc.","AvalonBay Communities, Inc.",Real Estate,REIT - Residential,Arlington,VA,United States
+NYQ,MTB,M&T Bank Corporation,M&T Bank Corporation,Financial Services,Banks - Regional,Buffalo,NY,United States
+NMS,DXCM,"DexCom, Inc.","DexCom, Inc.",Healthcare,Medical Devices,San Diego,CA,United States
+NYQ,ED,"Consolidated Edison, Inc.","Consolidated Edison, Inc.",Utilities,Utilities - Regulated Electric,New York,NY,United States
+NMS,EBAY,eBay Inc.,eBay Inc.,Consumer Cyclical,Internet Retail,San Jose,CA,United States
+NYQ,HPQ,HP Inc.,HP Inc.,Technology,Computer Hardware,Palo Alto,CA,United States
+NYQ,IRM,Iron Mountain Incorporated (Del,Iron Mountain Incorporated,Real Estate,REIT - Specialty,Portsmouth,NH,United States
+NYQ,EIX,Edison International,Edison International,Utilities,Utilities - Regulated Electric,Rosemead,CA,United States
+NYQ,LYV,"Live Nation Entertainment, Inc.","Live Nation Entertainment, Inc.",Communication Services,Entertainment,Beverly Hills,CA,United States
+NYQ,VICI,VICI Properties Inc.,VICI Properties Inc.,Real Estate,REIT - Diversified,New York,NY,United States
+NYQ,CNC,Centene Corporation,Centene Corporation,Healthcare,Healthcare Plans,Saint Louis,MO,United States
+NYQ,WEC,"WEC Energy Group, Inc.","WEC Energy Group, Inc.",Utilities,Utilities - Regulated Electric,Milwaukee,WI,United States
+NMS,MCHP,Microchip Technology Incorporat,Microchip Technology Incorporated,Technology,Semiconductors,Chandler,AZ,United States
+NYQ,HUM,Humana Inc.,Humana Inc.,Healthcare,Healthcare Plans,Louisville,KY,United States
+NYQ,BRO,"Brown & Brown, Inc.","Brown & Brown, Inc.",Financial Services,Insurance Brokers,Daytona Beach,FL,United States
+NMS,CSGP,"CoStar Group, Inc.","CoStar Group, Inc.",Real Estate,Real Estate Services,Washington,DC,United States
+NMS,MPWR,"Monolithic Power Systems, Inc.","Monolithic Power Systems, Inc.",Technology,Semiconductors,Kirkland,WA,United States
+NYQ,GDDY,GoDaddy Inc.,GoDaddy Inc.,Technology,Software - Infrastructure,Tempe,AZ,United States
+NMS,TSCO,Tractor Supply Company,Tractor Supply Company,Consumer Cyclical,Specialty Retail,Brentwood,TN,United States
+NYQ,STT,State Street Corporation,State Street Corporation,Financial Services,Asset Management,Boston,MA,United States
+NYQ,CAH,"Cardinal Health, Inc.","Cardinal Health, Inc.",Healthcare,Medical Distribution,Dublin,OH,United States
+NYQ,GPN,Global Payments Inc.,Global Payments Inc.,Industrials,Specialty Business Services,Atlanta,GA,United States
+NYQ,XYL,Xylem Inc.,Xylem Inc.,Industrials,Specialty Industrial Machinery,Washington,DC,United States
+NYQ,HPE,Hewlett Packard Enterprise Comp,Hewlett Packard Enterprise Company,Technology,Communication Equipment,Spring,TX,United States
+NYQ,KEYS,Keysight Technologies Inc.,"Keysight Technologies, Inc.",Technology,Scientific & Technical Instruments,Santa Rosa,CA,United States
+NYQ,DOW,Dow Inc.,Dow Inc.,Basic Materials,Chemicals,Midland,MI,United States
+NYQ,EQR,Equity Residential,Equity Residential,Real Estate,REIT - Residential,Chicago,IL,United States
+NMS,ON,ON Semiconductor Corporation,ON Semiconductor Corporation,Technology,Semiconductors,Scottsdale,AZ,United States
+NYQ,PPG,"PPG Industries, Inc.","PPG Industries, Inc.",Basic Materials,Specialty Chemicals,Pittsburgh,PA,United States
+NYQ,K,Kellanova,Kellanova,Consumer Defensive,Packaged Foods,Chicago,IL,United States
+NYQ,NUE,Nucor Corporation,Nucor Corporation,Basic Materials,Steel,Charlotte,NC,United States
+NYQ,EL,"Estee Lauder Companies, Inc. (T",The Estée Lauder Companies Inc.,Consumer Defensive,Household & Personal Products,New York,NY,United States
+NYQ,BR,"Broadridge Financial Solutions,","Broadridge Financial Solutions, Inc.",Technology,Information Technology Services,Lake Success,NY,United States
+NMS,WBD,"Warner Bros. Discovery, Inc. - ","Warner Bros. Discovery, Inc.",Communication Services,Entertainment,New York,NY,United States
+NYQ,TPL,Texas Pacific Land Corporation,Texas Pacific Land Corporation,Energy,Oil & Gas E&P,Dallas,TX,United States
+NYQ,CHD,"Church & Dwight Company, Inc.","Church & Dwight Co., Inc.",Consumer Defensive,Household & Personal Products,Ewing,NJ,United States
+NYQ,MTD,"Mettler-Toledo International, I",Mettler-Toledo International Inc.,Healthcare,Diagnostics & Research,Columbus,OH,United States
+NYQ,DOV,Dover Corporation,Dover Corporation,Industrials,Specialty Industrial Machinery,Downers Grove,IL,United States
+NYQ,TYL,"Tyler Technologies, Inc.","Tyler Technologies, Inc.",Technology,Software - Application,Plano,TX,United States
+NYQ,FTV,Fortive Corporation,Fortive Corporation,Technology,Scientific & Technical Instruments,Everett,WA,United States
+NMS,TROW,"T. Rowe Price Group, Inc.","T. Rowe Price Group, Inc.",Financial Services,Asset Management,Baltimore,MD,United States
+NYQ,VLTO,Veralto Corp,Veralto Corporation,Industrials,Pollution & Treatment Controls,Waltham,MA,United States
+NYQ,EQT,EQT Corporation,EQT Corporation,Energy,Oil & Gas E&P,Pittsburgh,PA,United States
+NYQ,SYF,Synchrony Financial,Synchrony Financial,Financial Services,Credit Services,Stamford,CT,United States
+NYQ,NVR,"NVR, Inc.","NVR, Inc.",Consumer Cyclical,Residential Construction,Reston,VA,United States
+NYQ,DTE,DTE Energy Company,DTE Energy Company,Utilities,Utilities - Regulated Electric,Detroit,MI,United States
+NYQ,VTR,"Ventas, Inc.","Ventas, Inc.",Real Estate,REIT - Healthcare Facilities,Chicago,IL,United States
+NYQ,AWK,"American Water Works Company, I","American Water Works Company, Inc.",Utilities,Utilities - Regulated Water,Camden,NJ,United States
+NYQ,ADM,Archer-Daniels-Midland Company,Archer-Daniels-Midland Company,Consumer Defensive,Farm Products,Chicago,IL,United States
+NMS,NTAP,"NetApp, Inc.","NetApp, Inc.",Technology,Computer Hardware,San Jose,CA,United States
+NYQ,WST,"West Pharmaceutical Services, I","West Pharmaceutical Services, Inc.",Healthcare,Medical Instruments & Supplies,Exton,PA,United States
+NYQ,CPAY,"Corpay, Inc.","Corpay, Inc.",Technology,Software - Infrastructure,Atlanta,GA,United States
+NYQ,PPL,PPL Corporation,PPL Corporation,Utilities,Utilities - Regulated Electric,Allentown,PA,United States
+NYQ,LYB,LyondellBasell Industries NV,LyondellBasell Industries N.V.,Basic Materials,Specialty Chemicals,Houston,TX,United States
+NYQ,AEE,Ameren Corporation,Ameren Corporation,Utilities,Utilities - Regulated Electric,Saint Louis,MO,United States
+NMS,EXPE,"Expedia Group, Inc.","Expedia Group, Inc.",Consumer Cyclical,Travel Services,Seattle,WA,United States
+NMS,HBAN,Huntington Bancshares Incorpora,Huntington Bancshares Incorporated,Financial Services,Banks - Regional,Columbus,OH,United States
+NMS,CDW,CDW Corporation,CDW Corporation,Technology,Information Technology Services,Vernon Hills,IL,United States
+NYQ,FE,FirstEnergy Corp.,FirstEnergy Corp.,Utilities,Utilities - Regulated Electric,Akron,OH,United States
+NYQ,HUBB,Hubbell Inc,Hubbell Incorporated,Industrials,Electrical Equipment & Parts,Shelton,CT,United States
+NYQ,HAL,Halliburton Company,Halliburton Company,Energy,Oil & Gas Equipment & Services,Houston,TX,United States
+NYQ,ROL,"Rollins, Inc.","Rollins, Inc.",Consumer Cyclical,Personal Services,Atlanta,GA,United States
+NYQ,PHM,"PulteGroup, Inc.","PulteGroup, Inc.",Consumer Cyclical,Residential Construction,Atlanta,GA,United States
+NMS,CINF,Cincinnati Financial Corporatio,Cincinnati Financial Corporation,Financial Services,Insurance - Property & Casualty,Fairfield,OH,United States
+NMS,PTC,PTC Inc.,PTC Inc.,Technology,Software - Application,Boston,MA,United States
+NYQ,WRB,W.R. Berkley Corporation,W. R. Berkley Corporation,Financial Services,Insurance - Property & Casualty,Greenwich,CT,United States
+NYQ,DRI,"Darden Restaurants, Inc.","Darden Restaurants, Inc.",Consumer Cyclical,Restaurants,Orlando,FL,United States
+NMS,FOXA,Fox Corporation,Fox Corporation,Communication Services,Entertainment,New York,NY,United States
+NMS,FOX,Fox Corporation,Fox Corporation,Communication Services,Entertainment,New York,NY,United States
+NYQ,IFF,International Flavors & Fragran,International Flavors & Fragrances Inc.,Basic Materials,Specialty Chemicals,New York,NY,United States
+NMS,SBAC,SBA Communications Corporation,SBA Communications Corporation,Real Estate,REIT - Specialty,Boca Raton,FL,United States
+NYQ,WAT,Waters Corporation,Waters Corporation,Healthcare,Diagnostics & Research,Milford,MA,United States
+NMS,ERIE,Erie Indemnity Company,Erie Indemnity Company,Financial Services,Insurance Brokers,Erie,PA,United States
+NYQ,TDY,Teledyne Technologies Incorpora,Teledyne Technologies Incorporated,Technology,Scientific & Technical Instruments,Thousand Oaks,CA,United States
+NYQ,ATO,Atmos Energy Corporation,Atmos Energy Corporation,Utilities,Utilities - Regulated Gas,Dallas,TX,United States
+NYQ,RF,Regions Financial Corporation,Regions Financial Corporation,Financial Services,Banks - Regional,Birmingham,AL,United States
+NMS,BIIB,Biogen Inc.,Biogen Inc.,Healthcare,Drug Manufacturers - General,Cambridge,MA,United States
+NYQ,ZBH,"Zimmer Biomet Holdings, Inc.","Zimmer Biomet Holdings, Inc.",Healthcare,Medical Devices,Warsaw,IN,United States
+NYQ,CNP,"CenterPoint Energy, Inc (Holdin","CenterPoint Energy, Inc.",Utilities,Utilities - Regulated Electric,Houston,TX,United States
+NYQ,MKC,"McCormick & Company, Incorporat","McCormick & Company, Incorporated",Consumer Defensive,Packaged Foods,Hunt Valley,MD,United States
+NYQ,ES,Eversource Energy (D/B/A),Eversource Energy,Utilities,Utilities - Regulated Electric,Springfield,MA,United States
+NMS,WDC,Western Digital Corporation,Western Digital Corporation,Technology,Computer Hardware,San Jose,CA,United States
+NYQ,TSN,"Tyson Foods, Inc.","Tyson Foods, Inc.",Consumer Defensive,Farm Products,Springdale,AR,United States
+NMS,TER,"Teradyne, Inc.","Teradyne, Inc.",Technology,Semiconductor Equipment & Materials,North Reading,MA,United States
+NYQ,STE,STERIS plc (Ireland),STERIS plc,Healthcare,Medical Devices,Mentor,OH,United States
+NYQ,PKG,Packaging Corporation of Americ,Packaging Corporation of America,Consumer Cyclical,Packaging & Containers,Lake Forest,IL,United States
+NYQ,CLX,Clorox Company (The),The Clorox Company,Consumer Defensive,Household & Personal Products,Oakland,CA,United States
+NMS,NTRS,Northern Trust Corporation,Northern Trust Corporation,Financial Services,Asset Management,Chicago,IL,United States
+NMS,ZBRA,Zebra Technologies Corporation,Zebra Technologies Corporation,Technology,Communication Equipment,Lincolnshire,IL,United States
+NYQ,DVN,Devon Energy Corporation,Devon Energy Corporation,Energy,Oil & Gas E&P,Oklahoma City,OK,United States
+BTS,CBOE,"Cboe Global Markets, Inc.","Cboe Global Markets, Inc.",Financial Services,Financial Data & Stock Exchanges,Chicago,IL,United States
+NYQ,WY,Weyerhaeuser Company,Weyerhaeuser Company,Real Estate,REIT - Specialty,Seattle,WA,United States
+NYQ,LUV,Southwest Airlines Company,Southwest Airlines Co.,Industrials,Airlines,Dallas,TX,United States
+NMS,ULTA,"Ulta Beauty, Inc.","Ulta Beauty, Inc.",Consumer Cyclical,Specialty Retail,Bolingbrook,IL,United States
+NYQ,CMS,CMS Energy Corporation,CMS Energy Corporation,Utilities,Utilities - Regulated Electric,Jackson,MI,United States
+NYQ,INVH,Invitation Homes Inc.,Invitation Homes Inc.,Real Estate,REIT - Residential,Dallas,TX,United States
+NMS,FSLR,"First Solar, Inc.","First Solar, Inc.",Technology,Solar,Tempe,AZ,United States
+NYQ,LDOS,"Leidos Holdings, Inc.","Leidos Holdings, Inc.",Technology,Information Technology Services,Reston,VA,United States
+NYQ,CFG,"Citizens Financial Group, Inc.","Citizens Financial Group, Inc.",Financial Services,Banks - Regional,Providence,RI,United States
+NYQ,LH,Labcorp Holdings Inc.,Labcorp Holdings Inc.,Healthcare,Diagnostics & Research,Burlington,NC,United States
+NMS,VRSN,"VeriSign, Inc.","VeriSign, Inc.",Technology,Software - Infrastructure,Reston,VA,United States
+NYQ,IP,International Paper Company,International Paper Company,Consumer Cyclical,Packaging & Containers,Memphis,TN,United States
+NYQ,ESS,"Essex Property Trust, Inc.","Essex Property Trust, Inc.",Real Estate,REIT - Residential,San Mateo,CA,United States
+NMS,PODD,Insulet Corporation,Insulet Corporation,Healthcare,Medical Devices,Acton,MA,United States
+NMS,COO,"The Cooper Companies, Inc.","The Cooper Companies, Inc.",Healthcare,Medical Instruments & Supplies,San Ramon,CA,United States
+NMS,SMCI,"Super Micro Computer, Inc.","Super Micro Computer, Inc.",Technology,Computer Hardware,San Jose,CA,United States
+NYQ,MAA,Mid-America Apartment Communiti,"Mid-America Apartment Communities, Inc.",Real Estate,REIT - Residential,Germantown,TN,United States
+NYQ,FDS,FactSet Research Systems Inc.,FactSet Research Systems Inc.,Financial Services,Financial Data & Stock Exchanges,Norwalk,CT,United States
+NYQ,NRG,"NRG Energy, Inc.","NRG Energy, Inc.",Utilities,Utilities - Independent Power Producers,Houston,TX,United States
+NYQ,BBY,"Best Buy Co., Inc.","Best Buy Co., Inc.",Consumer Cyclical,Specialty Retail,Richfield,MN,United States
+NYQ,SNA,Snap-On Incorporated,Snap-on Incorporated,Industrials,Tools & Accessories,Kenosha,WI,United States
+NYQ,L,Loews Corporation,Loews Corporation,Financial Services,Insurance - Property & Casualty,New York,NY,United States
+NMS,PFG,Principal Financial Group Inc,"Principal Financial Group, Inc.",Financial Services,Asset Management,Des Moines,IA,United States
+NMS,STLD,"Steel Dynamics, Inc.","Steel Dynamics, Inc.",Basic Materials,Steel,Fort Wayne,IN,United States
+NMS,TRMB,Trimble Inc.,Trimble Inc.,Technology,Scientific & Technical Instruments,Westminster,CO,United States
+NYQ,OMC,Omnicom Group Inc.,Omnicom Group Inc.,Communication Services,Advertising Agencies,New York,NY,United States
+NYQ,CTRA,Coterra Energy Inc.,Coterra Energy Inc.,Energy,Oil & Gas E&P,Houston,TX,United States
+NYQ,HRL,Hormel Foods Corporation,Hormel Foods Corporation,Consumer Defensive,Packaged Foods,Austin,MN,United States
+NYQ,ARE,Alexandria Real Estate Equities,"Alexandria Real Estate Equities, Inc.",Real Estate,REIT - Office,Pasadena,CA,United States
+NYQ,BLDR,"Builders FirstSource, Inc.","Builders FirstSource, Inc.",Industrials,Building Products & Equipment,Irving,TX,United States
+NMS,JBHT,"J.B. Hunt Transport Services, I","J.B. Hunt Transport Services, Inc.",Industrials,Integrated Freight & Logistics,Lowell,AR,United States
+NMS,GEN,Gen Digital Inc.,Gen Digital Inc.,Technology,Software - Infrastructure,Tempe,AZ,United States
+NYQ,DGX,Quest Diagnostics Incorporated,Quest Diagnostics Incorporated,Healthcare,Diagnostics & Research,Secaucus,NJ,United States
+NYQ,KEY,KeyCorp,KeyCorp,Financial Services,Banks - Regional,Cleveland,OH,United States
+NYQ,NI,NiSource Inc,NiSource Inc.,Utilities,Utilities - Regulated Gas,Merrillville,IN,United States
+NYQ,MOH,Molina Healthcare Inc,"Molina Healthcare, Inc.",Healthcare,Healthcare Plans,Long Beach,CA,United States
+NYQ,J,Jacobs Solutions Inc.,Jacobs Solutions Inc.,Industrials,Engineering & Construction,Dallas,TX,United States
+NYQ,DG,Dollar General Corporation,Dollar General Corporation,Consumer Defensive,Discount Stores,Goodlettsville,TN,United States
+NYQ,BALL,Ball Corporation,Ball Corporation,Consumer Cyclical,Packaging & Containers,Westminster,CO,United States
+NMS,NWS,News Corporation,News Corporation,Communication Services,Entertainment,New York,NY,United States
+NMS,NWSA,News Corporation,News Corporation,Communication Services,Entertainment,New York,NY,United States
+NYQ,UDR,"UDR, Inc.","UDR, Inc.",Real Estate,REIT - Residential,Highlands Ranch,CO,United States
+NMS,HOLX,"Hologic, Inc.","Hologic, Inc.",Healthcare,Medical Instruments & Supplies,Marlborough,MA,United States
+NYQ,JBL,Jabil Inc.,Jabil Inc.,Technology,Electronic Components,Saint Petersburg,FL,United States
+NYQ,GPC,Genuine Parts Company,Genuine Parts Company,Consumer Cyclical,Auto Parts,Atlanta,GA,United States
+NYQ,IEX,IDEX Corporation,IDEX Corporation,Industrials,Specialty Industrial Machinery,Northbrook,IL,United States
+NYQ,MAS,Masco Corporation,Masco Corporation,Industrials,Building Products & Equipment,Livonia,MI,United States
+NYQ,KIM,Kimco Realty Corporation (HC),Kimco Realty Corporation,Real Estate,REIT - Retail,Jericho,NY,United States
+NMS,ALGN,"Align Technology, Inc.","Align Technology, Inc.",Healthcare,Medical Instruments & Supplies,Tempe,AZ,United States
+NMS,DLTR,"Dollar Tree, Inc.","Dollar Tree, Inc.",Consumer Defensive,Discount Stores,Chesapeake,VA,United States
+NYQ,EXPD,Expeditors International of Was,"Expeditors International of Washington, Inc.",Industrials,Integrated Freight & Logistics,Seattle,WA,United States
+NMS,MRNA,"Moderna, Inc.","Moderna, Inc.",Healthcare,Biotechnology,Cambridge,MA,United States
+NMS,LNT,Alliant Energy Corporation,Alliant Energy Corporation,Utilities,Utilities - Regulated Electric,Madison,WI,United States
+NYQ,AVY,Avery Dennison Corporation,Avery Dennison Corporation,Consumer Cyclical,Packaging & Containers,Mentor,OH,United States
+NYQ,BAX,Baxter International Inc.,Baxter International Inc.,Healthcare,Medical Instruments & Supplies,Deerfield,IL,United States
+NYQ,TPR,"Tapestry, Inc.","Tapestry, Inc.",Consumer Cyclical,Luxury Goods,New York,NY,United States
+NMS,VTRS,Viatris Inc.,Viatris Inc.,Healthcare,Drug Manufacturers - Specialty & Generic,Canonsburg,PA,United States
+NYQ,CF,"CF Industries Holdings, Inc.","CF Industries Holdings, Inc.",Basic Materials,Agricultural Inputs,Northbrook,IL,United States
+NMS,FFIV,"F5, Inc.","F5, Inc.",Technology,Software - Infrastructure,Seattle,WA,United States
+NYQ,DPZ,Domino's Pizza Inc,"Domino's Pizza, Inc.",Consumer Cyclical,Restaurants,Ann Arbor,MI,United States
+NMS,AKAM,"Akamai Technologies, Inc.","Akamai Technologies, Inc.",Technology,Software - Infrastructure,Cambridge,MA,United States
+NYQ,RL,Ralph Lauren Corporation,Ralph Lauren Corporation,Consumer Cyclical,Apparel Manufacturing,New York,NY,United States
+NYQ,TXT,Textron Inc.,Textron Inc.,Industrials,Aerospace & Defense,Providence,RI,United States
+NMS,SWKS,"Skyworks Solutions, Inc.","Skyworks Solutions, Inc.",Technology,Semiconductors,Irvine,CA,United States
+NMS,EVRG,"Evergy, Inc.","Evergy, Inc.",Utilities,Utilities - Regulated Electric,Kansas City,MO,United States
+NYQ,EPAM,"EPAM Systems, Inc.","EPAM Systems, Inc.",Technology,Information Technology Services,Newtown,PA,United States
+NYQ,DOC,"Healthpeak Properties, Inc.","Healthpeak Properties, Inc.",Real Estate,REIT - Healthcare Facilities,Denver,CO,United States
+NYQ,RVTY,"Revvity, Inc.","Revvity, Inc.",Healthcare,Diagnostics & Research,Waltham,MA,United States
+NMS,REG,Regency Centers Corporation,Regency Centers Corporation,Real Estate,REIT - Retail,Jacksonville,FL,United States
+NMS,POOL,Pool Corporation,Pool Corporation,Industrials,Industrial Distribution,Covington,LA,United States
+NMS,INCY,Incyte Corporation,Incyte Corporation,Healthcare,Biotechnology,Wilmington,DE,United States
+NYQ,BXP,"BXP, Inc.","BXP, Inc.",Real Estate,REIT - Office,Boston,MA,United States
+NYQ,KMX,CarMax Inc,"CarMax, Inc.",Consumer Cyclical,Auto & Truck Dealerships,Richmond,VA,United States
+NYQ,CAG,"ConAgra Brands, Inc.","Conagra Brands, Inc.",Consumer Defensive,Packaged Foods,Chicago,IL,United States
+NMS,HST,"Host Hotels & Resorts, Inc.","Host Hotels & Resorts, Inc.",Real Estate,REIT - Hotel & Motel,Bethesda,MD,United States
+NMS,JKHY,"Jack Henry & Associates, Inc.","Jack Henry & Associates, Inc.",Technology,Information Technology Services,Monett,MO,United States
+NYQ,SWK,"Stanley Black & Decker, Inc.","Stanley Black & Decker, Inc.",Industrials,Tools & Accessories,New Britain,CT,United States
+NYQ,DVA,DaVita Inc.,DaVita Inc.,Healthcare,Medical Care Facilities,Denver,CO,United States
+NMS,CPB,The Campbell's Company,The Campbell's Company,Consumer Defensive,Packaged Foods,Camden,NJ,United States
+NMS,CHRW,"C.H. Robinson Worldwide, Inc.","C.H. Robinson Worldwide, Inc.",Industrials,Integrated Freight & Logistics,Eden Prairie,MN,United States
+NYQ,CPT,Camden Property Trust,Camden Property Trust,Real Estate,REIT - Residential,Houston,TX,United States
+NYQ,TAP,Molson Coors Beverage Company,Molson Coors Beverage Company,Consumer Defensive,Beverages - Brewers,Golden,CO,United States
+NMS,NDSN,Nordson Corporation,Nordson Corporation,Industrials,Specialty Industrial Machinery,Westlake,OH,United States
+NYQ,PAYC,"Paycom Software, Inc.","Paycom Software, Inc.",Technology,Software - Application,Oklahoma City,OK,United States
+NYQ,UHS,"Universal Health Services, Inc.","Universal Health Services, Inc.",Healthcare,Medical Care Facilities,King of Prussia,PA,United States
+NYQ,NCLH,Norwegian Cruise Line Holdings ,Norwegian Cruise Line Holdings Ltd.,Consumer Cyclical,Travel Services,Miami,FL,United States
+NYQ,DAY,"Dayforce, Inc.",Dayforce Inc,Technology,Software - Application,Minneapolis,MN,United States
+NYQ,SJM,The J.M. Smucker Company,The J. M. Smucker Company,Consumer Defensive,Packaged Foods,Orrville,OH,United States
+NMS,TECH,Bio-Techne Corp,Bio-Techne Corporation,Healthcare,Biotechnology,Minneapolis,MN,United States
+NYQ,SOLV,Solventum Corporation,Solventum Corporation,Healthcare,Health Information Services,Saint Paul,MN,United States
+NYQ,BG,Bunge Limited,Bunge Global SA,Consumer Defensive,Farm Products,Chesterfield,MO,United States
+NYQ,AIZ,"Assurant, Inc.","Assurant, Inc.",Financial Services,Insurance - Property & Casualty,Atlanta,GA,United States
+NYQ,IPG,"Interpublic Group of Companies,","The Interpublic Group of Companies, Inc.",Communication Services,Advertising Agencies,New York,NY,United States
+NYQ,BEN,"Franklin Resources, Inc.","Franklin Resources, Inc.",Financial Services,Asset Management,San Mateo,CA,United States
+NYQ,EMN,Eastman Chemical Company,Eastman Chemical Company,Basic Materials,Specialty Chemicals,Kingsport,TN,United States
+NYQ,ALB,Albemarle Corporation,Albemarle Corporation,Basic Materials,Specialty Chemicals,Charlotte,NC,United States
+NYQ,MGM,MGM Resorts International,MGM Resorts International,Consumer Cyclical,Resorts & Casinos,Las Vegas,NV,United States
+NYQ,AOS,A.O. Smith Corporation,A. O. Smith Corporation,Industrials,Specialty Industrial Machinery,Milwaukee,WI,United States
+NMS,WYNN,"Wynn Resorts, Limited","Wynn Resorts, Limited",Consumer Cyclical,Resorts & Casinos,Las Vegas,NV,United States
+NYQ,PNW,Pinnacle West Capital Corporati,Pinnacle West Capital Corporation,Utilities,Utilities - Regulated Electric,Phoenix,AZ,United States
+NGM,ENPH,"Enphase Energy, Inc.","Enphase Energy, Inc.",Technology,Solar,Fremont,CA,United States
+NMS,LKQ,LKQ Corporation,LKQ Corporation,Consumer Cyclical,Auto Parts,Chicago,IL,United States
+NYQ,FRT,Federal Realty Investment Trust,Federal Realty Investment Trust,Real Estate,REIT - Retail,North Bethesda,MD,United States
+NYQ,CRL,Charles River Laboratories Inte,"Charles River Laboratories International, Inc.",Healthcare,Diagnostics & Research,Wilmington,MA,United States
+NYQ,GNRC,Generac Holdlings Inc.,Generac Holdings Inc.,Industrials,Specialty Industrial Machinery,Waukesha,WI,United States
+NYQ,AES,The AES Corporation,The AES Corporation,Utilities,Utilities - Diversified,Arlington,VA,United States
+NYQ,GL,Globe Life Inc.,Globe Life Inc.,Financial Services,Insurance - Life,McKinney,TX,United States
+NYQ,LW,"Lamb Weston Holdings, Inc.","Lamb Weston Holdings, Inc.",Consumer Defensive,Packaged Foods,Eagle,ID,United States
+NMS,HSIC,"Henry Schein, Inc.","Henry Schein, Inc.",Healthcare,Medical Distribution,Melville,NY,United States
+NMS,MKTX,"MarketAxess Holdings, Inc.",MarketAxess Holdings Inc.,Financial Services,Capital Markets,New York,NY,United States
+NMS,MTCH,"Match Group, Inc.","Match Group, Inc.",Communication Services,Internet Content & Information,Dallas,TX,United States
+NYQ,TFX,Teleflex Incorporated,Teleflex Incorporated,Healthcare,Medical Instruments & Supplies,Wayne,PA,United States
+NMS,HAS,"Hasbro, Inc.","Hasbro, Inc.",Consumer Cyclical,Leisure,Pawtucket,RI,United States
+NYQ,IVZ,Invesco Ltd,Invesco Ltd.,Financial Services,Asset Management,Atlanta,GA,United States
+NMS,APA,APA Corporation,APA Corporation,Energy,Oil & Gas E&P,Houston,TX,United States
+NYQ,MOS,Mosaic Company (The),The Mosaic Company,Basic Materials,Agricultural Inputs,Tampa,FL,United States
+NYQ,MHK,"Mohawk Industries, Inc.","Mohawk Industries, Inc.",Consumer Cyclical,"Furnishings, Fixtures & Appliances",Calhoun,GA,United States
+NYQ,CE,Celanese Corporation,Celanese Corporation,Basic Materials,Chemicals,Irving,TX,United States
+NYQ,HII,"Huntington Ingalls Industries, ","Huntington Ingalls Industries, Inc.",Industrials,Aerospace & Defense,Newport News,VA,United States
+NMS,CZR,"Caesars Entertainment, Inc.","Caesars Entertainment, Inc.",Consumer Cyclical,Resorts & Casinos,Reno,NV,United States
+NYQ,BWA,BorgWarner Inc.,BorgWarner Inc.,Consumer Cyclical,Auto Parts,Auburn Hills,MI,United States
+NMS,QRVO,"Qorvo, Inc.","Qorvo, Inc.",Technology,Semiconductors,Greensboro,NC,United States
+NYQ,FMC,FMC Corporation,FMC Corporation,Basic Materials,Agricultural Inputs,Philadelphia,PA,United States
+NYQ,AMTM,"Amentum Holdings, Inc.","Amentum Holdings, Inc.",Industrials,Specialty Business Services,Chantilly,VA,United States

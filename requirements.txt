@@ -1,0 +1,14 @@
+pandas==2.2.2
+yfinance==0.2.50
+duckdb==1.1.0
+pyarrow==17.0.0
+tqdm==4.66.4
+python-dateutil==2.9.0.post0
+requests==2.32.3
+python-dotenv==1.0.1
+pandas-market-calendars==5.1.0
+torch>=2.2
+transformers>=4.43.0
+datasets>=2.20.0
+accelerate>=0.33.0
+sentencepiece>=0.2.1
