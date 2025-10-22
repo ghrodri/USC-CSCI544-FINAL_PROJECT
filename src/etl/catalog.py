@@ -1,10 +1,10 @@
-from pathlib import Path
+import os
 import pandas as pd
-import re
-csv_path = Path("/src/data/catalog/sp500_companies.csv")
-out_dir = Path("/src/data/catalog")
-catalog_out = out_dir / "sp500_catalog.parquet"
-df = pd.read_csv(csv_path)
+CSV_DATA = "./src/data/catalog/sp500_companies.csv"
+OUT_DIR_DATA = "./src/data/catalog"
+CATALOG_OUT_DATA = "./src/data/catalog/sp500_catalog.parquet"
+df = pd.read_csv(CSV_DATA)
+# rename columns 
 df = df.rename(columns={
     "Exchange": "exchange",
     "Symbol": "ticker",
@@ -16,15 +16,22 @@ df = df.rename(columns={
     "State": "state",
     "Country": "country"
 })
-for col in df.columns:
-    if df[col].dtype == object or pd.api.types.is_string_dtype(df[col]):
-        df[col] = df[col].astype(str).str.strip()
+# normalize string fields
+cols = list(df.columns)
+for i in range(len(cols)):
+    c = cols[i]
+    if df[c].dtype == object or pd.api.types.is_string_dtype(df[c]):
+        df[c] = df[c].astype(str).str.strip()
+
 if "ticker" in df.columns:
     df["ticker"] = df["ticker"].str.upper()
 if "exchange" in df.columns:
     df["exchange"] = df["exchange"].str.upper()
-out_dir.mkdir(parents=True, exist_ok=True)
-df.to_parquet(catalog_out, index=False, compression="snappy")
-if all(col in df.columns for col in ["ticker", "shortname", "sector"]):
-    symbols_df = df[["ticker", "shortname", "sector"]].rename(columns={"shortname": "name"})
+
+# check output dir
+os.makedirs(OUT_DIR_DATA, exist_ok=True)
+
+# write parquet
+df.to_parquet(CATALOG_OUT_DATA, index=False, compression="snappy")
+
 print("Done SP500 Catalog")

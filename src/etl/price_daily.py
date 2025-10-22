@@ -2,20 +2,22 @@ import os
 import time
 from datetime import date, timedelta
 from pathlib import Path
+from typing import List
+
 import pandas as pd
 import requests
 from tqdm import tqdm
 
 POLYGON_API_KEY = os.getenv("POLYGON_API_KEY", "")
 BASE_URL = "https://api.polygon.io"
-SLEEP = 12.5
-
-CSV_PATH = Path("/src/data/catalog/SP500_companies.csv")
-OUT_DIR = Path("/src/data")
-PRICES_DIR = OUT_DIR / "prices_daily"
+SLEEP_SECONDS = 12.5            # base sleep between calls
+DEFAULT_YEARS = 2               # historical range to fetch/max 2 years in free version
+CATALOG = "./src/data/catalog/SP500_companies.csv"
+PRICES_DIR = "./src/data/prices_daily"
 
 def ensure_dir(p: Path):
     p.mkdir(parents=True, exist_ok=True)
+
 
 def parquet_exists(folder: Path, ticker: str) -> bool:
     f = folder / f"ticker={ticker}/part-0.parquet"
@@ -32,15 +34,19 @@ def save_parquet(df: pd.DataFrame, folder: Path, ticker: str):
         return
     d = folder / f"ticker={ticker}"
     ensure_dir(d)
-    (d / "part-0.parquet").unlink(missing_ok=True)
-    df.to_parquet(d / "part-0.parquet", index=False)
+    out = d / "part-0.parquet"
+    out.unlink(missing_ok=True)
+    df.to_parquet(out, index=False)
 
-def get_tickers() -> list[str]:
-    df = pd.read_csv(CSV_PATH)
+
+def get_tickers() -> List[str]:
+    df = pd.read_csv(CATALOG)
     if "Symbol" not in df.columns:
         raise RuntimeError("Catalog missing 'Symbol' column")
-    return df["Symbol"].astype(str).str.strip().str.upper().tolist()
+    s = df["Symbol"].astype(str).str.strip().str.upper()
+    return s.tolist()
 
+# retry function
 def request_retry(url: str, params: dict, timeout: int = 30, retries: int = 3) -> requests.Response:
     last = None
     for attempt in range(1, retries + 1):
@@ -49,7 +55,10 @@ def request_retry(url: str, params: dict, timeout: int = 30, retries: int = 3) -
             r.raise_for_status()
             return r
         retry_after = r.headers.get("Retry-After")
-        sleep_s = int(retry_after) if retry_after and retry_after.isdigit() else SLEEP * attempt
+        if retry_after and retry_after.isdigit():
+            sleep_s = int(retry_after)
+        else:
+            sleep_s = SLEEP_SECONDS * attempt
         time.sleep(sleep_s)
         last = r
     if last is None:
@@ -57,6 +66,7 @@ def request_retry(url: str, params: dict, timeout: int = 30, retries: int = 3) -
     last.raise_for_status()
     return last
 
+# Polygon call
 def get_prices_daily(ticker: str, start: str, end: str) -> pd.DataFrame:
     url = f"{BASE_URL}/v2/aggs/ticker/{ticker}/range/1/day/{start}/{end}"
     params = {"adjusted": "true", "sort": "asc", "limit": 50000, "apiKey": POLYGON_API_KEY}
@@ -64,15 +74,20 @@ def get_prices_daily(ticker: str, start: str, end: str) -> pd.DataFrame:
     js = r.json()
     rows = js.get("results", [])
     if not rows:
-        return pd.DataFrame(columns=["date","ticker","open","high","low","close","volume","vwap","transactions"])
-    df = pd.DataFrame(rows).rename(columns={
-        "t":"ts","o":"open","h":"high","l":"low","c":"close","v":"volume","vw":"vwap","n":"transactions"
-    })
+        cols = ["date", "ticker", "open", "high", "low", "close", "volume", "vwap", "transactions"]
+        return pd.DataFrame(columns=cols)
+
+    df = pd.DataFrame(rows)
+    # rename polygon columns
+    df = df.rename(columns={"t": "ts", "o": "open", "h": "high", "l": "low", "c": "close",
+                            "v": "volume", "vw": "vwap", "n": "transactions"})
+    # normalize types
     df["date"] = pd.to_datetime(df["ts"], unit="ms").dt.date
     df["ticker"] = ticker
-    return df[["date","ticker","open","high","low","close","volume","vwap","transactions"]]
+    df = df[["date", "ticker", "open", "high", "low", "close", "volume", "vwap", "transactions"]]
+    return df
 
-def build(years: int = 2):
+def build(years: int = DEFAULT_YEARS):
     if not POLYGON_API_KEY:
         raise RuntimeError("missing POLYGON_API_KEY environment variable")
 
@@ -80,7 +95,9 @@ def build(years: int = 2):
 
     tickers = get_tickers()
     total = len(tickers)
-    created, skipped, failed = 0, 0, 0
+    created = 0
+    skipped = 0
+    failed = 0
 
     end = date.today()
     start = end - timedelta(days=365 * years)
@@ -103,16 +120,18 @@ def build(years: int = 2):
             except requests.exceptions.HTTPError as e:
                 code = getattr(e.response, "status_code", None)
                 if code in (400, 404):
+                    # permanent issue for this ticker; do not retry again
                     break
-                time.sleep(SLEEP)
+                time.sleep(SLEEP_SECONDS)
             except Exception:
-                time.sleep(SLEEP)
+                time.sleep(SLEEP_SECONDS)
+
         if not success:
             failed += 1
 
-        time.sleep(SLEEP)
+        time.sleep(SLEEP_SECONDS)  # be nice with the API
 
     print(f"\nSummary Price Daily: {created} created, {skipped} skipped, {failed} failed of {total} tickers.")
 
 if __name__ == "__main__":
-    build(years=2)
+    build(years=DEFAULT_YEARS)

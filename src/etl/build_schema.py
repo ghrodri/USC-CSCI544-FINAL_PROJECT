@@ -1,56 +1,50 @@
 import duckdb
-from pathlib import Path
+DB = "./src/db/financial.duckdb"
+CATALOG_DATA = "./src/data/catalog/sp500_catalog.parquet"
+PRICES_GLOB_DATA = "./src/data/prices_daily/ticker=*/part-*.parquet"
+DIVIDENDS_GLOB_DATA = "./src/data/dividends/ticker=*/part-*.parquet"
+SPLITS_GLOB_DATA = "./src/data/splits/ticker=*/part-*.parquet"
+REF_GLOB_DATA = "./src/data/ref_tickers/ticker=*/part-*.parquet"
+CALENDAR_DATA = "./src/data/trading_calendar/trading_calendar.parquet"
 
-ROOT = Path("")
-DATA = ROOT / "data"
-DB_PATH = ROOT / "db/financial.duckdb"
-
-CATALOG = DATA / "catalog/sp500_catalog.parquet"
-PRICES_GLOB = DATA / "prices_daily" / "ticker=*" / "part-*.parquet"
-DIVIDENDS_GLOB = DATA / "dividends" / "ticker=*" / "part-*.parquet"
-SPLITS_GLOB = DATA / "splits" / "ticker=*" / "part-*.parquet"
-REF_GLOB = DATA / "ref_tickers" / "ticker=*" / "part-*.parquet"
-CALENDAR_PARQUET = DATA / "trading_calendar" / "trading_calendar.parquet"
-
-con = duckdb.connect(DB_PATH.as_posix())
-
-# Schemas
+con = duckdb.connect(DB)
+# schemas
 con.execute("create schema if not exists ext;")
 con.execute("create schema if not exists core;")
 con.execute("create schema if not exists views;")
 
-# External sources
-con.execute(f"""
+# create raw parquet views
+con.execute("""
 create or replace view ext.catalog as
-select * from read_parquet('{CATALOG.as_posix()}');
-""")
+select * from read_parquet('{p}');
+""".format(p=CATALOG_DATA))
 
-con.execute(f"""
+con.execute("""
 create or replace view ext.prices_daily as
-select * from read_parquet('{PRICES_GLOB.as_posix()}');
-""")
+select * from read_parquet('{p}');
+""".format(p=PRICES_GLOB_DATA))
 
-con.execute(f"""
+con.execute("""
 create or replace view ext.dividends as
-select * from read_parquet('{DIVIDENDS_GLOB.as_posix()}', union_by_name=true);
-""")
+select * from read_parquet('{p}', union_by_name=true);
+""".format(p=DIVIDENDS_GLOB_DATA))
 
-con.execute(f"""
+con.execute("""
 create or replace view ext.splits as
-select * from read_parquet('{SPLITS_GLOB.as_posix()}', union_by_name=true);
-""")
+select * from read_parquet('{p}', union_by_name=true);
+""".format(p=SPLITS_GLOB_DATA))
 
-con.execute(f"""
+con.execute("""
 create or replace view ext.ref_tickers as
-select * from read_parquet('{REF_GLOB.as_posix()}', union_by_name=true);
-""")
+select * from read_parquet('{p}', union_by_name=true);
+""".format(p=REF_GLOB_DATA))
 
-con.execute(f"""
+con.execute("""
 create or replace view ext.trading_calendar as
-select * from read_parquet('{CALENDAR_PARQUET.as_posix()}');
-""")
+select * from read_parquet('{p}');
+""".format(p=CALENDAR_DATA))
 
-# Core tables
+# create views
 con.execute("""
 create or replace view core.tickers as
 select
@@ -104,33 +98,61 @@ select
 from ext.splits;
 """)
 
-# Reference tickers (dynamic detection)
-ref_columns = con.execute("describe select * from ext.ref_tickers").df()["column_name"].str.lower().tolist()
-def has_column(c): return c.lower() in ref_columns
+# ref tickers
+def column_exists(name_lower: str, cols_lower: list) -> bool:
+    for i in range(len(cols_lower)):
+        if cols_lower[i] == name_lower:
+            return True
+    return False
 
-company_col = "company_name" if has_column("company_name") else ("name" if has_column("name") else None)
-industry_col = "industry" if has_column("industry") else None
-sector_col = "sector" if has_column("sector") else None
-locale_col = "locale" if has_column("locale") else None
-market_col = "market" if has_column("market") else None
-primary_ex_col = "primary_exchange" if has_column("primary_exchange") else None
+df_cols = con.execute("describe select * from ext.ref_tickers").df()
+ref_columns_lower = df_cols["column_name"].str.lower().tolist()
 
-ref_select = [
-    "upper(r.ticker) as ticker",
-    f"cast(r.{company_col} as varchar) as company_name" if company_col else "cast(NULL as varchar) as company_name",
-    f"cast(r.{industry_col} as varchar) as industry" if industry_col else "cast(NULL as varchar) as industry",
-    f"cast(r.{sector_col} as varchar) as sector" if sector_col else "cast(NULL as varchar) as sector",
-    f"cast(r.{locale_col} as varchar) as locale" if locale_col else "cast(NULL as varchar) as locale",
-    f"cast(r.{market_col} as varchar) as market" if market_col else "cast(NULL as varchar) as market",
-    f"cast(r.{primary_ex_col} as varchar) as primary_exchange" if primary_ex_col else "cast(NULL as varchar) as primary_exchange",
-]
+company_col = None
+if column_exists("company_name", ref_columns_lower):
+    company_col = "company_name"
+elif column_exists("name", ref_columns_lower):
+    company_col = "name"
 
-con.execute(f"""
+industry_col = "industry" if column_exists("industry", ref_columns_lower) else None
+sector_col = "sector" if column_exists("sector", ref_columns_lower) else None
+locale_col = "locale" if column_exists("locale", ref_columns_lower) else None
+market_col = "market" if column_exists("market", ref_columns_lower) else None
+primary_ex_col = "primary_exchange" if column_exists("primary_exchange", ref_columns_lower) else None
+
+ref_lines = []
+ref_lines.append("upper(r.ticker) as ticker")
+if company_col:
+    ref_lines.append("cast(r.{c} as varchar) as company_name".format(c=company_col))
+else:
+    ref_lines.append("cast(NULL as varchar) as company_name")
+if industry_col:
+    ref_lines.append("cast(r.{c} as varchar) as industry".format(c=industry_col))
+else:
+    ref_lines.append("cast(NULL as varchar) as industry")
+if sector_col:
+    ref_lines.append("cast(r.{c} as varchar) as sector".format(c=sector_col))
+else:
+    ref_lines.append("cast(NULL as varchar) as sector")
+if locale_col:
+    ref_lines.append("cast(r.{c} as varchar) as locale".format(c=locale_col))
+else:
+    ref_lines.append("cast(NULL as varchar) as locale")
+if market_col:
+    ref_lines.append("cast(r.{c} as varchar) as market".format(c=market_col))
+else:
+    ref_lines.append("cast(NULL as varchar) as market")
+if primary_ex_col:
+    ref_lines.append("cast(r.{c} as varchar) as primary_exchange".format(c=primary_ex_col))
+else:
+    ref_lines.append("cast(NULL as varchar) as primary_exchange")
+
+con.execute("""
 create or replace view core.ref_tickers as
 select
-  {", ".join(ref_select)}
+  {cols}
 from ext.ref_tickers r;
-""")
+""".format(cols=", ".join(ref_lines)))
 
 con.execute("""
 create or replace view core.trading_calendar as
@@ -145,7 +167,7 @@ select
 from ext.trading_calendar;
 """)
 
-# Views
+# analytic views
 con.execute("""
 create or replace view views.prices_enriched as
 select
@@ -275,4 +297,5 @@ select
   case when close > 0 then cash_ttm / close else null end as dividend_yield_ttm
 from agg;
 """)
-print("Schema initialized", DB_PATH.as_posix())
+
+print("Schema initialized", DB)

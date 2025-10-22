@@ -1,0 +1,195 @@
+Q: Top 10 gainers by daily return on 2024-05-07.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-05-07' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-05-07' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-12-05.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-12-05' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-12-05' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-01-10.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-01-10' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-01-10' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-07-31.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-07-31' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-07-31' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-02-03.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-02-03' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-02-03' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-08-29.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-08-29' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-08-29' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-03-17.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-03-17' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-03-17' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-12-03.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-12-03' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-12-03' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-08-13.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-08-13' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-08-13' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2023-12-27.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2023-12-27' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2023-12-27' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-03-12.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-03-12' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-03-12' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-06-05.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-06-05' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-06-05' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-02-26.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-02-26' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-02-26' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-07-31.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-07-31' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-07-31' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-09-02.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-02' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-02' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-05-31.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-05-31' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-05-31' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-08-11.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-08-11' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-08-11' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-08-13.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-08-13' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-08-13' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-02-12.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-02-12' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-02-12' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-09-05.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-05' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-05' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-07-03.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-07-03' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-07-03' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-08-20.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-08-20' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-08-20' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-05-14.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-05-14' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-05-14' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-04-25.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-04-25' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-04-25' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-01-26.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-01-26' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-01-26' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-03-14.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-03-14' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-03-14' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-05-06.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-05-06' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-05-06' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-09-11.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-09-11' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-09-11' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-05-28.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-05-28' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-05-28' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-03-25.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-03-25' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-03-25' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-09-24.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-24' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-24' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-09-11.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-11' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-11' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-03-19.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-03-19' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-03-19' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-04-19.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-04-19' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-04-19' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-09-12.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-12' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-12' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-10-01.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-10-01' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-10-01' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-07-08.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-07-08' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-07-08' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-06-27.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-06-27' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-06-27' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-01-07.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-01-07' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-01-07' ) select ticker, ret from r order by ret desc limit 10
+---

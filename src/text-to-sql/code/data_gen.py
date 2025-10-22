@@ -3,13 +3,15 @@ import duckdb
 import pandas as pd
 import random
 import json
+from tqdm import tqdm
 
-DB_PATH = Path("/src/db/financial.duckdb")
-OUT_DIR = Path("/src/text-to-sql/data")
+# --- config (use *_DATA names) ---
+DB_DATA = "./src/db/financial.duckdb"
+OUT_DIR_DATA = "./src/text-to-sql/data"
+META_DATA = "./src/text-to-sql/data/dataset_metadata.json"
 RANDOM_SEED = 321
 PER_INTENT = 750
 ALLOW_EMPTY_FOR = {"calendar_filter"}
-METADATA_NAME = "dataset_metadata.json"
 
 def write_jsonl(path: Path, rows: list):
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -17,15 +19,15 @@ def write_jsonl(path: Path, rows: list):
         for r in rows:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
-def pick(items):
-    return random.choice(items) if items else None
+def pick(x):
+    return random.choice(x) if x else None
 
-def sample_n(items, k):
-    k = min(k, len(items))
-    return random.sample(items, k) if items else []
+def sample_n(x, k):
+    k = min(k, len(x))
+    return random.sample(x, k) if x else []
 
-# validate query by executing it
-def sql_is_valid(con, sql: str, intent: str) -> tuple[bool, bool]:
+# validation
+def sql_is_valid(con, sql: str, intent: str):
     try:
         df = con.sql(sql).df()
         if intent in ALLOW_EMPTY_FOR:
@@ -34,23 +36,24 @@ def sql_is_valid(con, sql: str, intent: str) -> tuple[bool, bool]:
     except Exception:
         return False, False
 
-# seed
 random.seed(RANDOM_SEED)
-con = duckdb.connect(DB_PATH.as_posix())
+con = duckdb.connect(DB_DATA)
 
-# seed entities from db
 tickers = con.sql("select distinct ticker from core.tickers order by ticker").df()["ticker"].tolist()
 sectors = con.sql("select distinct sector from core.tickers where sector is not null order by sector").df()["sector"].tolist()
 dates_all = con.sql("select distinct date from core.prices_daily order by date").df()["date"].astype(str).tolist()
 weeks_all = con.sql("select distinct week from views.prices_weekly order by week").df()["week"].astype(str).tolist()
 months_all = con.sql("select distinct month from views.prices_monthly order by month").df()["month"].astype(str).tolist()
 
-# positive pools to reduce runtime failures
 tickers_with_div = con.sql("select distinct ticker from core.dividends").df()["ticker"].tolist()
 tickers_with_spl = con.sql("select distinct ticker from core.splits").df()["ticker"].tolist()
-tickers_with_actions = con.sql("select distinct ticker from core.splits union select distinct ticker from core.dividends").df()["ticker"].tolist()
+tickers_with_actions = con.sql("""
+    select distinct ticker from core.splits
+    union
+    select distinct ticker from core.dividends
+""").df()["ticker"].tolist()
 
-# sector/date pairs built directly from core tables to avoid view dependency
+# sector/date pairs from base tables
 sector_dates_df = con.sql("""
   select distinct t.sector as sector, p.date as date
   from core.prices_daily p
@@ -58,7 +61,8 @@ sector_dates_df = con.sql("""
   where t.sector is not null
   order by 1,2
 """).df()
-sector_dates = list(zip(sector_dates_df["sector"].tolist(), sector_dates_df["date"].astype(str).tolist()))
+sector_dates = list(zip(sector_dates_df["sector"].tolist(),
+                        sector_dates_df["date"].astype(str).tolist()))
 
 weekly_pairs = con.sql("select distinct ticker, week from views.prices_weekly").df().to_records(index=False).tolist()
 monthly_pairs = con.sql("select distinct ticker, month from views.prices_monthly").df().to_records(index=False).tolist()
@@ -73,6 +77,7 @@ def choose_date_range():
     i2 = random.randint(i1 + 5, min(len(dates_all) - 1, i1 + random.randint(10, 90)))
     return dates_all[i1], dates_all[i2]
 
+# generators
 def g_point_ohlcv_first_day():
     t = pick(tickers)
     q = f"Show OHLCV for {t} on its first trading day."
@@ -113,11 +118,8 @@ def g_returns_window_7_30():
     return {"question": q, "sql": s, "intent": "delta_window"}
 
 def g_sector_agg_on_date():
-    sd = pick(sector_dates)
-    if sd:
-        sct, d = sd
-    else:
-        sct, d = pick(sectors), pick(dates_all)
+    sd = pick(sector_dates) or (pick(sectors), pick(dates_all))
+    sct, d = sd
     q = f"Average close and total volume for sector {sct} on {d}."
     s = f"""
         select avg(p.close) as avg_close, sum(p.volume) as total_volume
@@ -128,11 +130,8 @@ def g_sector_agg_on_date():
     return {"question": q, "sql": s, "intent": "sector_aggregate"}
 
 def g_weekly_bar():
-    tw = pick(weekly_pairs)
-    if tw:
-        t, w = tw
-    else:
-        t, w = pick(tickers), pick(weeks_all)
+    tw = pick(weekly_pairs) or (pick(tickers), pick(weeks_all))
+    t, w = tw
     q = f"Weekly OHLCV for {t} in week {w}."
     s = f"""
         select *
@@ -142,11 +141,8 @@ def g_weekly_bar():
     return {"question": q, "sql": s, "intent": "resample_weekly"}
 
 def g_monthly_bar():
-    tm = pick(monthly_pairs)
-    if tm:
-        t, m = tm
-    else:
-        t, m = pick(tickers), pick(months_all)
+    tm = pick(monthly_pairs) or (pick(tickers), pick(months_all))
+    t, m = tm
     q = f"Monthly OHLCV for {t} in {m}."
     s = f"""
         select *
@@ -295,11 +291,8 @@ def g_company_profile():
     return {"question": q, "sql": s, "intent": "profile"}
 
 def g_sector_members_on_date():
-    sd = pick(sector_dates)
-    if sd:
-        sct, d = sd
-    else:
-        sct, d = pick(sectors), pick(dates_all)
+    sd = pick(sector_dates) or (pick(sectors), pick(dates_all))
+    sct, d = sd
     q = f"Tickers in sector {sct} that traded on {d}."
     s = f"""
         select distinct p.ticker
@@ -310,7 +303,6 @@ def g_sector_members_on_date():
     """
     return {"question": q, "sql": s, "intent": "membership"}
 
-# generator registry
 generators = [
     g_point_ohlcv_first_day,
     g_latest_close_volume,
@@ -333,7 +325,7 @@ generators = [
 
 # generate raw candidates
 raw_examples = []
-for gen in generators:
+for gen in tqdm(generators, desc="generate intents"):
     for _ in range(PER_INTENT):
         raw_examples.append(gen())
 
@@ -341,7 +333,8 @@ for gen in generators:
 valid_examples = []
 failed_runtime = 0
 failed_empty = 0
-for ex in raw_examples:
+
+for ex in tqdm(raw_examples, desc="validate sql"):
     sql_clean = " ".join(ex["sql"].split())
     ok, was_empty = sql_is_valid(con, sql_clean, ex["intent"])
     if ok:
@@ -352,7 +345,6 @@ for ex in raw_examples:
         else:
             failed_runtime += 1
 
-# deduplicate by SQL
 seen_sql = set()
 dedup_examples = []
 for r in valid_examples:
@@ -360,24 +352,27 @@ for r in valid_examples:
         dedup_examples.append(r)
         seen_sql.add(r["sql"])
 
-# split into train/val/test
+# split data
 random.shuffle(dedup_examples)
 total = len(dedup_examples)
 n_train = int(total * 0.8)
 n_val = int(total * 0.1)
+
 train_rows = dedup_examples[:n_train]
 val_rows = dedup_examples[n_train:n_train + n_val]
 test_rows = dedup_examples[n_train + n_val:]
 
 # write outputs
-OUT_DIR.mkdir(parents=True, exist_ok=True)
-write_jsonl(OUT_DIR / "train.jsonl", train_rows)
-write_jsonl(OUT_DIR / "val.jsonl", val_rows)
-write_jsonl(OUT_DIR / "test.jsonl", test_rows)
+out_dir = Path(OUT_DIR_DATA)
+out_dir.mkdir(parents=True, exist_ok=True)
 
-# write dataset metadata
-metadata = {
-    "db_path": DB_PATH.as_posix(),
+write_jsonl(out_dir / "train.jsonl", train_rows)
+write_jsonl(out_dir / "val.jsonl", val_rows)
+write_jsonl(out_dir / "test.jsonl", test_rows)
+
+# write metadata
+meta = {
+    "db_path": DB_DATA,
     "counts": {"total": total, "train": len(train_rows), "val": len(val_rows), "test": len(test_rows)},
     "intents": sorted(list({r["intent"] for r in dedup_examples})),
     "seed": RANDOM_SEED,
@@ -389,10 +384,10 @@ metadata = {
         "failed_empty_or_disallowed": failed_empty
     }
 }
-(OUT_DIR / METADATA_NAME).write_text(json.dumps(metadata, indent=2))
+Path(META_DATA).write_text(json.dumps(meta, indent=2), encoding="utf-8")
 
 print(
     f"Done | total={total} train={len(train_rows)} val={len(val_rows)} test={len(test_rows)} "
-    f"intents={len(metadata['intents'])} | raw={len(raw_examples)} kept={total} "
+    f"intents={len(meta['intents'])} | raw={len(raw_examples)} kept={total} "
     f"fail_runtime={failed_runtime} fail_empty={failed_empty}"
 )
