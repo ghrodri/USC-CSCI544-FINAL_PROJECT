@@ -1,0 +1,14 @@
+Epoch 1: loss=3.280684 val_em=0.788222 val_exec=0.905590 gold_exec_cov=0.911665
+Epoch 2: loss=1.608673 val_em=0.916195 val_exec=0.956522 gold_exec_cov=0.911665
+Epoch 3: loss=1.497921 val_em=0.972820 val_exec=0.956522 gold_exec_cov=0.911665
+Epoch 4: loss=1.458154 val_em=0.988675 val_exec=0.957764 gold_exec_cov=0.911665
+Epoch 5: loss=1.439856 val_em=1.000000 val_exec=0.956522 gold_exec_cov=0.911665
+Epoch 6: loss=1.427625 val_em=0.998867 val_exec=0.957764 gold_exec_cov=0.911665
+Epoch 7: loss=1.420059 val_em=0.955832 val_exec=0.910559 gold_exec_cov=0.911665
+Epoch 8: loss=1.414658 val_em=1.000000 val_exec=0.957764 gold_exec_cov=0.911665
+Epoch 9: loss=1.409954 val_em=1.000000 val_exec=0.959006 gold_exec_cov=0.911665
+Epoch 10: loss=1.406814 val_em=0.997735 val_exec=0.956522 gold_exec_cov=0.911665
+Epoch 11: loss=1.404738 val_em=0.955832 val_exec=0.909317 gold_exec_cov=0.911665
+Epoch 12: loss=1.401793 val_em=1.000000 val_exec=0.956522 gold_exec_cov=0.911665
+Epoch 13: loss=1.399859 val_em=1.000000 val_exec=0.956522 gold_exec_cov=0.911665
+Epoch 14: loss=1.398311 val_em=0.998867 val_exec=0.956522 gold_exec_cov=0.911665

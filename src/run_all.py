@@ -1,45 +1,50 @@
-import subprocess
-from pathlib import Path
+import os
 import sys
 import time
 import subprocess
 from pathlib import Path
-import sys
-import time
-
-# Base path
-ROOT = Path("")
-
-ETL_SCRIPTS = [
-    ROOT / "etl" / "build_schema.py",
-    ROOT / "etl" / "catalog.py",
-    ROOT / "etl" / "dividends.py",
-    ROOT / "etl" / "price_daily.py",
-    ROOT / "etl" / "splits.py",
-    ROOT / "etl" / "tickers_ref.py",
-    ROOT / "etl" / "trading_calendar.py",
+ROOT_DATA = Path(".").resolve()
+ETL_SCRIPTS_DATA = [
+    ROOT_DATA / "etl" / "build_schema.py",
+    ROOT_DATA / "etl" / "catalog.py",
+    ROOT_DATA / "etl" / "dividends.py",
+    ROOT_DATA / "etl" / "price_daily.py",
+    ROOT_DATA / "etl" / "splits.py",
+    ROOT_DATA / "etl" / "tickers_ref.py",
+    ROOT_DATA / "etl" / "trading_calendar.py",
 ]
-# Data gen
-DATA_GEN = ROOT / "text-to-sql" / "code" / "data_gen.py"
+DATA_GEN_DATA = ROOT_DATA / "text-to-sql" / "code" / "data_gen.py"
+LOGS_DIR_DATA = ROOT_DATA / "src" / "logs" / "etl"
 
-def run_script(script_path: Path):
-    start = time.time()
-    result = subprocess.run([sys.executable, script_path.as_posix()],
-                            capture_output=True, text=True)
-    duration = time.time() - start
+def ensure_dir(p: Path):
+    os.makedirs(p, exist_ok=True)
 
-    if result.returncode != 0:
-        sys.stderr.write(f"Error in {script_path.name}\n")
-        sys.stderr.write(result.stderr + "\n")
-        sys.exit(1)
+def run_script(p: Path) -> float:
+    t0 = time.time()
+    r = subprocess.run([sys.executable, p.as_posix()], capture_output=True, text=True)
+    dt = time.time() - t0
 
-    log_file = script_path.with_suffix(".log")
-    with log_file.open("w", encoding="utf-8") as f:
-        f.write(result.stdout)
-        f.write(result.stderr)
-        f.write(f"\nDuration: {duration:.2f}s\n")
+    log_fp = LOGS_DIR_DATA / f"{p.stem}.log"
+    with log_fp.open("w", encoding="utf-8") as f:
+        f.write(r.stdout or "")
+        f.write(r.stderr or "")
+        f.write(f"\nDuration: {dt:.2f}s\n")
+
+    if r.returncode != 0:
+        print(f"FAILED: {p.name} (code {r.returncode})")
+        print(f"See log: {log_fp.as_posix()}")
+        sys.exit(r.returncode)
+
+    print(f"OK: {p.name}  {dt:.2f}s")
+    return dt
+
+
 if __name__ == "__main__":
-    for script in ETL_SCRIPTS:
-        run_script(script)
-    run_script(DATA_GEN)
-    print("\n Pipeline completed successfully")
+    ensure_dir(LOGS_DIR_DATA)
+
+    t_all = time.time()
+    for s in ETL_SCRIPTS_DATA:
+        run_script(s)
+
+    run_script(DATA_GEN_DATA)
+    print(f"\nPipeline completed successfully in {time.time() - t_all:.2f}s")

@@ -1,0 +1,1165 @@
+Q: Top 10 gainers by daily return on 2025-02-12.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-02-12' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-02-12' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Show OHLCV for TFX on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='tfx') select p.* from core.prices_daily p, d where p.ticker='tfx' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'tfx'
+---
+Q: Close price and split factors for BXP between 2023-11-21 and 2024-01-31.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='bxp' and p.date between '2023-11-21' and '2024-01-31' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'bxp' and date between '2023-11-21' and '2024-01-31'
+---
+Q: Close price and split factors for UHS between 2024-05-14 and 2024-05-29.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='uhs' and p.date between '2024-05-14' and '2024-05-29' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'uhs' and date between '2024-05-14' and '2024-05-29'
+---
+Q: Close price and split factors for CVS between 2024-03-18 and 2024-05-13.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='cvs' and p.date between '2024-03-18' and '2024-05-13' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'cvs' and date between '2024-03-18' and '2024-05-13'
+---
+Q: Top 10 gainers by daily return on 2024-03-25.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-03-25' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-03-25' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Latest close and volume for CRM.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='crm') select date, close, volume from core.prices_daily, mx where ticker='crm' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='crm' order by date desc limit 1
+---
+Q: Latest close and volume for PNW.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='pnw') select date, close, volume from core.prices_daily, mx where ticker='pnw' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='pnw' order by date desc limit 1
+---
+Q: Show OHLCV for CHD on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='chd') select p.* from core.prices_daily p, d where p.ticker='chd' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'chd'
+---
+Q: Close price and split factors for KMI between 2024-06-03 and 2024-06-12.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='kmi' and p.date between '2024-06-03' and '2024-06-12' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'kmi' and date between '2024-06-03' and '2024-06-12'
+---
+Q: Close price and split factors for TJX between 2024-10-16 and 2024-10-23.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='tjx' and p.date between '2024-10-16' and '2024-10-23' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'tjx' and date between '2024-10-16' and '2024-10-23'
+---
+Q: Latest close and volume for CLX.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='clx') select date, close, volume from core.prices_daily, mx where ticker='clx' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='clx' order by date desc limit 1
+---
+Q: Close price and split factors for ON between 2025-05-13 and 2025-06-11.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='on' and p.date between '2025-05-13' and '2025-06-11' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'on' and date between '2025-05-13' and '2025-06-11'
+---
+Q: Close price and split factors for CDNS between 2024-12-12 and 2025-01-02.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='cdns' and p.date between '2024-12-12' and '2025-01-02' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'cdns' and date between '2024-12-12' and '2025-01-02'
+---
+Q: Close price and split factors for TER between 2025-04-28 and 2025-05-14.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='ter' and p.date between '2025-04-28' and '2025-05-14' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'ter' and date between '2025-04-28' and '2025-05-14'
+---
+Q: Top 10 gainers by daily return on 2025-09-02.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-02' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-02' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Latest close and volume for BEN.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='ben') select date, close, volume from core.prices_daily, mx where ticker='ben' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='ben' order by date desc limit 1
+---
+Q: Latest close and volume for AXON.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='axon') select date, close, volume from core.prices_daily, mx where ticker='axon' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='axon' order by date desc limit 1
+---
+Q: Top 10 gainers by daily return on 2024-04-19.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-04-19' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-04-19' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Close price and split factors for MKC between 2023-11-09 and 2023-12-26.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='mkc' and p.date between '2023-11-09' and '2023-12-26' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'mkc' and date between '2023-11-09' and '2023-12-26'
+---
+Q: Corporate actions for EXR ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='exr' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'exr'
+---
+Q: Latest close and volume for FOXA.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='foxa') select date, close, volume from core.prices_daily, mx where ticker='foxa' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='foxa' order by date desc limit 1
+---
+Q: Latest close and volume for MGM.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='mgm') select date, close, volume from core.prices_daily, mx where ticker='mgm' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='mgm' order by date desc limit 1
+---
+Q: Latest close and volume for MHK.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='mhk') select date, close, volume from core.prices_daily, mx where ticker='mhk' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='mhk' order by date desc limit 1
+---
+Q: Corporate actions for WELL ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='well' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'well'
+---
+Q: Close price and split factors for GPN between 2023-12-12 and 2023-12-20.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='gpn' and p.date between '2023-12-12' and '2023-12-20' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'gpn' and date between '2023-12-12' and '2023-12-20'
+---
+Q: Close price and split factors for WFC between 2025-05-20 and 2025-05-28.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='wfc' and p.date between '2025-05-20' and '2025-05-28' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'wfc' and date between '2025-05-20' and '2025-05-28'
+---
+Q: Close price and split factors for MO between 2025-02-06 and 2025-02-14.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='mo' and p.date between '2025-02-06' and '2025-02-14' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'mo' and date between '2025-02-06' and '2025-02-14'
+---
+Q: Top 10 gainers by daily return on 2024-01-10.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-01-10' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-01-10' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Corporate actions for IR ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='ir' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'ir'
+---
+Q: Corporate actions for VTR ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='vtr' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'vtr'
+---
+Q: Top 10 gainers by daily return on 2025-07-03.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-07-03' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-07-03' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-02-26.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-02-26' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-02-26' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Close price and split factors for BBY between 2024-07-18 and 2024-09-16.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='bby' and p.date between '2024-07-18' and '2024-09-16' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'bby' and date between '2024-07-18' and '2024-09-16'
+---
+Q: Show OHLCV for DVN on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='dvn') select p.* from core.prices_daily p, d where p.ticker='dvn' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'dvn'
+---
+Q: Latest close and volume for BDX.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='bdx') select date, close, volume from core.prices_daily, mx where ticker='bdx' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='bdx' order by date desc limit 1
+---
+Q: Show OHLCV for ALGN on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='algn') select p.* from core.prices_daily p, d where p.ticker='algn' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'algn'
+---
+Q: Latest close and volume for BK.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='bk') select date, close, volume from core.prices_daily, mx where ticker='bk' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='bk' order by date desc limit 1
+---
+Q: Close price and split factors for SNA between 2024-07-25 and 2024-08-01.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='sna' and p.date between '2024-07-25' and '2024-08-01' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'sna' and date between '2024-07-25' and '2024-08-01'
+---
+Q: Close price and split factors for MA between 2025-03-06 and 2025-03-28.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='ma' and p.date between '2025-03-06' and '2025-03-28' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'ma' and date between '2025-03-06' and '2025-03-28'
+---
+Q: Close price and split factors for RVTY between 2024-02-20 and 2024-02-27.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='rvty' and p.date between '2024-02-20' and '2024-02-27' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'rvty' and date between '2024-02-20' and '2024-02-27'
+---
+Q: Show OHLCV for CDNS on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='cdns') select p.* from core.prices_daily p, d where p.ticker='cdns' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'cdns'
+---
+Q: Close price and split factors for SNA between 2025-08-18 and 2025-10-01.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='sna' and p.date between '2025-08-18' and '2025-10-01' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'sna' and date between '2025-08-18' and '2025-10-01'
+---
+Q: Close price and split factors for KKR between 2024-08-14 and 2024-10-31.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='kkr' and p.date between '2024-08-14' and '2024-10-31' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'kkr' and date between '2024-08-14' and '2024-10-31'
+---
+Q: Corporate actions for PLTR ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='pltr' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'pltr'
+---
+Q: Close price and split factors for PPL between 2024-04-16 and 2024-07-01.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='ppl' and p.date between '2024-04-16' and '2024-07-01' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'ppl' and date between '2024-04-16' and '2024-07-01'
+---
+Q: Top 10 gainers by daily return on 2024-06-05.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-06-05' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-06-05' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Close price and split factors for BIIB between 2025-07-18 and 2025-08-12.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='biib' and p.date between '2025-07-18' and '2025-08-12' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'biib' and date between '2025-07-18' and '2025-08-12'
+---
+Q: Show OHLCV for DHI on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='dhi') select p.* from core.prices_daily p, d where p.ticker='dhi' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'dhi'
+---
+Q: Close price and split factors for TPR between 2024-08-05 and 2024-09-12.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='tpr' and p.date between '2024-08-05' and '2024-09-12' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'tpr' and date between '2024-08-05' and '2024-09-12'
+---
+Q: Show OHLCV for VTR on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='vtr') select p.* from core.prices_daily p, d where p.ticker='vtr' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'vtr'
+---
+Q: Close price and split factors for MTCH between 2024-06-07 and 2024-08-05.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='mtch' and p.date between '2024-06-07' and '2024-08-05' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'mtch' and date between '2024-06-07' and '2024-08-05'
+---
+Q: Close price and split factors for RF between 2024-07-11 and 2024-10-31.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='rf' and p.date between '2024-07-11' and '2024-10-31' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'rf' and date between '2024-07-11' and '2024-10-31'
+---
+Q: Close price and split factors for SO between 2025-06-17 and 2025-07-11.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='so' and p.date between '2025-06-17' and '2025-07-11' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'so' and date between '2025-06-17' and '2025-07-11'
+---
+Q: Top 10 gainers by daily return on 2024-05-14.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-05-14' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-05-14' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Latest close and volume for MSI.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='msi') select date, close, volume from core.prices_daily, mx where ticker='msi' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='msi' order by date desc limit 1
+---
+Q: Latest close and volume for J.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='j') select date, close, volume from core.prices_daily, mx where ticker='j' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='j' order by date desc limit 1
+---
+Q: Latest close and volume for AMD.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='amd') select date, close, volume from core.prices_daily, mx where ticker='amd' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='amd' order by date desc limit 1
+---
+Q: Close price and split factors for AMZN between 2024-03-21 and 2024-04-02.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='amzn' and p.date between '2024-03-21' and '2024-04-02' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'amzn' and date between '2024-03-21' and '2024-04-02'
+---
+Q: Show OHLCV for LKQ on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='lkq') select p.* from core.prices_daily p, d where p.ticker='lkq' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'lkq'
+---
+Q: Close price and split factors for WST between 2024-12-20 and 2025-04-01.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='wst' and p.date between '2024-12-20' and '2025-04-01' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'wst' and date between '2024-12-20' and '2025-04-01'
+---
+Q: Latest close and volume for CTRA.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='ctra') select date, close, volume from core.prices_daily, mx where ticker='ctra' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='ctra' order by date desc limit 1
+---
+Q: Show OHLCV for D on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='d') select p.* from core.prices_daily p, d where p.ticker='d' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'd'
+---
+Q: Close price and split factors for LNT between 2024-09-19 and 2024-11-01.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='lnt' and p.date between '2024-09-19' and '2024-11-01' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'lnt' and date between '2024-09-19' and '2024-11-01'
+---
+Q: Top 10 gainers by daily return on 2024-12-03.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-12-03' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-12-03' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Close price and split factors for HSIC between 2024-08-15 and 2024-08-27.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='hsic' and p.date between '2024-08-15' and '2024-08-27' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'hsic' and date between '2024-08-15' and '2024-08-27'
+---
+Q: Latest close and volume for BIIB.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='biib') select date, close, volume from core.prices_daily, mx where ticker='biib' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='biib' order by date desc limit 1
+---
+Q: Latest close and volume for IFF.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='iff') select date, close, volume from core.prices_daily, mx where ticker='iff' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='iff' order by date desc limit 1
+---
+Q: Close price and split factors for JNJ between 2025-04-04 and 2025-04-30.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='jnj' and p.date between '2025-04-04' and '2025-04-30' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'jnj' and date between '2025-04-04' and '2025-04-30'
+---
+Q: Close price and split factors for VRTX between 2024-12-24 and 2025-01-16.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='vrtx' and p.date between '2024-12-24' and '2025-01-16' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'vrtx' and date between '2024-12-24' and '2025-01-16'
+---
+Q: Show OHLCV for BEN on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='ben') select p.* from core.prices_daily p, d where p.ticker='ben' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'ben'
+---
+Q: Corporate actions for TSCO ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='tsco' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'tsco'
+---
+Q: Corporate actions for BXP ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='bxp' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'bxp'
+---
+Q: Corporate actions for CTRA ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='ctra' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'ctra'
+---
+Q: Latest close and volume for CAG.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='cag') select date, close, volume from core.prices_daily, mx where ticker='cag' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='cag' order by date desc limit 1
+---
+Q: Top 10 gainers by daily return on 2024-05-07.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-05-07' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-05-07' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Show OHLCV for PWR on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='pwr') select p.* from core.prices_daily p, d where p.ticker='pwr' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'pwr'
+---
+Q: Close price and split factors for KR between 2024-08-14 and 2024-09-16.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='kr' and p.date between '2024-08-14' and '2024-09-16' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'kr' and date between '2024-08-14' and '2024-09-16'
+---
+Q: Show OHLCV for GE on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='ge') select p.* from core.prices_daily p, d where p.ticker='ge' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'ge'
+---
+Q: Close price and split factors for HPE between 2024-03-18 and 2024-04-01.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='hpe' and p.date between '2024-03-18' and '2024-04-01' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'hpe' and date between '2024-03-18' and '2024-04-01'
+---
+Q: Corporate actions for INCY ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='incy' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'incy'
+---
+Q: Latest close and volume for IEX.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='iex') select date, close, volume from core.prices_daily, mx where ticker='iex' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='iex' order by date desc limit 1
+---
+Q: Corporate actions for MCK ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='mck' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'mck'
+---
+Q: Show OHLCV for SHW on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='shw') select p.* from core.prices_daily p, d where p.ticker='shw' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'shw'
+---
+Q: Latest close and volume for LNT.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='lnt') select date, close, volume from core.prices_daily, mx where ticker='lnt' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='lnt' order by date desc limit 1
+---
+Q: Close price and split factors for GL between 2024-05-28 and 2024-08-06.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='gl' and p.date between '2024-05-28' and '2024-08-06' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'gl' and date between '2024-05-28' and '2024-08-06'
+---
+Q: Show OHLCV for SWK on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='swk') select p.* from core.prices_daily p, d where p.ticker='swk' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'swk'
+---
+Q: Close price and split factors for FDX between 2025-03-19 and 2025-05-29.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='fdx' and p.date between '2025-03-19' and '2025-05-29' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'fdx' and date between '2025-03-19' and '2025-05-29'
+---
+Q: Latest close and volume for AMTM.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='amtm') select date, close, volume from core.prices_daily, mx where ticker='amtm' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='amtm' order by date desc limit 1
+---
+Q: Close price and split factors for WRB between 2024-04-22 and 2024-05-28.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='wrb' and p.date between '2024-04-22' and '2024-05-28' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'wrb' and date between '2024-04-22' and '2024-05-28'
+---
+Q: Top 10 gainers by daily return on 2025-08-29.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-08-29' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-08-29' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Close price and split factors for MPC between 2025-01-16 and 2025-02-28.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='mpc' and p.date between '2025-01-16' and '2025-02-28' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'mpc' and date between '2025-01-16' and '2025-02-28'
+---
+Q: Top 10 gainers by daily return on 2025-04-25.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-04-25' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-04-25' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-09-24.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-24' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-24' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Show OHLCV for BLK on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='blk') select p.* from core.prices_daily p, d where p.ticker='blk' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'blk'
+---
+Q: Show OHLCV for CTSH on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='ctsh') select p.* from core.prices_daily p, d where p.ticker='ctsh' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'ctsh'
+---
+Q: Top 10 gainers by daily return on 2024-12-05.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-12-05' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-12-05' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Show OHLCV for TPL on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='tpl') select p.* from core.prices_daily p, d where p.ticker='tpl' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'tpl'
+---
+Q: Close price and split factors for PGR between 2024-05-15 and 2024-06-21.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='pgr' and p.date between '2024-05-15' and '2024-06-21' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'pgr' and date between '2024-05-15' and '2024-06-21'
+---
+Q: Close price and split factors for UHS between 2024-10-24 and 2024-11-01.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='uhs' and p.date between '2024-10-24' and '2024-11-01' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'uhs' and date between '2024-10-24' and '2024-11-01'
+---
+Q: Show OHLCV for MHK on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='mhk') select p.* from core.prices_daily p, d where p.ticker='mhk' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'mhk'
+---
+Q: Close price and split factors for DE between 2024-11-06 and 2024-12-12.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='de' and p.date between '2024-11-06' and '2024-12-12' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'de' and date between '2024-11-06' and '2024-12-12'
+---
+Q: Corporate actions for YUM ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='yum' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'yum'
+---
+Q: Close price and split factors for CHD between 2025-07-29 and 2025-08-11.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='chd' and p.date between '2025-07-29' and '2025-08-11' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'chd' and date between '2025-07-29' and '2025-08-11'
+---
+Q: Top 10 gainers by daily return on 2025-03-17.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-03-17' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-03-17' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Show OHLCV for REG on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='reg') select p.* from core.prices_daily p, d where p.ticker='reg' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'reg'
+---
+Q: Latest close and volume for GIS.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='gis') select date, close, volume from core.prices_daily, mx where ticker='gis' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='gis' order by date desc limit 1
+---
+Q: Show OHLCV for MPWR on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='mpwr') select p.* from core.prices_daily p, d where p.ticker='mpwr' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'mpwr'
+---
+Q: Corporate actions for IBM ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='ibm' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'ibm'
+---
+Q: Corporate actions for MHK ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='mhk' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'mhk'
+---
+Q: Corporate actions for CARR ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='carr' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'carr'
+---
+Q: Latest close and volume for PCAR.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='pcar') select date, close, volume from core.prices_daily, mx where ticker='pcar' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='pcar' order by date desc limit 1
+---
+Q: Top 10 gainers by daily return on 2025-08-11.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-08-11' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-08-11' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Latest close and volume for IDXX.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='idxx') select date, close, volume from core.prices_daily, mx where ticker='idxx' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='idxx' order by date desc limit 1
+---
+Q: Top 10 gainers by daily return on 2025-02-03.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-02-03' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-02-03' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Close price and split factors for REGN between 2024-06-12 and 2024-09-16.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='regn' and p.date between '2024-06-12' and '2024-09-16' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'regn' and date between '2024-06-12' and '2024-09-16'
+---
+Q: Latest close and volume for ABNB.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='abnb') select date, close, volume from core.prices_daily, mx where ticker='abnb' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='abnb' order by date desc limit 1
+---
+Q: Close price and split factors for FOXA between 2024-12-18 and 2025-03-12.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='foxa' and p.date between '2024-12-18' and '2025-03-12' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'foxa' and date between '2024-12-18' and '2025-03-12'
+---
+Q: Corporate actions for ALL ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='all' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'all'
+---
+Q: Latest close and volume for QCOM.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='qcom') select date, close, volume from core.prices_daily, mx where ticker='qcom' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='qcom' order by date desc limit 1
+---
+Q: Top 10 gainers by daily return on 2025-08-13.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-08-13' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-08-13' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-10-01.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-10-01' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-10-01' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Latest close and volume for KO.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='ko') select date, close, volume from core.prices_daily, mx where ticker='ko' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='ko' order by date desc limit 1
+---
+Q: Close price and split factors for EQR between 2024-07-12 and 2024-08-07.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='eqr' and p.date between '2024-07-12' and '2024-08-07' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'eqr' and date between '2024-07-12' and '2024-08-07'
+---
+Q: Close price and split factors for LRCX between 2024-10-07 and 2025-01-16.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='lrcx' and p.date between '2024-10-07' and '2025-01-16' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'lrcx' and date between '2024-10-07' and '2025-01-16'
+---
+Q: Corporate actions for ESS ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='ess' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'ess'
+---
+Q: Latest close and volume for INTC.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='intc') select date, close, volume from core.prices_daily, mx where ticker='intc' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='intc' order by date desc limit 1
+---
+Q: Close price and split factors for GOOG between 2024-02-08 and 2024-03-08.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='goog' and p.date between '2024-02-08' and '2024-03-08' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'goog' and date between '2024-02-08' and '2024-03-08'
+---
+Q: Show OHLCV for DVA on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='dva') select p.* from core.prices_daily p, d where p.ticker='dva' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'dva'
+---
+Q: Close price and split factors for UDR between 2025-01-28 and 2025-02-28.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='udr' and p.date between '2025-01-28' and '2025-02-28' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'udr' and date between '2025-01-28' and '2025-02-28'
+---
+Q: Show OHLCV for HST on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='hst') select p.* from core.prices_daily p, d where p.ticker='hst' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'hst'
+---
+Q: Corporate actions for FOXA ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='foxa' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'foxa'
+---
+Q: Top 10 gainers by daily return on 2025-06-27.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-06-27' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-06-27' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Latest close and volume for PH.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='ph') select date, close, volume from core.prices_daily, mx where ticker='ph' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='ph' order by date desc limit 1
+---
+Q: Close price and split factors for MCD between 2023-11-07 and 2023-12-05.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='mcd' and p.date between '2023-11-07' and '2023-12-05' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'mcd' and date between '2023-11-07' and '2023-12-05'
+---
+Q: Corporate actions for SPG ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='spg' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'spg'
+---
+Q: Close price and split factors for WFC between 2024-12-13 and 2025-02-12.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='wfc' and p.date between '2024-12-13' and '2025-02-12' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'wfc' and date between '2024-12-13' and '2025-02-12'
+---
+Q: Top 10 gainers by daily return on 2025-03-14.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-03-14' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-03-14' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2024-05-31.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-05-31' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-05-31' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Show OHLCV for SLB on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='slb') select p.* from core.prices_daily p, d where p.ticker='slb' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'slb'
+---
+Q: Top 10 gainers by daily return on 2024-05-06.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-05-06' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-05-06' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Close price and split factors for PEG between 2025-03-25 and 2025-04-25.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='peg' and p.date between '2025-03-25' and '2025-04-25' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'peg' and date between '2025-03-25' and '2025-04-25'
+---
+Q: Close price and split factors for SPG between 2025-07-28 and 2025-08-13.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='spg' and p.date between '2025-07-28' and '2025-08-13' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'spg' and date between '2025-07-28' and '2025-08-13'
+---
+Q: Latest close and volume for KMX.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='kmx') select date, close, volume from core.prices_daily, mx where ticker='kmx' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='kmx' order by date desc limit 1
+---
+Q: Latest close and volume for AZO.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='azo') select date, close, volume from core.prices_daily, mx where ticker='azo' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='azo' order by date desc limit 1
+---
+Q: Top 10 gainers by daily return on 2025-03-12.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-03-12' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-03-12' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Close price and split factors for KEYS between 2025-05-13 and 2025-05-29.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='keys' and p.date between '2025-05-13' and '2025-05-29' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'keys' and date between '2025-05-13' and '2025-05-29'
+---
+Q: Top 10 gainers by daily return on 2025-09-05.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-05' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-05' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Close price and split factors for FDS between 2024-10-30 and 2024-11-21.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='fds' and p.date between '2024-10-30' and '2024-11-21' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'fds' and date between '2024-10-30' and '2024-11-21'
+---
+Q: Close price and split factors for AMGN between 2024-09-11 and 2024-11-12.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='amgn' and p.date between '2024-09-11' and '2024-11-12' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'amgn' and date between '2024-09-11' and '2024-11-12'
+---
+Q: Close price and split factors for DELL between 2023-12-15 and 2024-03-26.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='dell' and p.date between '2023-12-15' and '2024-03-26' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'dell' and date between '2023-12-15' and '2024-03-26'
+---
+Q: Show OHLCV for FAST on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='fast') select p.* from core.prices_daily p, d where p.ticker='fast' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'fast'
+---
+Q: Latest close and volume for NTRS.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='ntrs') select date, close, volume from core.prices_daily, mx where ticker='ntrs' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='ntrs' order by date desc limit 1
+---
+Q: Show OHLCV for GM on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='gm') select p.* from core.prices_daily p, d where p.ticker='gm' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'gm'
+---
+Q: Corporate actions for UDR ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='udr' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'udr'
+---
+Q: Close price and split factors for ULTA between 2025-02-14 and 2025-04-25.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='ulta' and p.date between '2025-02-14' and '2025-04-25' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'ulta' and date between '2025-02-14' and '2025-04-25'
+---
+Q: Show OHLCV for NDAQ on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='ndaq') select p.* from core.prices_daily p, d where p.ticker='ndaq' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'ndaq'
+---
+Q: Latest close and volume for WDC.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='wdc') select date, close, volume from core.prices_daily, mx where ticker='wdc' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='wdc' order by date desc limit 1
+---
+Q: Close price and split factors for CNP between 2024-09-10 and 2024-11-29.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='cnp' and p.date between '2024-09-10' and '2024-11-29' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'cnp' and date between '2024-09-10' and '2024-11-29'
+---
+Q: Corporate actions for TSLA ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='tsla' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'tsla'
+---
+Q: Close price and split factors for MSCI between 2025-04-11 and 2025-06-20.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='msci' and p.date between '2025-04-11' and '2025-06-20' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'msci' and date between '2025-04-11' and '2025-06-20'
+---
+Q: Show OHLCV for DXCM on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='dxcm') select p.* from core.prices_daily p, d where p.ticker='dxcm' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'dxcm'
+---
+Q: Close price and split factors for LYB between 2024-02-22 and 2024-04-12.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='lyb' and p.date between '2024-02-22' and '2024-04-12' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'lyb' and date between '2024-02-22' and '2024-04-12'
+---
+Q: Close price and split factors for MET between 2024-12-27 and 2025-03-07.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='met' and p.date between '2024-12-27' and '2025-03-07' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'met' and date between '2024-12-27' and '2025-03-07'
+---
+Q: Corporate actions for UNP ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='unp' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'unp'
+---
+Q: Close price and split factors for PCAR between 2024-03-25 and 2024-04-04.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='pcar' and p.date between '2024-03-25' and '2024-04-04' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'pcar' and date between '2024-03-25' and '2024-04-04'
+---
+Q: Close price and split factors for FANG between 2024-03-04 and 2024-05-16.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='fang' and p.date between '2024-03-04' and '2024-05-16' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'fang' and date between '2024-03-04' and '2024-05-16'
+---
+Q: Close price and split factors for DOC between 2024-01-26 and 2024-02-22.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='doc' and p.date between '2024-01-26' and '2024-02-22' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'doc' and date between '2024-01-26' and '2024-02-22'
+---
+Q: Top 10 gainers by daily return on 2024-07-31.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-07-31' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-07-31' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Corporate actions for MPC ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='mpc' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'mpc'
+---
+Q: Close price and split factors for QRVO between 2024-11-27 and 2025-01-29.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='qrvo' and p.date between '2024-11-27' and '2025-01-29' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'qrvo' and date between '2024-11-27' and '2025-01-29'
+---
+Q: Corporate actions for BKNG ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='bkng' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'bkng'
+---
+Q: Latest close and volume for XEL.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='xel') select date, close, volume from core.prices_daily, mx where ticker='xel' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='xel' order by date desc limit 1
+---
+Q: Show OHLCV for VST on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='vst') select p.* from core.prices_daily p, d where p.ticker='vst' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'vst'
+---
+Q: Close price and split factors for ON between 2024-01-05 and 2024-01-19.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='on' and p.date between '2024-01-05' and '2024-01-19' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'on' and date between '2024-01-05' and '2024-01-19'
+---
+Q: Close price and split factors for ALGN between 2024-07-23 and 2024-07-31.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='algn' and p.date between '2024-07-23' and '2024-07-31' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'algn' and date between '2024-07-23' and '2024-07-31'
+---
+Q: Top 10 gainers by daily return on 2025-01-07.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-01-07' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-01-07' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Close price and split factors for BAX between 2025-08-06 and 2025-08-13.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='bax' and p.date between '2025-08-06' and '2025-08-13' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'bax' and date between '2025-08-06' and '2025-08-13'
+---
+Q: Top 10 gainers by daily return on 2025-09-11.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-11' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-11' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Show OHLCV for CME on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='cme') select p.* from core.prices_daily p, d where p.ticker='cme' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'cme'
+---
+Q: Latest close and volume for BKR.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='bkr') select date, close, volume from core.prices_daily, mx where ticker='bkr' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='bkr' order by date desc limit 1
+---
+Q: Close price and split factors for AES between 2024-10-29 and 2025-01-10.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='aes' and p.date between '2024-10-29' and '2025-01-10' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'aes' and date between '2024-10-29' and '2025-01-10'
+---
+Q: Show OHLCV for PPG on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='ppg') select p.* from core.prices_daily p, d where p.ticker='ppg' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'ppg'
+---
+Q: Close price and split factors for LYB between 2024-09-30 and 2024-10-22.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='lyb' and p.date between '2024-09-30' and '2024-10-22' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'lyb' and date between '2024-09-30' and '2024-10-22'
+---
+Q: Top 10 gainers by daily return on 2024-08-20.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-08-20' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-08-20' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Latest close and volume for MSFT.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='msft') select date, close, volume from core.prices_daily, mx where ticker='msft' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='msft' order by date desc limit 1
+---
+Q: Close price and split factors for ALB between 2024-10-28 and 2025-01-08.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='alb' and p.date between '2024-10-28' and '2025-01-08' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'alb' and date between '2024-10-28' and '2025-01-08'
+---
+Q: Close price and split factors for AEE between 2024-12-12 and 2024-12-31.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='aee' and p.date between '2024-12-12' and '2024-12-31' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'aee' and date between '2024-12-12' and '2024-12-31'
+---
+Q: Top 10 gainers by daily return on 2025-05-28.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-05-28' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-05-28' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2023-12-27.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2023-12-27' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2023-12-27' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Show OHLCV for VMC on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='vmc') select p.* from core.prices_daily p, d where p.ticker='vmc' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'vmc'
+---
+Q: Show OHLCV for DOC on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='doc') select p.* from core.prices_daily p, d where p.ticker='doc' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'doc'
+---
+Q: Show OHLCV for COF on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='cof') select p.* from core.prices_daily p, d where p.ticker='cof' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'cof'
+---
+Q: Close price and split factors for ABNB between 2023-12-06 and 2023-12-21.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='abnb' and p.date between '2023-12-06' and '2023-12-21' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'abnb' and date between '2023-12-06' and '2023-12-21'
+---
+Q: Close price and split factors for WFC between 2024-07-11 and 2024-08-13.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='wfc' and p.date between '2024-07-11' and '2024-08-13' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'wfc' and date between '2024-07-11' and '2024-08-13'
+---
+Q: Latest close and volume for PEP.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='pep') select date, close, volume from core.prices_daily, mx where ticker='pep' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='pep' order by date desc limit 1
+---
+Q: Show OHLCV for ZBH on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='zbh') select p.* from core.prices_daily p, d where p.ticker='zbh' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'zbh'
+---
+Q: Latest close and volume for CHTR.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='chtr') select date, close, volume from core.prices_daily, mx where ticker='chtr' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='chtr' order by date desc limit 1
+---
+Q: Top 10 gainers by daily return on 2024-01-26.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-01-26' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-01-26' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Show OHLCV for NI on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='ni') select p.* from core.prices_daily p, d where p.ticker='ni' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'ni'
+---
+Q: Corporate actions for DUK ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='duk' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'duk'
+---
+Q: Close price and split factors for USB between 2025-01-06 and 2025-01-21.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='usb' and p.date between '2025-01-06' and '2025-01-21' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'usb' and date between '2025-01-06' and '2025-01-21'
+---
+Q: Close price and split factors for CSGP between 2025-02-03 and 2025-03-06.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='csgp' and p.date between '2025-02-03' and '2025-03-06' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'csgp' and date between '2025-02-03' and '2025-03-06'
+---
+Q: Close price and split factors for PAYX between 2025-03-19 and 2025-03-31.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='payx' and p.date between '2025-03-19' and '2025-03-31' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'payx' and date between '2025-03-19' and '2025-03-31'
+---
+Q: Show OHLCV for UHS on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='uhs') select p.* from core.prices_daily p, d where p.ticker='uhs' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'uhs'
+---
+Q: Latest close and volume for FTV.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='ftv') select date, close, volume from core.prices_daily, mx where ticker='ftv' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='ftv' order by date desc limit 1
+---
+Q: Close price and split factors for ORLY between 2024-10-24 and 2025-01-02.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='orly' and p.date between '2024-10-24' and '2025-01-02' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'orly' and date between '2024-10-24' and '2025-01-02'
+---
+Q: Show OHLCV for CMG on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='cmg') select p.* from core.prices_daily p, d where p.ticker='cmg' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'cmg'
+---
+Q: Show OHLCV for MGM on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='mgm') select p.* from core.prices_daily p, d where p.ticker='mgm' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'mgm'
+---
+Q: Close price and split factors for NEM between 2024-08-26 and 2024-09-04.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='nem' and p.date between '2024-08-26' and '2024-09-04' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'nem' and date between '2024-08-26' and '2024-09-04'
+---
+Q: Corporate actions for SWK ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='swk' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'swk'
+---
+Q: Close price and split factors for KMX between 2024-09-05 and 2024-10-07.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='kmx' and p.date between '2024-09-05' and '2024-10-07' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'kmx' and date between '2024-09-05' and '2024-10-07'
+---
+Q: Close price and split factors for AFL between 2023-12-04 and 2024-01-31.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='afl' and p.date between '2023-12-04' and '2024-01-31' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'afl' and date between '2023-12-04' and '2024-01-31'
+---
+Q: Close price and split factors for A between 2024-04-23 and 2024-05-03.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='a' and p.date between '2024-04-23' and '2024-05-03' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'a' and date between '2024-04-23' and '2024-05-03'
+---
+Q: Top 10 gainers by daily return on 2024-08-13.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-08-13' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-08-13' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Corporate actions for EVRG ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='evrg' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'evrg'
+---
+Q: Corporate actions for ORLY ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='orly' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'orly'
+---
+Q: Top 10 gainers by daily return on 2025-07-08.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-07-08' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-07-08' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Top 10 gainers by daily return on 2025-03-19.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-03-19' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-03-19' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Show OHLCV for BWA on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='bwa') select p.* from core.prices_daily p, d where p.ticker='bwa' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'bwa'
+---
+Q: Top 10 gainers by daily return on 2024-09-11.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-09-11' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2024-09-11' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Close price and split factors for DHR between 2024-02-08 and 2024-03-12.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='dhr' and p.date between '2024-02-08' and '2024-03-12' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'dhr' and date between '2024-02-08' and '2024-03-12'
+---
+Q: Close price and split factors for CTVA between 2024-02-23 and 2024-04-18.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='ctva' and p.date between '2024-02-23' and '2024-04-18' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'ctva' and date between '2024-02-23' and '2024-04-18'
+---
+Q: Corporate actions for VST ordered by date.
+GOLD_INTENT: corporate_actions
+GOLD_SQL: select * from views.corporate_actions where ticker='vst' order by event_date
+PRED_SQL: select cash_amount from views.corporate_actions where ticker = 'vst'
+---
+Q: Close price and split factors for VRSK between 2023-12-06 and 2024-02-01.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='vrsk' and p.date between '2023-12-06' and '2024-02-01' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'vrsk' and date between '2023-12-06' and '2024-02-01'
+---
+Q: Close price and split factors for PHM between 2024-03-19 and 2024-05-02.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='phm' and p.date between '2024-03-19' and '2024-05-02' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'phm' and date between '2024-03-19' and '2024-05-02'
+---
+Q: Close price and split factors for DLR between 2024-02-14 and 2024-02-27.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='dlr' and p.date between '2024-02-14' and '2024-02-27' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'dlr' and date between '2024-02-14' and '2024-02-27'
+---
+Q: Top 10 gainers by daily return on 2025-09-12.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-12' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-09-12' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Latest close and volume for SCHW.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='schw') select date, close, volume from core.prices_daily, mx where ticker='schw' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='schw' order by date desc limit 1
+---
+Q: Top 10 gainers by daily return on 2025-07-31.
+GOLD_INTENT: top_k
+GOLD_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-07-31' ) select ticker, ret from r order by ret desc limit 10
+PRED_SQL: with r as ( select close/lag(close) over (partition by ticker order by date)-1 as ret, ticker from core.prices_daily where date='2025-07-31' ) select ticker, ret from r order by ret desc limit 10
+---
+Q: Latest close and volume for AMT.
+GOLD_INTENT: latest_point
+GOLD_SQL: with mx as (select max(date) as md from core.prices_daily where ticker='amt') select date, close, volume from core.prices_daily, mx where ticker='amt' and date=mx.md
+PRED_SQL: select close from core.prices_daily where ticker='amt' order by date desc limit 1
+---
+Q: Show OHLCV for MS on its first trading day.
+GOLD_INTENT: point_lookup
+GOLD_SQL: with d as (select min(date) as d0 from core.prices_daily where ticker='ms') select p.* from core.prices_daily p, d where p.ticker='ms' and p.date=d.d0
+PRED_SQL: select close from core.prices_daily where ticker = 'ms'
+---
+Q: Close price and split factors for UNH between 2025-05-21 and 2025-06-03.
+GOLD_INTENT: join_splits
+GOLD_SQL: select case when s.split_from>0 and s.split_to>0 then s.split_from/s.split_to else null end as split_factor, p.close, p.date from core.prices_daily p left join core.splits s on s.ticker=p.ticker and s.event_date=p.date where p.ticker='unh' and p.date between '2025-05-21' and '2025-06-03' order by p.date
+PRED_SQL: select close from core.prices_daily where ticker = 'unh' and date between '2025-05-21' and '2025-06-03'
+---
