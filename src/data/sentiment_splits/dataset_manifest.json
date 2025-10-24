@@ -1,0 +1,56 @@
+{
+  "dataset_info": {
+    "total_samples": 2958,
+    "n_sources": 2,
+    "created_date": "2025-10-23 19:46:28"
+  },
+  "splits": {
+    "train": {
+      "n_samples": 2070,
+      "label_distribution": {
+        "0": 258,
+        "1": 1269,
+        "2": 543
+      },
+      "source_distribution": {
+        "financial_phrasebank": 1595,
+        "aiera": 475
+      }
+    },
+    "val": {
+      "n_samples": 444,
+      "label_distribution": {
+        "0": 55,
+        "1": 272,
+        "2": 117
+      },
+      "source_distribution": {
+        "financial_phrasebank": 339,
+        "aiera": 105
+      }
+    },
+    "test": {
+      "n_samples": 444,
+      "label_distribution": {
+        "0": 56,
+        "1": 272,
+        "2": 116
+      },
+      "source_distribution": {
+        "financial_phrasebank": 325,
+        "aiera": 119
+      }
+    }
+  },
+  "sources": {
+    "financial_phrasebank": 2259,
+    "aiera": 699
+  },
+  "label_map": {
+    "0": "negative",
+    "1": "neutral",
+    "2": "positive"
+  },
+  "split_ratio": "70/15/15",
+  "random_seed": 42
+}
