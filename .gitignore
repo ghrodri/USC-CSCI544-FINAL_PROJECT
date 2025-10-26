@@ -1,1 +1,12 @@
 .DS_Store
+
+# Large model files
+*.pt
+*.pth
+*.bin
+*.h5
+*.ckpt
+*.safetensors
+
+# Specific large files
+src/sentiment-analysis/bert-models/best_model.pt
