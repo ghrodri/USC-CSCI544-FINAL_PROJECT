@@ -1,7 +1,7 @@
 import os
 import re
 import pytesseract
-from PyPDF2 import PdfReader
+import pdfplumber
 from pdf2image import convert_from_path
 
 
@@ -10,34 +10,27 @@ PDF_DIR = "pdfs/"
 def get_pdf_text(pdf_docs):
     text = ""
     for pdf_path in pdf_docs:
-        full_path = pdf_path
-        if not os.path.isabs(full_path) and not os.path.exists(full_path):
-            full_path = os.path.join(PDF_DIR, pdf_path) # For local run
-
+        full_path = pdf_path if os.path.isabs(pdf_path) else os.path.join(PDF_DIR, pdf_path)
         if not os.path.exists(full_path):
             print("[WARN] File not found:", full_path)
             continue
-
+        
         print("[INFO] Reading:", full_path)
-        extracted_text = ""
         try:
-            pdf_reader = PdfReader(full_path)
-            for i, page in enumerate(pdf_reader.pages):
-                try:
-                    page_text = page.extract_text()
-                except Exception as e:
-                    print(f"[WARN] Page {i+1} read error: {e}")
-                    page_text = None
-                if page_text and page_text.strip():
-                    extracted_text += page_text + "\n"
-                else:
-                    print(f"[INFO] Using OCR for page {i+1}...")
-                    extracted_text += extract_text_ocr(full_path, i)
+            with pdfplumber.open(full_path) as pdf:
+                for page in pdf.pages:
+                    # Extract tables with structure
+                    tables = page.extract_tables()
+                    for table in tables:
+                        if table:
+                            # Convert to readable format
+                            for row in table:
+                                text += " | ".join([str(cell or "") for cell in row]) + "\n"
+                            text += "\n"
+                    # Then text
+                    text += (page.extract_text() or "") + "\n"
         except Exception as e:
-            print(f"[WARN] PyPDF2 failed for '{full_path}': {e}")
-            print("[INFO] Running full OCR for file...")
-            extracted_text = extract_text_ocr(full_path)
-        text += extracted_text + "\n"
+            print(f"[ERROR] pdfplumber failed: {e}")
     return text.strip()
 
 

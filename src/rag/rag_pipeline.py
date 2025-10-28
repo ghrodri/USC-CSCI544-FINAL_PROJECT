@@ -1,26 +1,22 @@
 import os
 import hashlib
 import argparse
+import requests
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings  # CHANGED: import OpenAIEmbeddings
 from dotenv import load_dotenv
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from pdf_utilities import clean_text, get_pdf_text
 from rag_evaluation import run_evaluation, build_sample_dataset
-# NEW: deps for FinanceBench ingestion
-import requests
-try:
-    from datasets import load_dataset
-except ImportError:
-    load_dataset = None
+from datasets import load_dataset
 
 load_dotenv()
 index_path = os.path.join(os.path.dirname(__file__), "faiss_index")
 FINANCEBENCH_PDF_DIR = os.path.join(os.path.dirname(__file__), "pdfs_financebench")
+SKIPPED_DOCS = {"adobe_2022_10k"}
 
-def get_text_chunks(text, chunk_size=1000, chunk_overlap=300):
+def get_text_chunks(text, chunk_size=1500, chunk_overlap=500):
     # Use recursive splitter with multiple fallback separators to avoid giant chunks
     splitter = RecursiveCharacterTextSplitter(
         separators=["\n\n", "\n", ". ", " ", ""],
@@ -34,10 +30,9 @@ def get_text_chunks(text, chunk_size=1000, chunk_overlap=300):
 
 
 def get_or_load_vectorstore(text_chunks, path="faiss_index"):
-    # Always use OpenAI embeddings
-    embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
-    print("[INFO] Using OpenAI embeddings: text-embedding-3-large")
-
+    # Reduce batch size to avoid 300k token/request cap
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-large", chunk_size=64)
+    print("[INFO] Using OpenAI embeddings: text-embedding-3-large (batch size=64)")
     if os.path.exists(path):
         print(f"[INFO] Loading existing vectorstore from '{path}'...")
         print("[WARN] Ensure this index was built with the same embedding model; otherwise run with --rebuild-index or a different --index-path.")
@@ -58,7 +53,7 @@ def get_or_load_vectorstore(text_chunks, path="faiss_index"):
 # Fallback LLM-only response
 def generate_general_response(question, history_messages):
     """LLM-only response (no retrieval), acts as a fallback."""
-    llm = ChatOpenAI(model_name="gpt-4.1-mini", temperature=0)
+    llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
     messages = [
         SystemMessage(content="You are a helpful, concise assistant."),
         *history_messages,
@@ -86,12 +81,11 @@ def _dedup_docs(docs):
 
 def generate_rag_response(vectorstore, question, history_messages, k=8, return_docs=False):
     """Retrieve -> prompt with context -> LLM, with safe fallback."""
-    llm = ChatOpenAI(model_name="gpt-4.1-mini", temperature=0)
+    llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
 
     # Prefer high-recall similarity first; fetch more, then keep top-k after dedup
     try:
-        fetch_k = max(15, k * 3)
-        sim_docs = vectorstore.similarity_search(question, k=fetch_k)
+        sim_docs = vectorstore.similarity_search(question, k=k)
     except Exception as e:
         print(f"[WARN] similarity_search failed: {e}")
         sim_docs = []
@@ -106,8 +100,9 @@ def generate_rag_response(vectorstore, question, history_messages, k=8, return_d
 
     context_text = "\n\n---\n\n".join(getattr(d, "page_content", "") for d in merged)
     system_prompt = (
-        "You are a helpful assistant. Use the provided context to answer the user's question. "
-        "If the context is insufficient, say you don't know. Be concise.\n\n"
+        "You are a financial analysis expert. Carefully analyze the provided context "
+        "from financial documents. For numerical questions, cite specific figures. "
+        "Be precise and concise.\n\n"
         f"Context:\n{context_text}"
     )
     messages = [
@@ -188,7 +183,7 @@ def _download_pdf(url: str, dest_path: str):
         print(f"[WARN] Failed to download PDF from {url}: {e}")
         return None
 
-def prepare_financebench(limit: int = 30):
+def prepare_financebench(limit: int = 20):
     """
     Load first `limit` rows of FinanceBench, download PDFs, and map Q&A pairs.
     Returns (pdf_paths, dataset)
@@ -199,9 +194,15 @@ def prepare_financebench(limit: int = 30):
     qa_dataset = []
     seen_docs = set()
     for row in rows:
+        # Determine doc_name early and skip if in blocklist
+        doc_name = _safe_first(row, ["doc_name", "doc", "document", "document_name"])
+        base_doc = os.path.splitext(doc_name)[0].lower() if doc_name else None
+        if base_doc and base_doc in SKIPPED_DOCS:
+            print(f"[INFO] Skipping blocked dataset row for doc: {doc_name}")
+            continue
+
         # Determine PDF URL
         pdf_url = _safe_first(row, ["pdf_url", "url", "document_url"])
-        doc_name = _safe_first(row, ["doc_name", "doc", "document", "document_name"])
         if not pdf_url:
             if not doc_name:
                 print("[WARN] Row missing both pdf_url and doc_name; skipping.")
@@ -209,11 +210,18 @@ def prepare_financebench(limit: int = 30):
             fname = doc_name if doc_name.lower().endswith(".pdf") else f"{doc_name}.pdf"
             pdf_url = f"https://raw.githubusercontent.com/patronus-ai/financebench/main/pdfs/{fname}"
         else:
-            # Try to derive a clean filename
+            # Try to derive a clean filename and doc_name if missing
             base = os.path.basename(pdf_url.split("?")[0])
             fname = base if base.lower().endswith(".pdf") else (base + ".pdf")
             if not doc_name:
                 doc_name = os.path.splitext(fname)[0]
+                base_doc = doc_name.lower()
+
+        # Skip after deriving doc_name
+        if base_doc and base_doc in SKIPPED_DOCS:
+            print(f"[INFO] Skipping blocked PDF download for: {doc_name}")
+            continue
+
         # Download PDF once per doc
         if doc_name in seen_docs:
             pass
@@ -223,13 +231,14 @@ def prepare_financebench(limit: int = 30):
             if saved:
                 pdf_paths.append(os.path.abspath(saved))
                 seen_docs.add(doc_name)
+
         # Map Q&A
         q = _safe_first(row, ["question", "prompt", "query"])
         a = _safe_first(row, ["answer", "final_answer", "ground_truth", "reference_answer", "label"])
-        if q and a:
+        if q and a and (not base_doc or base_doc not in SKIPPED_DOCS):
             qa_dataset.append({"inputs": {"question": q}, "outputs": {"answer": a}})
         else:
-            print("[WARN] Skipping Q&A row due to missing fields.")
+            print("[WARN] Skipping Q&A row due to missing fields or blocked doc.")
     if not qa_dataset:
         print("[WARN] No usable FinanceBench Q&A rows collected.")
     if not pdf_paths:
@@ -241,12 +250,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="RAG pipeline with optional evaluation.")
     parser.add_argument("--eval", action="store_true", help="Run evaluation instead of interactive chat")
     parser.add_argument("--pdfs", "--pdf", nargs="+", dest="pdfs", default=["Apple_Q3.pdf", "Tesla_Q3.pdf"], help="List of PDF files or paths")
-    parser.add_argument("--k", type=int, default=5, help="Top-k documents for retrieval during evaluation")
+    parser.add_argument("--k", type=int, default=15, help="Top-k documents for retrieval during evaluation")
     parser.add_argument("--index-path", dest="idx_path", default=index_path, help="Path to FAISS index directory")
     parser.add_argument("--rebuild-index", action="store_true", help="Force rebuild vectorstore from PDFs")
-    # NEW: FinanceBench options
+    # FinanceBench options
     parser.add_argument("--financebench", action="store_true", help="Use FinanceBench dataset and PDFs (first N rows)")
-    parser.add_argument("--financebench-rows", type=int, default=30, help="Number of FinanceBench rows to ingest")
+    parser.add_argument("--financebench-rows", type=int, default=50, help="Number of FinanceBench rows to ingest")
+    # Baseline flag to disable retrieval during evaluation
+    parser.add_argument("--no-rag-baseline", action="store_true", help="Evaluate LLM-only baseline (no retrieval)")
     args = parser.parse_args()
 
     index_path = args.idx_path
@@ -262,26 +273,38 @@ if __name__ == "__main__":
             pdf_list = fb_pdfs
         dataset_for_eval = fb_dataset
 
-    # Build or load vectorstore
-    if args.rebuild_index or not os.path.exists(index_path):
-        print("[INFO] Building vectorstore from PDFs...")
-        raw_text = get_pdf_text(pdf_list)
-        if not raw_text.strip():
-            print("[ERROR] No text extracted. Exiting.")
-            raise SystemExit(1)
-        cleaned_text = clean_text(raw_text)
-        text_chunks = get_text_chunks(cleaned_text)
-    else:
-        print("[INFO] Using existing vectorstore at:", index_path)
-        print("[WARN] If this index was built with a different embedding model, pass --rebuild-index.")
-        text_chunks = []
-    vs = get_or_load_vectorstore(text_chunks, path=index_path)
+    # Build or load vectorstore only if needed:
+    # - Always needed for interactive chat (not args.eval)
+    # - Needed for evaluation when NOT running baseline
+    vs = None
+    if (not args.eval) or (args.eval and not args.no_rag_baseline):
+        if args.rebuild_index or not os.path.exists(index_path):
+            print("[INFO] Building vectorstore from PDFs...")
+            raw_text = get_pdf_text(pdf_list)
+            if not raw_text.strip():
+                print("[ERROR] No text extracted. Exiting.")
+                raise SystemExit(1)
+            cleaned_text = clean_text(raw_text)
+            text_chunks = get_text_chunks(cleaned_text)
+        else:
+            print("[INFO] Using existing vectorstore at:", index_path)
+            print("[WARN] If this index was built with a different embedding model, pass --rebuild-index.")
+            text_chunks = []
+        vs = get_or_load_vectorstore(text_chunks, path=index_path)
 
     if args.eval:
         print("[INFO] Evaluation mode enabled.")
-        def generate_fn(q: str):
-            return generate_rag_response(vs, q, history_messages=[], k=args.k, return_docs=True)
         eval_dataset = dataset_for_eval if 'dataset_for_eval' in locals() and dataset_for_eval else build_sample_dataset()
+
+        if args.no_rag_baseline:
+            print("[INFO] Running LLM-only baseline (no retrieval).")
+            def generate_fn(q: str):
+                ans = generate_general_response(q, history_messages=[])
+                return {"answer": ans, "documents": []}
+        else:
+            def generate_fn(q: str):
+                return generate_rag_response(vs, q, history_messages=[], k=args.k, return_docs=True)
+
         run_evaluation(generate_fn=generate_fn, dataset=eval_dataset)
     else:
         run_conversational_agent(pdf_list)

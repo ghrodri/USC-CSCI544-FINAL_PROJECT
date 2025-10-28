@@ -26,3 +26,4 @@ langchain-community==0.4
 langchain-text-splitters==1.0.0
 langchain-huggingface==1.0.0
 langchain-openai==1.0.1
+pdfplumber==0.11.7
