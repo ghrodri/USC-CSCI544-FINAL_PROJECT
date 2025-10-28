@@ -1,1 +1,6 @@
 .DS_Store
+faiss_index/
+.env
+__pycache__
+venv/
+pdfs_financebench/
