@@ -4,14 +4,21 @@ import argparse
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain_openai import ChatOpenAI
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings  # CHANGED: import OpenAIEmbeddings
 from dotenv import load_dotenv
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from pdf_utilities import clean_text, get_pdf_text
 from rag_evaluation import run_evaluation, build_sample_dataset
+# NEW: deps for FinanceBench ingestion
+import requests
+try:
+    from datasets import load_dataset
+except ImportError:
+    load_dataset = None
 
 load_dotenv()
 index_path = os.path.join(os.path.dirname(__file__), "faiss_index")
+FINANCEBENCH_PDF_DIR = os.path.join(os.path.dirname(__file__), "pdfs_financebench")
 
 def get_text_chunks(text, chunk_size=1000, chunk_overlap=300):
     # Use recursive splitter with multiple fallback separators to avoid giant chunks
@@ -26,11 +33,14 @@ def get_text_chunks(text, chunk_size=1000, chunk_overlap=300):
     return chunks
 
 
-def get_or_load_vectorstore(text_chunks, path="faiss_index", model_name="sentence-transformers/all-MiniLM-L6-v2"):
-    embeddings = HuggingFaceEmbeddings(model_name=model_name)
+def get_or_load_vectorstore(text_chunks, path="faiss_index"):
+    # Always use OpenAI embeddings
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
+    print("[INFO] Using OpenAI embeddings: text-embedding-3-large")
 
     if os.path.exists(path):
         print(f"[INFO] Loading existing vectorstore from '{path}'...")
+        print("[WARN] Ensure this index was built with the same embedding model; otherwise run with --rebuild-index or a different --index-path.")
         vectorstore = FAISS.load_local(path, embeddings, allow_dangerous_deserialization=True)
         if text_chunks:
             print("[INFO] Adding new chunks to existing vectorstore...")
@@ -152,6 +162,80 @@ def run_conversational_agent(pdf_files):
         history_msgs.append(AIMessage(content=answer))
 
 
+def _safe_first(row: dict, keys: list[str]):
+    for k in keys:
+        v = row.get(k)
+        if v is not None and str(v).strip():
+            return v
+    return None
+
+def _ensure_dir(path: str):
+    os.makedirs(path, exist_ok=True)
+
+def _download_pdf(url: str, dest_path: str):
+    _ensure_dir(os.path.dirname(dest_path))
+    if os.path.exists(dest_path):
+        return dest_path
+    try:
+        with requests.get(url, stream=True, timeout=30) as r:
+            r.raise_for_status()
+            with open(dest_path, "wb") as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    if chunk:
+                        f.write(chunk)
+        return dest_path
+    except Exception as e:
+        print(f"[WARN] Failed to download PDF from {url}: {e}")
+        return None
+
+def prepare_financebench(limit: int = 30):
+    """
+    Load first `limit` rows of FinanceBench, download PDFs, and map Q&A pairs.
+    Returns (pdf_paths, dataset)
+    """
+    ds = load_dataset("PatronusAI/financebench", split="train")
+    rows = ds.select(range(min(limit, len(ds))))
+    pdf_paths = []
+    qa_dataset = []
+    seen_docs = set()
+    for row in rows:
+        # Determine PDF URL
+        pdf_url = _safe_first(row, ["pdf_url", "url", "document_url"])
+        doc_name = _safe_first(row, ["doc_name", "doc", "document", "document_name"])
+        if not pdf_url:
+            if not doc_name:
+                print("[WARN] Row missing both pdf_url and doc_name; skipping.")
+                continue
+            fname = doc_name if doc_name.lower().endswith(".pdf") else f"{doc_name}.pdf"
+            pdf_url = f"https://raw.githubusercontent.com/patronus-ai/financebench/main/pdfs/{fname}"
+        else:
+            # Try to derive a clean filename
+            base = os.path.basename(pdf_url.split("?")[0])
+            fname = base if base.lower().endswith(".pdf") else (base + ".pdf")
+            if not doc_name:
+                doc_name = os.path.splitext(fname)[0]
+        # Download PDF once per doc
+        if doc_name in seen_docs:
+            pass
+        else:
+            dest = os.path.join(FINANCEBENCH_PDF_DIR, f"{doc_name}.pdf")
+            saved = _download_pdf(pdf_url, dest)
+            if saved:
+                pdf_paths.append(os.path.abspath(saved))
+                seen_docs.add(doc_name)
+        # Map Q&A
+        q = _safe_first(row, ["question", "prompt", "query"])
+        a = _safe_first(row, ["answer", "final_answer", "ground_truth", "reference_answer", "label"])
+        if q and a:
+            qa_dataset.append({"inputs": {"question": q}, "outputs": {"answer": a}})
+        else:
+            print("[WARN] Skipping Q&A row due to missing fields.")
+    if not qa_dataset:
+        print("[WARN] No usable FinanceBench Q&A rows collected.")
+    if not pdf_paths:
+        print("[WARN] No FinanceBench PDFs downloaded.")
+    return pdf_paths, qa_dataset
+
 # Local runner
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="RAG pipeline with optional evaluation.")
@@ -160,14 +244,28 @@ if __name__ == "__main__":
     parser.add_argument("--k", type=int, default=5, help="Top-k documents for retrieval during evaluation")
     parser.add_argument("--index-path", dest="idx_path", default=index_path, help="Path to FAISS index directory")
     parser.add_argument("--rebuild-index", action="store_true", help="Force rebuild vectorstore from PDFs")
+    # NEW: FinanceBench options
+    parser.add_argument("--financebench", action="store_true", help="Use FinanceBench dataset and PDFs (first N rows)")
+    parser.add_argument("--financebench-rows", type=int, default=30, help="Number of FinanceBench rows to ingest")
     args = parser.parse_args()
 
     index_path = args.idx_path
 
+    # Decide data source
+    dataset_for_eval = None
+    pdf_list = args.pdfs
+    if args.financebench:
+        print(f"[INFO] Using FinanceBench (first {args.financebench_rows} rows)")
+        fb_pdfs, fb_dataset = prepare_financebench(limit=args.financebench_rows)
+        # Use FinanceBench PDFs for indexing; fall back to provided pdfs if none downloaded
+        if fb_pdfs:
+            pdf_list = fb_pdfs
+        dataset_for_eval = fb_dataset
+
     # Build or load vectorstore
     if args.rebuild_index or not os.path.exists(index_path):
         print("[INFO] Building vectorstore from PDFs...")
-        raw_text = get_pdf_text(args.pdfs)
+        raw_text = get_pdf_text(pdf_list)
         if not raw_text.strip():
             print("[ERROR] No text extracted. Exiting.")
             raise SystemExit(1)
@@ -175,14 +273,15 @@ if __name__ == "__main__":
         text_chunks = get_text_chunks(cleaned_text)
     else:
         print("[INFO] Using existing vectorstore at:", index_path)
+        print("[WARN] If this index was built with a different embedding model, pass --rebuild-index.")
         text_chunks = []
     vs = get_or_load_vectorstore(text_chunks, path=index_path)
 
     if args.eval:
         print("[INFO] Evaluation mode enabled.")
-        # Wrap generator to avoid circular imports
         def generate_fn(q: str):
             return generate_rag_response(vs, q, history_messages=[], k=args.k, return_docs=True)
-        run_evaluation(generate_fn=generate_fn, dataset=build_sample_dataset())
+        eval_dataset = dataset_for_eval if 'dataset_for_eval' in locals() and dataset_for_eval else build_sample_dataset()
+        run_evaluation(generate_fn=generate_fn, dataset=eval_dataset)
     else:
-        run_conversational_agent(args.pdfs)
+        run_conversational_agent(pdf_list)
