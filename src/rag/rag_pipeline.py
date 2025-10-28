@@ -255,7 +255,7 @@ if __name__ == "__main__":
     parser.add_argument("--rebuild-index", action="store_true", help="Force rebuild vectorstore from PDFs")
     # FinanceBench options
     parser.add_argument("--financebench", action="store_true", help="Use FinanceBench dataset and PDFs (first N rows)")
-    parser.add_argument("--financebench-rows", type=int, default=50, help="Number of FinanceBench rows to ingest")
+    parser.add_argument("--financebench-rows", type=int, default=20, help="Number of FinanceBench rows to ingest")
     # Baseline flag to disable retrieval during evaluation
     parser.add_argument("--no-rag-baseline", action="store_true", help="Evaluate LLM-only baseline (no retrieval)")
     args = parser.parse_args()

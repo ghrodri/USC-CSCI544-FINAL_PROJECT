@@ -134,25 +134,43 @@ def run_evaluation(generate_fn, dataset=None):
         q = ex["inputs"]["question"]
         ref = ex["outputs"]
         out = generate_fn(q)
+        docs = out.get("documents") or []
+
         correctness = eval_correctness(ex["inputs"], out, ref)
-        grounded = eval_groundedness(ex["inputs"], out)
         relevance = eval_relevance(ex["inputs"], out)
-        retr_rel = eval_retrieval_relevance(ex["inputs"], out)
+
+        # Only grade groundedness/retrieval relevance when we actually have retrieved docs
+        if docs:
+            grounded = eval_groundedness(ex["inputs"], out)
+            retr_rel = eval_retrieval_relevance(ex["inputs"], out)
+        else:
+            grounded = None
+            retr_rel = None
+
         results.append({
             "question": q,
             "answer": out["answer"],
             "correctness": correctness,
-            "groundedness": grounded,
+            "groundedness": grounded,           # may be None (N/A)
             "relevance": relevance,
-            "retrieval_relevance": retr_rel,
+            "retrieval_relevance": retr_rel,    # may be None (N/A)
         })
-        print(f"[EVAL] {i}. corr={correctness} grounded={grounded} rel={relevance} retr_rel={retr_rel}")
+
+        def _fmt(v): return "N/A" if v is None else str(v)
+        print(f"[EVAL] {i}. corr={_fmt(correctness)} grounded={_fmt(grounded)} rel={_fmt(relevance)} retr_rel={_fmt(retr_rel)}")
     
-    def _avg(key): return sum(1 for r in results if r[key]) / max(1, len(results))
+    def _avg_bool(key):
+        vals = [r[key] for r in results if isinstance(r[key], bool)]
+        return (sum(1 for v in vals if v) / len(vals)) if vals else None
+    
+    corr_avg = _avg_bool("correctness")
+    grounded_avg = _avg_bool("groundedness")
+    relevance_avg = _avg_bool("relevance")
+    retr_rel_avg = _avg_bool("retrieval_relevance")
     
     print("\n[EVAL][SUMMARY]")
-    print("Correctness:", _avg("correctness"))
-    print("Groundedness:", _avg("groundedness"))
-    print("Relevance:", _avg("relevance"))
-    print("Retrieval relevance:", _avg("retrieval_relevance"))
+    print("Correctness:", "N/A" if corr_avg is None else corr_avg)
+    print("Groundedness:", "N/A" if grounded_avg is None else grounded_avg)
+    print("Relevance:", "N/A" if relevance_avg is None else relevance_avg)
+    print("Retrieval relevance:", "N/A" if retr_rel_avg is None else retr_rel_avg)
     return results
