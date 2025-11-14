@@ -4,3 +4,35 @@ faiss_index/
 __pycache__
 venv/
 pdfs_financebench/
+
+frontend/node_modules/
+chatbot.db
+*.db
+.github/
+
+# Local configuration
+local.properties
+*.iml
+.idea/
+*.iws
+*.log
+captures/
+output.json
+*.keystore
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing
+*.hprof
+*.orig
+*.rej
+*.patch
+
+# Misc
+*.bin
+*.lock
+*.tmp
+*.bak
+
