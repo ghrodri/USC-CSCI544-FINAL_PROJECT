@@ -10,8 +10,6 @@ The Financial Portfolio Assistant integrates three core NLP components to make f
 
 These modules together enable clearer insights into financial data, improving decision-making and transparency in portfolio analysis.
 
----
-
 ## App
 
 ### Architecture
@@ -23,7 +21,7 @@ These modules together enable clearer insights into financial data, improving de
 
 ### Setup Instructions
 
-### 1. Backend Setup
+#### 1. Backend Setup
 
 ```bash
 # Create and activate virtual environment
@@ -38,11 +36,11 @@ pip install -r requirements.txt
 echo "OPENAI_API_KEY=your_api_key_here" > .env
 ```
 
-### 2. Frontend Setup
+#### 2. Frontend Setup
 
 The frontend shell script file takes care of any frontend-related setup steps.
 
-### 3. Running the Application
+#### 3. Running the Application
 
 **Terminal 1 - Start Backend:**
 
