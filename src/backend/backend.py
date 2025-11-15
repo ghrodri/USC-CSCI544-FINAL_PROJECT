@@ -1,17 +1,15 @@
 import os
 import tempfile
 import traceback
-from typing import Optional, List
-from fastapi import FastAPI, File, UploadFile, HTTPException, Header, Depends, WebSocket, WebSocketDisconnect, Query
+from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, EmailStr, constr
+from pydantic import BaseModel
+from typing import Optional
 from backend.data_storage import (
     get_pdf_text, get_text_chunks, get_or_load_vectorstore, clean_text,
     format_history_from_db, generate_rag_response, generate_general_response
 )
-from backend.database import add_pdf, get_all_pdfs, delete_pdf, create_chat, get_all_chats, get_chat_messages, add_message, update_chat_title, delete_chat, get_message_with_sender
-from . import database
-from .auth import hash_password, verify_password, create_access_token, get_email_from_token
+from backend.database import init_database, add_pdf, get_all_pdfs, delete_pdf, create_chat, get_all_chats, get_chat_messages, add_message, update_chat_title, delete_chat
 
 index_path = os.path.join(os.path.dirname(__file__), "faiss_index")
 
@@ -29,27 +27,6 @@ app.add_middleware(
 # Global vectorstore (shared across all chats)
 vectorstore = None
 
-class ConnectionManager:
-    def __init__(self):
-        self.active_connections: dict[int, list[WebSocket]] = {}
-
-    async def connect(self, websocket: WebSocket, chat_id: int):
-        await websocket.accept()
-        if chat_id not in self.active_connections:
-            self.active_connections[chat_id] = []
-        self.active_connections[chat_id].append(websocket)
-
-    def disconnect(self, websocket: WebSocket, chat_id: int):
-        if chat_id in self.active_connections:
-            self.active_connections[chat_id].remove(websocket)
-
-    async def broadcast(self, message: str, chat_id: int):
-        if chat_id in self.active_connections:
-            for connection in self.active_connections[chat_id]:
-                await connection.send_text(message)
-
-manager = ConnectionManager()
-
 class ChatMessage(BaseModel):
     message: str
     chat_id: Optional[int] = None
@@ -64,26 +41,12 @@ class CreateChatRequest(BaseModel):
 class ChatListResponse(BaseModel):
     chats: list
 
-class RegisterRequest(BaseModel):
-    email: EmailStr
-    username: constr(min_length=3, max_length=20) # type: ignore
-    password: str
-
-class LoginRequest(BaseModel):
-    email: EmailStr
-    password: str
-
-class AuthResponse(BaseModel):
-    access_token: str
-    token_type: str = "bearer"
-    username: str
-
 @app.on_event("startup")
-def startup():
+async def startup_event():
     """Initialize the app on startup"""
     global vectorstore
     # Initialize database
-    database.init_db()
+    init_database()
     
     # Try to load existing vectorstore if it exists
     try:
@@ -99,146 +62,8 @@ def startup():
     
     print("Backend started successfully!")
 
-def get_current_user(authorization: str = Header(...)):
-    if not authorization.lower().startswith("bearer "):
-        raise HTTPException(status_code=401, detail="Invalid auth header")
-    token = authorization.split(" ", 1)[1].strip()
-    email = get_email_from_token(token)
-    if not email:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    user = database.get_user_by_email(email)
-    if not user:
-        raise HTTPException(status_code=401, detail="User not found")
-    return user  # dict with id, email, ...
-
-async def get_current_user_ws(token: str = Query(...)):
-    if not token:
-        return None
-    email = get_email_from_token(token)
-    if not email:
-        return None
-    user = database.get_user_by_email(email)
-    return user
-
-class InviteRequest(BaseModel):
-    emails: List[EmailStr]
-
-# --- Auth unchanged ---
-
-@app.post("/auth/register", response_model=AuthResponse)
-def register(body: RegisterRequest):
-    if database.get_user_by_email(body.email):
-        raise HTTPException(status_code=400, detail="Email already registered")
-    try:
-        database.create_user(body.email, body.username, hash_password(body.password))
-    except database.sqlite3.IntegrityError:
-        raise HTTPException(status_code=400, detail="Username already taken")
-    token = create_access_token(sub=body.email)
-    return AuthResponse(access_token=token, username=body.username)
-
-@app.post("/auth/login", response_model=AuthResponse)
-def login(body: LoginRequest):
-    user = database.get_user_by_email(body.email)
-    if not user or not verify_password(body.password, user["password_hash"]):
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    token = create_access_token(sub=body.email)
-    return AuthResponse(access_token=token, username=user["username"])
-
-@app.get("/users", response_model=List[dict])
-def get_all_users_endpoint(user=Depends(get_current_user)):
-    """Returns a list of all users (id and email)."""
-    users = database.get_all_users()
-    return users
-
-# --- Group Chat Endpoints ---
-
-@app.post("/chats", response_model=dict)
-def create_new_chat(request: CreateChatRequest, user=Depends(get_current_user)):
-    chat_id = database.create_chat(request.title, owner_user_id=user["id"])
-    return {"chat_id": chat_id, "title": request.title}
-
-@app.get("/chats", response_model=ChatListResponse)
-def get_chats(user=Depends(get_current_user)):
-    chats = database.get_user_chats(user["id"])
-    return ChatListResponse(chats=chats)
-
-@app.post("/chats/{chat_id}/invite", response_model=dict)
-def invite_users(chat_id: int, body: InviteRequest, user=Depends(get_current_user)):
-    # Verify requester is member
-    if not database.is_member(chat_id, user["id"]):
-        raise HTTPException(status_code=403, detail="Not a member of chat")
-    added_count = 0
-    for email in body.emails:
-        target_user = database.get_user_by_email(email)
-        if target_user:
-            database.add_chat_member(chat_id, target_user["id"])
-            added_count += 1
-    return {"message": f"Successfully added {added_count} user(s)."}
-
-@app.delete("/chats/{chat_id}", status_code=204)
-def delete_chat_endpoint(chat_id: int, user: dict = Depends(get_current_user)):
-    """Deletes a chat. Only the owner can delete it."""
-    owner_id = database.get_chat_owner(chat_id)
-    if not owner_id or owner_id != user["id"]:
-        raise HTTPException(status_code=403, detail="Only the chat owner can delete the chat.")
-    database.delete_chat(chat_id)
-    return {}
-
-@app.delete("/chats/{chat_id}/members/{member_id}", status_code=204)
-def remove_member_endpoint(chat_id: int, member_id: int, user: dict = Depends(get_current_user)):
-    """Removes a member from a chat. Only the owner can do this."""
-    owner_id = database.get_chat_owner(chat_id)
-    if not owner_id or owner_id != user["id"]:
-        raise HTTPException(status_code=403, detail="Only the chat owner can remove members.")
-    if owner_id == member_id:
-        raise HTTPException(status_code=400, detail="The owner cannot be removed from the chat.")
-    database.remove_chat_member(chat_id, member_id)
-    return {}
-
-@app.get("/chats/{chat_id}/members", response_model=dict)
-def list_members(chat_id: int, user=Depends(get_current_user)):
-    if not database.is_member(chat_id, user["id"]):
-        raise HTTPException(status_code=403, detail="Not a member")
-    return {"members": database.get_chat_members(chat_id)}
-
-@app.get("/chats/{chat_id}/messages")
-def get_chat_messages_endpoint(chat_id: int, user=Depends(get_current_user)):
-    if not database.is_member(chat_id, user["id"]):
-        raise HTTPException(status_code=403, detail="Not a member")
-    messages = database.get_chat_messages(chat_id)
-    return {"messages": messages}
-
-@app.websocket("/ws/{chat_id}")
-async def websocket_endpoint(websocket: WebSocket, chat_id: int, user: dict = Depends(get_current_user_ws)):
-    if not user or not database.is_member(chat_id, user["id"]):
-        await websocket.close(code=4001)
-        return
-
-    await manager.connect(websocket, chat_id)
-    try:
-        while True:
-            data = await websocket.receive_text()
-            # Save message to DB
-            message_id = database.add_message(chat_id, data, "user", user_id=user["id"])
-            # Get full message to broadcast
-            message = database.get_message_with_sender(message_id)
-            import json
-            await manager.broadcast(json.dumps(message), chat_id)
-    except WebSocketDisconnect:
-        manager.disconnect(websocket, chat_id)
-    except Exception as e:
-        print(f"WebSocket Error: {e}")
-        manager.disconnect(websocket, chat_id)
-
-# Make upload async (it awaits file.read()); keep public for now
 @app.post("/upload-pdf")
-async def upload_pdf_endpoint(  # type: ignore[func-annotations]
-    file: UploadFile = File(...)
-):
+async def upload_pdf(file: UploadFile = File(...)):
     """Upload and process a PDF file"""
     global vectorstore
     
@@ -286,6 +111,57 @@ async def upload_pdf_endpoint(  # type: ignore[func-annotations]
         print(f"Error processing PDF: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error processing PDF: {str(e)}")
 
+@app.post("/chat", response_model=ChatResponse)
+async def chat(message: ChatMessage):
+    """Handle chat messages"""
+    global vectorstore
+    
+    try:
+        print(f"[CHAT] Processing message: {message.message[:10]}...")
+        
+        # Create new chat if no chat_id provided
+        if message.chat_id is None:
+            chat_id = create_chat("New Chat")
+            print(f"[CHAT] Created new chat: {chat_id}")
+        else:
+            chat_id = message.chat_id
+        
+        # Load history from DB and convert to LC messages
+        chat_messages_db = get_chat_messages(chat_id)
+        history_msgs = format_history_from_db(chat_messages_db)
+
+        # Get response via explicit helpers
+        if vectorstore is None:
+            print("[CHAT] No vectorstore available, using general LLM")
+            bot_response = generate_general_response(message.message, history_msgs)
+        else:
+            print("[CHAT] Using explicit RAG flow")
+            bot_response = generate_rag_response(vectorstore, message.message, history_msgs, k=5)
+
+        if not bot_response:
+            bot_response = "Sorry, I couldn’t generate a response."
+
+        # Limit response length
+        if len(bot_response) > 2000:
+            bot_response = bot_response[:2000] + "... [Response truncated]"
+
+        # Save user message first, then bot response
+        add_message(chat_id, message.message, "user")
+        add_message(chat_id, bot_response, "bot")
+
+        # Update chat title if this was the first message exchange
+        messages_count = len(get_chat_messages(chat_id))
+        if messages_count == 2:  # first user + bot pair
+            title = message.message[:30] + "..." if len(message.message) > 30 else message.message
+            update_chat_title(chat_id, title)
+        
+        return ChatResponse(response=bot_response, chat_id=chat_id)
+        
+    except Exception as e:
+        print(f"[ERROR] Chat error: {str(e)}")
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Error processing your message: {str(e)}")
+
 @app.get("/pdfs")
 async def get_pdfs():
     """Get all uploaded PDFs"""
@@ -305,6 +181,62 @@ async def delete_pdf_endpoint(pdf_id: int):
     except Exception as e:
         print(f"Error deleting PDF: {str(e)}")
         raise HTTPException(status_code=500, detail="Error deleting PDF")
+
+@app.get("/debug/vectorstore")
+async def debug_vectorstore():
+    """Debug endpoint to test vectorstore"""
+    global vectorstore
+    
+    if vectorstore is None:
+        return {"status": "no_vectorstore", "message": "No vectorstore loaded"}
+    
+    try:
+        test_query = "What is this document about?"
+        answer = generate_rag_response(vectorstore, test_query, history_messages=[], k=3)
+        return {
+            "status": "success",
+            "test_query": test_query,
+            "response": (answer[:200] + "...") if answer else "",
+        }
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+# Chat endpoints
+@app.post("/chats", response_model=dict)
+async def create_new_chat(request: CreateChatRequest):
+    """Create a new chat"""
+    try:
+        chat_id = create_chat(request.title)
+        return {"chat_id": chat_id, "message": "Chat created successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error creating chat: {str(e)}")
+
+@app.get("/chats", response_model=ChatListResponse)
+async def get_chats():
+    """Get all chats"""
+    try:
+        chats = get_all_chats()
+        return ChatListResponse(chats=chats)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving chats: {str(e)}")
+
+@app.get("/chats/{chat_id}/messages")
+async def get_chat_messages_endpoint(chat_id: int):
+    """Get messages for a specific chat"""
+    try:
+        messages = get_chat_messages(chat_id)
+        return {"messages": messages}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving messages: {str(e)}")
+
+@app.delete("/chats/{chat_id}")
+async def delete_chat_endpoint(chat_id: int):
+    """Delete a chat"""
+    try:
+        delete_chat(chat_id)
+        return {"message": "Chat deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting chat: {str(e)}")
 
 @app.get("/health")
 async def health_check():

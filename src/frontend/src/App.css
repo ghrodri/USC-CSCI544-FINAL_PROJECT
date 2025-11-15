@@ -1,5 +1,5 @@
 .app {
-  height: 90vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   max-width: 1200px;
@@ -10,7 +10,7 @@
   overflow: hidden;
   margin-top: 40px;
   margin-bottom: 40px;
-  height: calc(90vh - 80px);
+  height: calc(100vh - 80px);
 }
 
 .header {
@@ -37,7 +37,7 @@
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 500;
 }
 
@@ -54,7 +54,6 @@
   border-radius: 8px;
   cursor: pointer;
   font-size: 1rem;
-  line-height: 1;
   transition: all 0.3s ease;
 }
 
@@ -83,7 +82,7 @@
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .upload-button:hover {
@@ -92,7 +91,7 @@
 }
 
 .uploaded-file {
-  font-size: 0.9rem;
+  font-size: 1rem;
   opacity: 0.9;
 }
 
@@ -130,22 +129,18 @@
   background: none;
   border: none;
   font-size: 1.5rem;
-  font-weight: bold;
   cursor: pointer;
   color: #666;
   padding: 0;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
-  transition: all 0.2s ease;
 }
 
 .close-sidebar:hover {
   color: #333;
-  background-color: #f0f0f0;
 }
 
 .chat-list {
@@ -162,7 +157,7 @@
 
 .sidebar-footer h4 {
   margin: 0 0 0.5rem 0;
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: #666;
 }
 
@@ -177,7 +172,7 @@
   color: #666;
   font-style: italic;
   padding: 1rem;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .chat-item {
@@ -198,26 +193,6 @@
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
 }
 
-.delete-chat-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.5rem;
-  font-weight: bold;
-  line-height: 1;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  opacity: 0.4;
-  transition: all 0.2s ease;
-  color: #777;
-}
-
-.delete-chat-button:hover {
-  opacity: 1;
-  background: #fee2e2;
-  color: #b91c1c;
-}
-
 .chat-item.active {
   border-color: #667eea;
   background: #f0f4ff;
@@ -234,7 +209,7 @@
 .chat-title {
   font-weight: 500;
   color: #333;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .chat-date {
@@ -269,7 +244,7 @@
 .pdf-name {
   font-weight: 500;
   color: #333;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .pdf-date {
@@ -324,8 +299,7 @@
   justify-content: flex-end;
 }
 
-.message.bot,
-.message.other {
+.message.bot {
   justify-content: flex-start;
 }
 
@@ -348,8 +322,7 @@
   border-bottom-right-radius: 4px;
 }
 
-.message.bot .message-content,
-.message.other .message-content {
+.message.bot .message-content {
   background: #f1f3f4;
   color: #333;
   border-bottom-left-radius: 4px;
@@ -359,7 +332,7 @@
   background: #e3f2fd;
   color: #1976d2;
   border-radius: 12px;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .typing-indicator {
@@ -475,7 +448,7 @@
 /* Responsive design */
 @media (max-width: 768px) {
   .app {
-    height: 80vh;
+    height: 100vh;
   }
 
   .header {
@@ -501,207 +474,3 @@
     padding: 0.75rem;
   }
 }
-
-.topnav {
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1.25rem;
-  background: linear-gradient(135deg, #1e293b, #0ea5e9);
-  color: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
-}
-
-.topnav-left {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.brand {
-  font-weight: 600;
-  letter-spacing: 0.3px;
-}
-
-.topnav-right {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.profile {
-  position: relative;
-}
-
-.avatar-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.avatar-button:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
-
-.avatar-letter {
-  font-weight: 600;
-}
-
-.dropdown {
-  position: absolute;
-  right: 0;
-  top: 42px;
-  min-width: 180px;
-  background: #ffffff;
-  color: #111827;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-  z-index: 300;
-}
-
-.dropdown-email {
-  padding: 10px 12px;
-  font-size: 0.9rem;
-  color: #374151;
-  background: #f9fafb;
-  cursor: default;
-}
-
-.dropdown-item {
-  width: 100%;
-  padding: 10px 12px;
-  background: transparent;
-  border: none;
-  text-align: left;
-  cursor: pointer;
-  font-size: 0.92rem;
-}
-
-.dropdown-item:hover {
-  background: #f3f4f6;
-}
-
-.popup-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 500;
-}
-
-.popup-container {
-  background: #ffffff;
-  padding: 24px 28px;
-  border-radius: 14px;
-  width: 320px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  animation: popupFade 0.18s ease-out;
-}
-
-.popup-button {
-  width: 100%;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 8px;
-  background: #0ea5e9;
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.popup-button:hover {
-  background: #0284c7;
-}
-
-.remove-member-button {
-  background: #fee2e2;
-  color: #b91c1c;
-  border: 1px solid #fecaca;
-  padding: 2px 8px;
-  font-size: 0.75rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.remove-member-button:hover {
-  background: #fca5a5;
-  color: #7f1d1d;
-}
-
-.toast-notification {
-  position: fixed;
-  top: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #22c55e;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  font-weight: 500;
-  animation: toastFadeIn 0.3s ease-out, toastFadeOut 0.3s ease-in 2.7s;
-}
-
-@keyframes toastFadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -20px);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-}
-
-@keyframes toastFadeOut {
-  from {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-  to {
-    opacity: 0;
-    transform: translate(-50%, -20px);
-  }
-}
-
-@keyframes popupFade {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.landing-background {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  background-color: #0c4a6e;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 800 400'%3E%3Cdefs%3E%3CradialGradient id='a' cx='396' cy='281' r='514' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0' stop-color='%2322D3EE'/%3E%3Cstop offset='1' stop-color='%230C4A6E'/%3E%3C/radialGradient%3E%3ClinearGradient id='b' gradientUnits='userSpaceOnUse' x1='400' y1='148' x2='400' y2='333'%3E%3Cstop offset='0' stop-color='%23FFFFFF' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23FFFFFF' stop-opacity='0.5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23a)' width='800' height='400'/%3E%3Cg fill-opacity='0.4'%3E%3Ccircle fill='url(%23b)' cx='267.5' cy='61' r='300'/%3E%3Ccircle fill='url(%23b)' cx='532.5' cy='61' r='300'/%3E%3Ccircle fill='url(%23b)' cx='400' cy='30' r='300'/%3E%3C/g%3E%3C/svg%3E");
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: center;
-}
-
-/* (Popup & existing styles already support new modal; no extra changes required) */
