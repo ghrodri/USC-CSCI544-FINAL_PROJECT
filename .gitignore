@@ -5,7 +5,7 @@ __pycache__
 venv/
 pdfs_financebench/
 
-frontend/node_modules/
+node_modules/
 chatbot.db
 *.db
 .github/
