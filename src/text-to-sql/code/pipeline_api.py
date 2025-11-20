@@ -7,12 +7,18 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from peft import PeftModel
 
-BASE_MODEL = "Qwen/Qwen2.5-0.5B"
-LORA_DIR = Path("src/text-to-sql/model/QWEN/Qwen")
-DB_PATH = "src/db/financial.duckdb"
+# Resolve important paths relative to this file so it works both from CLI and backend imports.
+_THIS_FILE = Path(__file__).resolve()
+_TEXT_TO_SQL_ROOT = _THIS_FILE.parents[1]  
+_SRC_ROOT = _THIS_FILE.parents[2]        
 
-# para poder importar ir_to_sql
-sys.path.append("./src/text-to-sql")
+BASE_MODEL = "Qwen/Qwen2.5-0.5B"
+LORA_DIR = _TEXT_TO_SQL_ROOT / "model" / "QWEN" / "Qwen"
+DB_PATH = str(_SRC_ROOT / "db" / "financial.duckdb")
+
+if str(_TEXT_TO_SQL_ROOT) not in sys.path:
+    sys.path.append(str(_TEXT_TO_SQL_ROOT))
+
 from semantic.ir_to_sql import ir_to_sql  # noqa: E402
 
 def lookup_company_name(ticker: str) -> str:

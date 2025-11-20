@@ -3,7 +3,9 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 import yaml
 
-SEMANTIC_DIR = Path("./src/text-to-sql/semantic")
+# Resolve paths relative to this file so it works from CLI and when imported by backend.
+_THIS_FILE = Path(__file__).resolve()
+SEMANTIC_DIR = _THIS_FILE.parent
 IR_SCHEMA_PATH = SEMANTIC_DIR / "ir_schema.json"
 SEMANTIC_LAYER_PATH = SEMANTIC_DIR / "semantic_layer.yaml"
 

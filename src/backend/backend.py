@@ -1,4 +1,6 @@
 import os
+import sys
+import re
 import tempfile
 import traceback
 from fastapi import FastAPI, File, UploadFile, HTTPException
@@ -10,6 +12,16 @@ from backend.data_storage import (
     format_history_from_db, generate_rag_response, generate_general_response
 )
 from backend.database import init_database, add_pdf, get_all_pdfs, delete_pdf, create_chat, get_all_chats, get_chat_messages, add_message, update_chat_title, delete_chat
+
+TEXT_TO_SQL_CODE_DIR = os.path.join(os.path.dirname(__file__), "..", "text-to-sql", "code")
+if TEXT_TO_SQL_CODE_DIR not in sys.path:
+    sys.path.append(TEXT_TO_SQL_CODE_DIR)
+
+try:
+    from pipeline_api import run_financial_query  # type: ignore
+except Exception as e:  # pragma: no cover - best-effort import
+    run_financial_query = None  # type: ignore
+    print(f"[STARTUP] Warning: text-to-SQL pipeline not available: {e}")
 
 index_path = os.path.join(os.path.dirname(__file__), "faiss_index")
 
@@ -26,6 +38,49 @@ app.add_middleware(
 
 # Global vectorstore (shared across all chats)
 vectorstore = None
+
+FINANCE_KEYWORDS = {
+    "ytd",
+    "year-to-date",
+    "return",
+    "performance",
+    "price",
+    "closing price",
+    "close price",
+    "portfolio",
+    "holdings",
+    "positions",
+    "pnl",
+    "p&l",
+    "volatility",
+    "sharpe",
+    "beta",
+    "dividend",
+    "dividends",
+    "dividend yield",
+    "yield",
+}
+
+
+def is_financial_query(text: str) -> bool:
+    """
+    Heuristic router: decide if a message should go to the text-to-SQL engine.
+
+    - Looks for finance/metric keywords.
+    - Boosts if combined with what looks like a ticker symbol.
+    """
+    t = text.lower()
+
+    if any(kw in t for kw in FINANCE_KEYWORDS):
+        return True
+
+    # Rough ticker pattern: 1–5 uppercase letters (e.g., AAPL, NTRS)
+    has_ticker_pattern = bool(re.search(r"\b[A-Z]{1,5}\b", text))
+    if has_ticker_pattern and any(kw in t for kw in {"return", "price", "portfolio", "yield", "dividend"}):
+        return True
+
+    return False
+
 
 class ChatMessage(BaseModel):
     message: str
@@ -130,13 +185,41 @@ async def chat(message: ChatMessage):
         chat_messages_db = get_chat_messages(chat_id)
         history_msgs = format_history_from_db(chat_messages_db)
 
-        # Get response via explicit helpers
-        if vectorstore is None:
-            print("[CHAT] No vectorstore available, using general LLM")
-            bot_response = generate_general_response(message.message, history_msgs)
-        else:
-            print("[CHAT] Using explicit RAG flow")
-            bot_response = generate_rag_response(vectorstore, message.message, history_msgs, k=5)
+        bot_response: Optional[str] = None
+
+        # 1) Try text-to-SQL when it looks like a financial data question
+        used_sql = False
+        print(
+            "[CHAT DEBUG] run_financial_query is None?:",
+            run_financial_query is None,
+            "| is_financial_query?:",
+            is_financial_query(message.message),
+        )
+
+        if run_financial_query is not None and is_financial_query(message.message):
+            try:
+                print("[CHAT] Routing to text-to-SQL engine (Qwen)...")
+                sql_out = run_financial_query(message.message)
+                bot_response = sql_out.get("natural_answer") or ""
+
+                # Optionally append a small hint that this came from structured data
+                if bot_response:
+                    bot_response += "\n\n_(Answer computed from your financial database via text-to-SQL.)_"
+
+                used_sql = True
+            except Exception as e:
+                print(f"[CHAT] text-to-SQL engine failed, falling back to RAG/LLM: {e}")
+                traceback.print_exc()
+                bot_response = None  # ensure we fall through
+
+        # 2) If we didn't use SQL (or it failed), fall back to RAG/general llm
+        if not used_sql or not bot_response:
+            if vectorstore is None:
+                print("[CHAT] No vectorstore available, using general LLM")
+                bot_response = generate_general_response(message.message, history_msgs)
+            else:
+                print("[CHAT] Using explicit RAG flow")
+                bot_response = generate_rag_response(vectorstore, message.message, history_msgs, k=5)
 
         if not bot_response:
             bot_response = "Sorry, I couldn’t generate a response."

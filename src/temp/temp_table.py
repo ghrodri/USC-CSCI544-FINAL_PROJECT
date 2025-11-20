@@ -7,10 +7,17 @@ DATA_DIR = "./src/data/portfolio"
 USER_PORTFOLIO_PARQUET = os.path.join(DATA_DIR, "user_portfolio.parquet")
 
 def load_portfolio_from_csv(csv_path: str) -> pd.DataFrame:
+    """
+    Load a user portfolio from either a CSV or Parquet file.
+    """
     if not os.path.exists(csv_path):
-        raise FileNotFoundError(f"CSV file not found: {csv_path}")
+        raise FileNotFoundError(f"Portfolio file not found: {csv_path}")
 
-    df = pd.read_csv(csv_path)
+    _, ext = os.path.splitext(csv_path.lower())
+    if ext == ".parquet":
+        df = pd.read_parquet(csv_path)
+    else:
+        df = pd.read_csv(csv_path)
 
     required_cols = {"ticker", "shares", "avg_cost"}
     missing = required_cols - set(df.columns)
@@ -29,10 +36,16 @@ def create_internal_portfolio_table(csv_path: str) -> None:
     print(f"Saved user portfolio parquet: {USER_PORTFOLIO_PARQUET}")
 
     con = duckdb.connect(DB_PATH)
-    con.execute("DROP VIEW IF EXISTS portfolio;")
-    con.execute("DROP TABLE IF EXISTS portfolio;")
-    con.execute("DROP MACRO IF EXISTS portfolio;")
-    con.execute("DROP SEQUENCE IF EXISTS portfolio;")
+    for stmt in [
+        "DROP VIEW IF EXISTS portfolio;",
+        "DROP TABLE IF EXISTS portfolio;",
+        "DROP MACRO IF EXISTS portfolio;",
+        "DROP SEQUENCE IF EXISTS portfolio;",
+    ]:
+        try:
+            con.execute(stmt)
+        except duckdb.CatalogException:
+            pass
 
     con.execute(
         f"""
