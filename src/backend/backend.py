@@ -18,9 +18,9 @@ if TEXT_TO_SQL_CODE_DIR not in sys.path:
     sys.path.append(TEXT_TO_SQL_CODE_DIR)
 
 try:
-    from pipeline_api import run_financial_query  # type: ignore
-except Exception as e:  # pragma: no cover - best-effort import
-    run_financial_query = None  # type: ignore
+    from pipeline_api import run_financial_query 
+except Exception as e:  
+    run_financial_query = None  
     print(f"[STARTUP] Warning: text-to-SQL pipeline not available: {e}")
 
 index_path = os.path.join(os.path.dirname(__file__), "faiss_index")
@@ -202,15 +202,11 @@ async def chat(message: ChatMessage):
                 sql_out = run_financial_query(message.message)
                 bot_response = sql_out.get("natural_answer") or ""
 
-                # Optionally append a small hint that this came from structured data
-                if bot_response:
-                    bot_response += "\n\n_(Answer computed from your financial database via text-to-SQL.)_"
-
                 used_sql = True
             except Exception as e:
                 print(f"[CHAT] text-to-SQL engine failed, falling back to RAG/LLM: {e}")
                 traceback.print_exc()
-                bot_response = None  # ensure we fall through
+                bot_response = None 
 
         # 2) If we didn't use SQL (or it failed), fall back to RAG/general llm
         if not used_sql or not bot_response:
