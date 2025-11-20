@@ -4,17 +4,19 @@ The system accepts free-form financial questions such as:
 ```
 What is the year-to-date return of my portfolio for 2024?
 ```
-and produces:
-A structured **Intermediate Representation (IR)**
-A deterministic **SQL query** generated from the IR
-The **execution result** from DuckDB
-A final **Plain Language answer**
-The project uses:
-Qwen 2.5-0.5B fine-tuned with LoRA adapters 
-A controlled JSON IR schema 
-A semantic IR to SQL compiler 
-A DuckDB financial warehouse 
-Optional ingestion of user portfolio data 
+and produces:  
+- A structured **Intermediate Representation (IR)** 
+- A deterministic **SQL query** generated from the IR** 
+- The **execution result** from DuckDB 
+- A final **Plain Language answer** 
+
+The project uses: 
+- Qwen 2.5-0.5B fine-tuned with LoRA adapters 
+- A controlled JSON IR schema 
+- A semantic IR to SQL compiler 
+- A DuckDB financial warehouse 
+- Optional ingestion of user portfolio data 
+
 ---
 ## System Architecture
 | Component | Description |
