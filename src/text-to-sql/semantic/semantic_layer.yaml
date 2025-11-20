@@ -1,0 +1,821 @@
+version: 1.0.0
+description: >
+  Semantic layer for a financial Text-to-SQL system over DuckDB, covering US
+  equities, prices, returns, dividends, splits, trading calendar and a user
+  portfolio table. This layer maps business concepts to concrete tables,
+  columns and metric definitions, and is meant to be used together with
+  ir_schema.json (IR 1.1.0).
+
+# ---------------------------------------------------------------------
+# GLOBAL CONFIG
+# ---------------------------------------------------------------------
+dialect: duckdb
+
+default_schema:
+  prices: core.prices_daily
+  prices_enriched: views.prices_enriched
+  prices_weekly: views.prices_weekly
+  prices_monthly: views.prices_monthly
+  daily_returns: views.daily_returns
+  daily_returns_open_days: views.daily_returns_open_days
+  adjusted_prices_splits: views.adjusted_prices_splits
+  dividend_yield_ttm: views.dividend_yield_ttm
+  dividends: core.dividends
+  splits: core.splits
+  trading_calendar: core.trading_calendar
+  tickers: core.tickers
+  ext_catalog: ext.catalog
+  ext_prices_daily: ext.prices_daily
+  ext_dividends: ext.dividends
+  ext_splits: ext.splits
+  ext_trading_calendar: ext.trading_calendar
+  portfolio: portfolio          # main.portfolio
+
+# ---------------------------------------------------------------------
+# SYNONYMS AND VOCABULARY
+# ---------------------------------------------------------------------
+synonyms:
+  # Assets / tickers
+  ticker:
+    - ticker
+    - symbol
+    - stock
+    - acción
+    - activo
+  portfolio:
+    - portfolio
+    - portafolio
+    - cartera
+    - posiciones
+  benchmark:
+    - benchmark
+    - índice
+    - index
+    - market index
+    - sp500
+    - s&p500
+    - s&p 500
+    - nasdaq
+
+  # Price-related
+  price:
+    - price
+    - closing price
+    - close
+    - precio
+    - precio de cierre
+  open_price:
+    - open
+    - opening price
+    - precio de apertura
+  high_price:
+    - high
+    - máximo
+    - high price
+  low_price:
+    - low
+    - mínimo
+    - low price
+  volume:
+    - volume
+    - volumen
+    - traded volume
+  vwap:
+    - vwap
+    - volume weighted average price
+    - precio promedio ponderado
+
+  # Returns, performance
+  return:
+    - return
+    - rendimiento
+    - performance
+    - retorno
+  daily_return:
+    - daily return
+    - retorno diario
+  ytd_return:
+    - year to date return
+    - ytd return
+    - retorno año a la fecha
+    - retorno YTD
+  mtd_return:
+    - month to date return
+    - mtd return
+    - retorno mes a la fecha
+  volatility:
+    - volatility
+    - vol
+    - volatilidad
+  drawdown:
+    - drawdown
+    - caída
+    - retroceso
+
+  # Dividends / splits
+  dividend:
+    - dividend
+    - dividendo
+    - dividendos
+  dividend_yield:
+    - dividend yield
+    - rendimiento por dividendo
+    - dividendo sobre precio
+  split:
+    - split
+    - stock split
+    - desdoblamiento
+    - split de acciones
+  corporate_action:
+    - corporate action
+    - acción corporativa
+    - evento corporativo
+
+  # Time / calendar
+  trading_day:
+    - trading day
+    - día de trading
+    - día hábil
+    - día de mercado abierto
+  last_trading_day:
+    - last trading day
+    - último día hábil
+    - último día de mercado
+  previous_day:
+    - previous day
+    - día anterior
+  next_trading_day:
+    - next trading day
+    - siguiente día hábil
+  today:
+    - today
+    - hoy
+  yesterday:
+    - yesterday
+    - ayer
+  this_year:
+    - this year
+    - este año
+  this_month:
+    - this month
+    - este mes
+
+# ---------------------------------------------------------------------
+# ENTITIES (BUSINESS OBJECTS → TABLES)
+# ---------------------------------------------------------------------
+entities:
+  prices_daily:
+    table: core.prices_daily
+    primary_key: [ticker, date]
+    description: "Daily OHLCV prices for US equities."
+    columns:
+      date:
+        type: date
+        role: trading_date
+        synonyms: [date, fecha, trading day]
+      ticker:
+        type: string
+        role: ticker
+        synonyms: [ticker, symbol, acción, stock]
+      open:
+        type: float
+        role: price_open
+        synonyms: [open, opening price, precio de apertura]
+      high:
+        type: float
+        role: price_high
+        synonyms: [high, máximo]
+      low:
+        type: float
+        role: price_low
+        synonyms: [low, mínimo]
+      close:
+        type: float
+        role: price_close
+        synonyms: [close, closing price, precio de cierre, last price]
+      volume:
+        type: float
+        role: volume
+        synonyms: [volume, volumen]
+      vwap:
+        type: float
+        role: vwap
+        synonyms: [vwap, volume weighted average price]
+      transactions:
+        type: integer
+        role: trades_count
+        synonyms: [transactions, number of trades]
+
+  prices_enriched:
+    table: views.prices_enriched
+    primary_key: [ticker, date]
+    description: "Daily prices joined with company metadata (sector, name, exchange)."
+    columns:
+      date: { type: date, role: trading_date }
+      ticker: { type: string, role: ticker }
+      open: { type: float, role: price_open }
+      high: { type: float, role: price_high }
+      low: { type: float, role: price_low }
+      close: { type: float, role: price_close }
+      volume: { type: float, role: volume }
+      vwap: { type: float, role: vwap }
+      transactions: { type: integer, role: trades_count }
+      name:
+        type: string
+        role: company_name
+        synonyms: [company, name, nombre compañía]
+      sector:
+        type: string
+        role: sector
+        synonyms: [sector]
+      exchange:
+        type: string
+        role: exchange
+        synonyms: [exchange, bolsa]
+
+  prices_weekly:
+    table: views.prices_weekly
+    primary_key: [ticker, week]
+    description: "Weekly aggregated OHLCV prices."
+    columns:
+      ticker: { type: string, role: ticker }
+      week:
+        type: date
+        role: period_start
+        synonyms: [week, semana]
+      open: { type: float, role: price_open }
+      high: { type: float, role: price_high }
+      low: { type: float, role: price_low }
+      close: { type: float, role: price_close }
+      volume: { type: float, role: volume }
+      vwap: { type: float, role: vwap }
+
+  prices_monthly:
+    table: views.prices_monthly
+    primary_key: [ticker, month]
+    description: "Monthly aggregated OHLCV prices."
+    columns:
+      ticker: { type: string, role: ticker }
+      month:
+        type: date
+        role: period_start
+        synonyms: [month, mes]
+      open: { type: float, role: price_open }
+      high: { type: float, role: price_high }
+      low: { type: float, role: price_low }
+      close: { type: float, role: price_close }
+      volume: { type: float, role: volume }
+      vwap: { type: float, role: vwap }
+
+  daily_returns:
+    table: views.daily_returns
+    primary_key: [ticker, date]
+    description: "Simple daily returns computed from prices."
+    columns:
+      date: { type: date, role: trading_date }
+      ticker: { type: string, role: ticker }
+      ret:
+        type: float
+        role: daily_return
+        synonyms: [return, daily return, rendimiento diario]
+
+  daily_returns_open_days:
+    table: views.daily_returns_open_days
+    primary_key: [ticker, date]
+    description: "Returns only on days where the market is open."
+    columns:
+      date: { type: date, role: trading_date }
+      ticker: { type: string, role: ticker }
+      ret: { type: float, role: daily_return }
+
+  adjusted_prices_splits:
+    table: views.adjusted_prices_splits
+    primary_key: [ticker, date]
+    description: "Prices adjusted for splits via cumulative adjustment factor."
+    columns:
+      ticker: { type: string, role: ticker }
+      date: { type: date, role: trading_date }
+      close: { type: float, role: price_close }
+      close_adj_splits:
+        type: float
+        role: price_close_adjusted_splits
+        synonyms: [adjusted close, precio ajustado por splits]
+      cum_adj_factor:
+        type: float
+        role: split_adjustment_factor
+
+  dividend_yield_ttm:
+    table: views.dividend_yield_ttm
+    primary_key: [ticker, date]
+    description: "Trailing twelve-month dividend cash and yield on each date."
+    columns:
+      date: { type: date, role: trading_date }
+      ticker: { type: string, role: ticker }
+      close: { type: float, role: price_close }
+      cash_ttm:
+        type: float
+        role: dividend_cash_ttm
+      dividend_yield_ttm:
+        type: float
+        role: dividend_yield_ttm
+
+  dividends:
+    table: core.dividends
+    primary_key: [ticker, event_date]
+    description: "Dividend events for each ticker."
+    columns:
+      ticker: { type: string, role: ticker }
+      event_date:
+        type: date
+        role: dividend_event_date
+      ex_dividend_date:
+        type: date
+        role: ex_dividend_date
+      pay_date:
+        type: date
+        role: dividend_payment_date
+      record_date:
+        type: date
+        role: dividend_record_date
+      cash_amount:
+        type: float
+        role: dividend_cash_amount
+
+  splits:
+    table: core.splits
+    primary_key: [ticker, event_date]
+    description: "Stock split events."
+    columns:
+      ticker: { type: string, role: ticker }
+      event_date: { type: date, role: split_event_date }
+      execution_date:
+        type: date
+        role: split_execution_date
+      split_from:
+        type: float
+        role: split_from
+      split_to:
+        type: float
+        role: split_to
+
+  corporate_actions:
+    table: views.corporate_actions
+    primary_key: [ticker, event_date, action_type]
+    description: "Unified view of dividends and splits as corporate actions."
+    columns:
+      action_type:
+        type: string
+        role: corporate_action_type
+        synonyms: [action, tipo de acción corporativa]
+      ticker: { type: string, role: ticker }
+      event_date: { type: date, role: corporate_action_date }
+      cash_amount: { type: float, role: dividend_cash_amount }
+      split_from: { type: float, role: split_from }
+      split_to: { type: float, role: split_to }
+
+  trading_calendar:
+    table: core.trading_calendar
+    primary_key: [exchange, date]
+    description: "Trading calendar indicating open/close status for each date."
+    columns:
+      exchange: { type: string, role: exchange }
+      date: { type: date, role: calendar_date }
+      is_open:
+        type: boolean
+        role: is_trading_day
+      market_open_utc: { type: timestamp, role: market_open_utc }
+      market_close_utc: { type: timestamp, role: market_close_utc }
+      market_open_ny: { type: timestamp, role: market_open_ny }
+      market_close_ny: { type: timestamp, role: market_close_ny }
+
+  tickers:
+    table: core.tickers
+    primary_key: [ticker]
+    description: "Core ticker reference with sector, industry and location."
+    columns:
+      ticker: { type: string, role: ticker }
+      name:
+        type: string
+        role: company_name
+      sector:
+        type: string
+        role: sector
+      exchange:
+        type: string
+        role: exchange
+      industry:
+        type: string
+        role: industry
+      city: { type: string, role: city }
+      state: { type: string, role: state }
+      country: { type: string, role: country }
+
+  ext_catalog:
+    table: ext.catalog
+    primary_key: [exchange, ticker]
+    description: "Extended catalog from external API (YFinance-like)."
+    columns:
+      exchange: { type: string, role: exchange }
+      ticker: { type: string, role: ticker }
+      shortname:
+        type: string
+        role: short_name
+      longname:
+        type: string
+        role: long_name
+      sector:
+        type: string
+        role: sector
+      industry:
+        type: string
+        role: industry
+      city: { type: string, role: city }
+      state: { type: string, role: state }
+      country: { type: string, role: country }
+
+  portfolio:
+    table: portfolio
+    primary_key: [ticker]
+    description: "User portfolio with current positions and cost basis."
+    columns:
+      ticker:
+        type: string
+        role: ticker
+      shares:
+        type: float
+        role: shares
+        synonyms: [cantidad, quantity, position size]
+      avg_cost:
+        type: float
+        role: avg_cost
+        synonyms: [average cost, costo promedio, base price]
+
+# ---------------------------------------------------------------------
+# RELATIONS (LOGICAL / DEFAULT JOINS)
+# ---------------------------------------------------------------------
+relations:
+  - name: prices_to_tickers
+    left_entity: prices_enriched
+    right_entity: tickers
+    on:
+      - prices_enriched.ticker = tickers.ticker
+
+  - name: prices_to_dividends
+    left_entity: prices_daily
+    right_entity: dividends
+    on:
+      - prices_daily.ticker = dividends.ticker
+      - prices_daily.date = dividends.event_date
+
+  - name: prices_to_splits
+    left_entity: prices_daily
+    right_entity: splits
+    on:
+      - prices_daily.ticker = splits.ticker
+      - prices_daily.date = splits.event_date
+
+  - name: prices_to_calendar
+    left_entity: prices_daily
+    right_entity: trading_calendar
+    on:
+      - prices_daily.date = trading_calendar.date
+
+  - name: portfolio_to_prices
+    left_entity: portfolio
+    right_entity: prices_daily
+    on:
+      - portfolio.ticker = prices_daily.ticker
+
+  - name: catalog_to_tickers
+    left_entity: ext_catalog
+    right_entity: tickers
+    on:
+      - ext_catalog.ticker = tickers.ticker
+
+# ---------------------------------------------------------------------
+# CALENDAR RULES
+# ---------------------------------------------------------------------
+calendar_rules:
+  last_trading_day_before:
+    description: >
+      Returns the last trading date before or equal to the given date
+      where is_open = TRUE.
+    sql_template: |
+      SELECT MAX(date)
+      FROM core.trading_calendar
+      WHERE is_open = TRUE
+        AND date <= {date}
+
+  next_trading_day_after:
+    description: >
+      Returns the next trading date strictly after the given date
+      where is_open = TRUE.
+    sql_template: |
+      SELECT MIN(date)
+      FROM core.trading_calendar
+      WHERE is_open = TRUE
+        AND date > {date}
+
+  only_open_days_filter:
+    description: "Filter prices to only days where the market is open."
+    sql_template: |
+      INNER JOIN core.trading_calendar cal
+        ON cal.date = {prices_alias}.date
+       AND cal.is_open = TRUE
+
+# ---------------------------------------------------------------------
+# METRICS DEFINITIONS (MAP IR.metric.name → SQL SHAPES)
+# ---------------------------------------------------------------------
+metrics:
+  close:
+    metric_type: price
+    default_entity: prices_daily
+    expression: "{prices_alias}.close"
+    default_output_name: close
+
+  open:
+    metric_type: price
+    default_entity: prices_daily
+    expression: "{prices_alias}.open"
+    default_output_name: open
+
+  high:
+    metric_type: price
+    default_entity: prices_daily
+    expression: "{prices_alias}.high"
+    default_output_name: high
+
+  low:
+    metric_type: price
+    default_entity: prices_daily
+    expression: "{prices_alias}.low"
+    default_output_name: low
+
+  volume:
+    metric_type: price
+    default_entity: prices_daily
+    expression: "{prices_alias}.volume"
+    default_output_name: volume
+
+  vwap:
+    metric_type: price
+    default_entity: prices_daily
+    expression: "{prices_alias}.vwap"
+    default_output_name: vwap
+
+  daily_return:
+    metric_type: return
+    default_entity: daily_returns
+    expression: "{returns_alias}.ret"
+    default_output_name: daily_return
+
+  ytd_return:
+    metric_type: return
+    default_entity: prices_daily
+    sql_template: |
+      WITH prices AS (
+        SELECT
+          ticker,
+          date,
+          close,
+          FIRST_VALUE(close) OVER (
+            PARTITION BY ticker
+            ORDER BY date
+            ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+          ) AS first_close_ytd
+        FROM core.prices_daily
+        WHERE ticker IN ({tickers})
+          AND EXTRACT(year FROM date) = {year}
+      )
+      SELECT
+        ticker,
+        MAX(date) AS as_of_date,
+        MAX(close / first_close_ytd - 1) AS ytd_return
+      FROM prices
+      GROUP BY ticker
+    default_output_name: ytd_return
+
+  mtd_return:
+    metric_type: return
+    default_entity: prices_daily
+    sql_template: |
+      WITH prices AS (
+        SELECT
+          ticker,
+          date,
+          close,
+          FIRST_VALUE(close) OVER (
+            PARTITION BY ticker
+            ORDER BY date
+            ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+          ) AS first_close_mtd
+        FROM core.prices_daily
+        WHERE ticker IN ({tickers})
+          AND EXTRACT(year FROM date) = {year}
+          AND EXTRACT(month FROM date) = {month}
+      )
+      SELECT
+        ticker,
+        MAX(date) AS as_of_date,
+        MAX(close / first_close_mtd - 1) AS mtd_return
+      FROM prices
+      GROUP BY ticker
+    default_output_name: mtd_return
+
+  period_return:
+    metric_type: return
+    default_entity: prices_daily
+    sql_template: |
+      WITH prices AS (
+        SELECT
+          ticker,
+          date,
+          close,
+          FIRST_VALUE(close) OVER (
+            PARTITION BY ticker
+            ORDER BY date
+            ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+          ) AS first_close_period
+        FROM core.prices_daily
+        WHERE ticker IN ({tickers})
+          AND date BETWEEN {start_date} AND {end_date}
+      )
+      SELECT
+        ticker,
+        MAX(date) AS as_of_date,
+        MAX(close / first_close_period - 1) AS period_return
+      FROM prices
+      GROUP BY ticker
+    default_output_name: period_return
+
+  dividend_yield_ttm:
+    metric_type: corporate_action
+    default_entity: dividend_yield_ttm
+    expression: "{div_yield_alias}.dividend_yield_ttm"
+    default_output_name: dividend_yield_ttm
+
+  dividend_amount:
+    metric_type: corporate_action
+    default_entity: dividends
+    expression: "{dividends_alias}.cash_amount"
+    default_output_name: dividend_cash_amount
+
+  total_return_price_plus_dividends:
+    metric_type: composite
+    default_entity: prices_daily
+    sql_template: |
+      WITH p AS (
+        SELECT date, ticker, close
+        FROM core.prices_daily
+        WHERE ticker IN ({tickers})
+          AND date BETWEEN {start_date} AND {end_date}
+      ),
+      d AS (
+        SELECT event_date AS date, ticker, cash_amount
+        FROM core.dividends
+        WHERE ticker IN ({tickers})
+          AND event_date BETWEEN {start_date} AND {end_date}
+      ),
+      joined AS (
+        SELECT
+          p.date,
+          p.ticker,
+          p.close,
+          COALESCE(d.cash_amount, 0) AS dividend_cash
+        FROM p
+        LEFT JOIN d
+          ON p.ticker = d.ticker
+         AND p.date = d.date
+      )
+      SELECT
+        ticker,
+        MAX(date) AS as_of_date,
+        (MAX(close) + SUM(dividend_cash)) / MIN(close) - 1 AS total_return
+      FROM joined
+      GROUP BY ticker
+    default_output_name: total_return
+
+  rolling_volatility:
+    metric_type: risk
+    default_entity: daily_returns
+    sql_template: |
+      WITH r AS (
+        SELECT
+          ticker,
+          date,
+          ret,
+          STDDEV_POP(ret) OVER (
+            PARTITION BY ticker
+            ORDER BY date
+            ROWS BETWEEN {window_size} PRECEDING AND CURRENT ROW
+          ) AS rolling_vol
+        FROM views.daily_returns
+        WHERE ticker IN ({tickers})
+          AND date BETWEEN {start_date} AND {end_date}
+      )
+      SELECT
+        ticker,
+        date,
+        rolling_vol
+      FROM r
+    default_output_name: rolling_volatility
+
+  rolling_return:
+    metric_type: return
+    default_entity: daily_returns
+    sql_template: |
+      WITH r AS (
+        SELECT
+          ticker,
+          date,
+          EXP(SUM(LN(1 + ret)) OVER (
+            PARTITION BY ticker
+            ORDER BY date
+            ROWS BETWEEN {window_size} PRECEDING AND CURRENT ROW
+          )) - 1 AS rolling_ret
+        FROM views.daily_returns
+        WHERE ticker IN ({tickers})
+          AND date BETWEEN {start_date} AND {end_date}
+      )
+      SELECT
+        ticker,
+        date,
+        rolling_ret
+      FROM r
+    default_output_name: rolling_return
+
+  portfolio_value:
+    metric_type: portfolio
+    default_entity: portfolio
+    sql_template: |
+      WITH latest_price AS (
+        SELECT
+          p.ticker,
+          FIRST(p.close) BY (p.date DESC) AS last_close
+        FROM core.prices_daily p
+        WHERE p.ticker IN (SELECT ticker FROM portfolio)
+        GROUP BY p.ticker
+      )
+      SELECT
+        port.ticker,
+        port.shares,
+        port.avg_cost,
+        lp.last_close,
+        port.shares * lp.last_close AS market_value,
+        port.shares * (lp.last_close - port.avg_cost) AS unrealized_pnl
+      FROM portfolio port
+      JOIN latest_price lp
+        ON port.ticker = lp.ticker
+    default_output_name: portfolio_value
+
+# ---------------------------------------------------------------------
+# INTENT → DEFAULT ENTITY / METRIC HINTS
+# ---------------------------------------------------------------------
+intent_defaults:
+  get_price:
+    default_metric: close
+    default_entity: prices_daily
+
+  get_ohlcv:
+    default_entity: prices_daily
+    fields: [open, high, low, close, volume]
+
+  get_last_price:
+    default_metric: close
+    default_entity: prices_daily
+
+  get_return:
+    default_metric: daily_return
+    default_entity: daily_returns
+
+  get_ytd_return:
+    default_metric: ytd_return
+    default_entity: prices_daily
+
+  get_mtd_return:
+    default_metric: mtd_return
+    default_entity: prices_daily
+
+  get_dividends:
+    default_metric: dividend_amount
+    default_entity: dividends
+
+  get_splits:
+    default_metric: null
+    default_entity: splits
+
+  get_corporate_actions:
+    default_metric: null
+    default_entity: corporate_actions
+
+  evaluate_portfolio:
+    default_metric: portfolio_value
+    default_entity: portfolio
+
+  portfolio_performance:
+    default_metric: portfolio_value
+    default_entity: portfolio
+
+  rolling_stat:
+    default_metric: rolling_volatility
+    default_entity: daily_returns
