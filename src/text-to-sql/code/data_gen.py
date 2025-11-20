@@ -5,7 +5,6 @@ import random
 import json
 from tqdm import tqdm
 
-# --- config (use *_DATA names) ---
 DB_DATA = "./src/db/financial.duckdb"
 OUT_DIR_DATA = "./src/text-to-sql/data"
 META_DATA = "./src/text-to-sql/data/dataset_metadata.json"

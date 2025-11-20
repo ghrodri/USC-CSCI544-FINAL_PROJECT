@@ -9,9 +9,12 @@ python-dotenv==1.0.1
 pandas-market-calendars==5.1.0
 torch>=2.2
 transformers>=4.43.0
-datasets>=2.20.0
+datasets>=2.18.0,<3.0.0
 accelerate>=0.33.0
-sentencepiece>=0.2.1
+peft>=0.8.1
+sentencepiece==0.1.99
+protobuf==3.20.3
+
 
 PyPDF2==3.0.1
 pdf2image==1.17.0
@@ -32,3 +35,8 @@ python-multipart==0.0.20
 pyjwt>=2.9.0
 passlib[bcrypt]>=1.7.4
 email-validator==2.3.0
+ollama>=0.1.0
+dateparser>=1.1.8
+sqlparse==0.4.4
+matplotlib==3.8.2
+PyYAML==6.0.1

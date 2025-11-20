@@ -1,0 +1,59 @@
+{
+  "total_examples": 250000,
+  "splits": {
+    "train": 200000,
+    "val": 37500,
+    "test": 12500
+  },
+  "schema": {
+    "core.prices_daily": {
+      "columns": [
+        "ticker",
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ]
+    },
+    "core.dividends": {
+      "columns": [
+        "ticker",
+        "ex_date",
+        "amount"
+      ]
+    },
+    "core.splits": {
+      "columns": [
+        "ticker",
+        "date",
+        "ratio"
+      ]
+    },
+    "core.catalog": {
+      "columns": [
+        "ticker",
+        "name",
+        "sector",
+        "industry"
+      ]
+    },
+    "portfolio": {
+      "columns": [
+        "ticker",
+        "shares",
+        "avg_cost"
+      ],
+      "description": "Dynamic user portfolio table, synthetic during training, populated at runtime in production."
+    }
+  },
+  "generation": {
+    "train_llm_fraction": 0.3,
+    "train_synthetic_fraction": 0.7,
+    "random_seed": 42,
+    "num_train_shards": 20,
+    "train_shard_size": 10000,
+    "ollama_model": "llama3.1:8b"
+  }
+}

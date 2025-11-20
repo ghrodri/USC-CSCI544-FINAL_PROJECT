@@ -1,0 +1,96 @@
+
+{
+  "core.prices_daily": {
+    "table_description": "Daily OHLCV price data for each traded stock over the past two years.",
+    "columns": {
+      "ticker": "Stock ticker symbol, e.g., AAPL, MSFT, META.",
+      "date": "Trading date in YYYY-MM-DD format.",
+      "open": "Opening price for the trading day.",
+      "high": "Highest price reached during the day.",
+      "low": "Lowest price reached during the day.",
+      "close": "Closing price for the day.",
+      "volume": "Total number of shares traded."
+    },
+    "relations": [
+      "JOIN on ticker and date with core.dividends (ticker, date)",
+      "JOIN on ticker and date with core.splits (ticker, date)",
+      "JOIN on ticker with core.catalog (ticker)",
+      "JOIN on date with trading_calendar (date)"
+    ]
+  },
+  "core.dividends": {
+    "table_description": "Historical dividend payouts declared by companies.",
+    "columns": {
+      "ticker": "Stock ticker symbol.",
+      "date": "Dividend ex-date or payment date in YYYY-MM-DD format.",
+      "dividend": "Cash amount distributed per share."
+    },
+    "relations": [
+      "JOIN on ticker and date with core.prices_daily (ticker, date)",
+      "JOIN on ticker with core.catalog (ticker)",
+      "JOIN on date with trading_calendar (date)"
+    ]
+  },
+  "core.splits": {
+    "table_description": "Historical stock split events for each ticker.",
+    "columns": {
+      "ticker": "Stock ticker symbol.",
+      "date": "Split effective date in YYYY-MM-DD format.",
+      "split_ratio": "Split ratio, e.g., 2.0 for a 2-for-1 split."
+    },
+    "relations": [
+      "JOIN on ticker and date with core.prices_daily (ticker, date)",
+      "JOIN on ticker with core.catalog (ticker)",
+      "JOIN on date with trading_calendar (date)"
+    ]
+  },
+  "core.catalog": {
+    "table_description": "Reference information for each stock, including name, sector, and industry.",
+    "columns": {
+      "ticker": "Stock ticker symbol.",
+      "name": "Full company name.",
+      "sector": "Sector classification.",
+      "industry": "Industry classification."
+    },
+    "relations": [
+      "JOIN on ticker with core.prices_daily (ticker)",
+      "JOIN on ticker with core.dividends (ticker)",
+      "JOIN on ticker with core.splits (ticker)",
+      "JOIN on ticker with portfolio (ticker)"
+    ]
+  },
+  "trading_calendar": {
+    "table_description": "Daily trading calendar including open/close times and whether the exchange was open.",
+    "columns": {
+      "exchange": "Exchange identifier, e.g., nasdaq, nyse.",
+      "date": "Calendar date.",
+      "is_open": "Boolean flag indicating if the exchange was open on this date.",
+      "market_open_utc": "Opening datetime in UTC timezone.",
+      "market_close_utc": "Closing datetime in UTC timezone.",
+      "market_open_ny": "Opening datetime in New York timezone.",
+      "market_close_ny": "Closing datetime in New York timezone."
+    },
+    "relations": [
+      "JOIN on date with core.prices_daily (date)",
+      "JOIN on date with core.dividends (date)",
+      "JOIN on date with core.splits (date)"
+    ]
+  },
+  "portfolio": {
+    "table_description": "User-specific portfolio holdings uploaded at query time.",
+    "columns": {
+      "ticker": "Ticker contained in the user's portfolio.",
+      "shares": "Number of shares held.",
+      "avg_cost": "Average cost per share."
+    },
+    "notes": [
+      "This table is dynamic and created per user session.",
+      "Training uses a synthetic portfolio."
+    ],
+    "relations": [
+      "JOIN on ticker with core.prices_daily (ticker)",
+      "JOIN on ticker with core.catalog (ticker)",
+      "JOIN on ticker with core.dividends (ticker)"
+    ]
+  }
+}

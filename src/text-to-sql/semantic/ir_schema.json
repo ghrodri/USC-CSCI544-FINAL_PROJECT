@@ -1,0 +1,440 @@
+{
+  "ir_schema_version": "1.1.0",
+  "description": "Extended financial text-to-SQL program sketch IR covering trading, market data, portfolio, calendar logic, corporate actions, factor-style analytics and advanced time-series metrics.",
+  "structure": {
+    "intent": {
+      "type": "string",
+      "description": "Main task the user wants to accomplish.",
+      "allowed_values": [
+        "get_price",
+        "get_ohlcv",
+        "get_last_price",
+        "get_return",
+        "get_ytd_return",
+        "get_mtd_return",
+        "get_period_return",
+        "get_dividends",
+        "get_splits",
+        "get_corporate_actions",
+        "compare_assets",
+        "compute_metric",
+        "evaluate_portfolio",
+        "portfolio_performance",
+        "portfolio_positions",
+        "risk_metric",
+        "rolling_stat",
+        "time_series_slice",
+        "describe_asset",
+        "describe_portfolio",
+        "calendar_logic",
+        "benchmark_comparison",
+        "correlation_matrix",
+        "pairs_analysis",
+        "rank_assets",
+        "screen_universe"
+      ]
+    },
+
+    "entities": {
+      "type": "object",
+      "description": "Assets, benchmarks, portfolio and universes involved in the query.",
+      "properties": {
+        "assets": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of tickers or asset identifiers (e.g. ['AAPL', 'MSFT'])."
+        },
+        "benchmark": {
+          "type": "string",
+          "description": "Benchmark ticker such as SPY, QQQ, SP500."
+        },
+        "portfolio": {
+          "type": "string",
+          "description": "Reference to a portfolio table (usually 'portfolio' or 'user_portfolio')."
+        },
+        "universe": {
+          "type": "string",
+          "description": "Logical universe or index definition (e.g. 'SP500', 'NASDAQ100')."
+        },
+        "asset_class": {
+          "type": "string",
+          "description": "Optional high-level asset class.",
+          "allowed_values": [
+            "equity",
+            "etf",
+            "index",
+            "all"
+          ]
+        },
+        "sector_filter": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Limit query to specific sectors (e.g. ['Technology', 'Healthcare'])."
+        },
+        "industry_filter": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Limit query to specific industries."
+        }
+      }
+    },
+
+    "metric": {
+      "type": "object",
+      "description": "Metric or calculation requested by the user.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "allowed_values": [
+            "close",
+            "open",
+            "high",
+            "low",
+            "volume",
+            "vwap",
+
+            "daily_return",
+            "weekly_return",
+            "monthly_return",
+            "cumulative_return",
+            "ytd_return",
+            "mtd_return",
+            "period_return",
+
+            "rolling_return",
+            "rolling_volatility",
+            "rolling_std",
+            "rolling_mean",
+            "moving_average",
+            "ema",
+            "zscore",
+
+            "drawdown",
+            "max_drawdown",
+
+            "volatility_annualized",
+            "variance",
+            "beta",
+            "beta_to_benchmark",
+            "alpha",
+            "tracking_error",
+            "information_ratio",
+            "sharpe_ratio",
+            "sortino_ratio",
+
+            "correlation",
+            "covariance",
+            "correlation_matrix",
+
+            "dividend_yield",
+            "ttm_dividend_yield",
+            "dividend_amount",
+            "total_return_price_plus_dividends",
+
+            "price_change",
+            "percent_change",
+            "spread",
+
+            "portfolio_value",
+            "portfolio_pnl",
+            "portfolio_return",
+            "portfolio_volatility",
+            "contribution_to_return",
+            "contribution_to_risk"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "description": "Category of metric.",
+          "allowed_values": [
+            "price",
+            "return",
+            "risk",
+            "corporate_action",
+            "portfolio",
+            "correlation",
+            "descriptive",
+            "composite"
+          ]
+        },
+        "arguments": {
+          "type": "object",
+          "description": "Parameters needed for the metric, such as window length, year, thresholds, comparison entities.",
+          "properties": {
+            "year": { "type": "integer" },
+            "month": { "type": "integer" },
+            "start_date": { "type": "string" },
+            "end_date": { "type": "string" },
+            "window": { "type": "integer", "description": "Window length for rolling metrics." },
+            "window_unit": {
+              "type": "string",
+              "allowed_values": ["days", "weeks", "months", "trading_days"]
+            },
+            "confidence_level": {
+              "type": "number",
+              "description": "For risk metrics or quantiles (e.g. 0.95)."
+            },
+            "compare_to": {
+              "type": "string",
+              "description": "Ticker or benchmark to compare against."
+            },
+            "top_k": {
+              "type": "integer",
+              "description": "For ranking or screening (e.g. top 10)."
+            },
+            "bottom_k": {
+              "type": "integer",
+              "description": "For ranking or screening (e.g. bottom 10)."
+            },
+            "threshold": {
+              "type": "number",
+              "description": "Numeric threshold for filters inside metric."
+            }
+          },
+          "example": {
+            "year": 2024,
+            "window": 30,
+            "window_unit": "trading_days",
+            "compare_to": "SPY"
+          }
+        }
+      }
+    },
+
+    "time": {
+      "type": "object",
+      "description": "Time range, granularity and calendar-specific options.",
+      "properties": {
+        "granularity": {
+          "type": "string",
+          "allowed_values": ["daily", "weekly", "monthly", "none"]
+        },
+        "range": {
+          "type": "object",
+          "description": "Logical time range for the query.",
+          "properties": {
+            "type": {
+              "type": "string",
+              "allowed_values": [
+                "all",
+                "year",
+                "month",
+                "between_dates",
+                "trailing",
+                "last_n_days",
+                "ytd",
+                "mtd",
+                "since_inception"
+              ]
+            },
+            "value": {
+              "description": "Generic value used for single-parameter ranges (e.g. year=2024, last_n_days=30)."
+            },
+            "start": {
+              "type": "string",
+              "description": "Start date for between_dates (YYYY-MM-DD)."
+            },
+            "end": {
+              "type": "string",
+              "description": "End date for between_dates (YYYY-MM-DD)."
+            }
+          }
+        },
+        "window": {
+          "type": "object",
+          "description": "Window specification for rolling metrics.",
+          "properties": {
+            "size": { "type": "integer" },
+            "unit": {
+              "type": "string",
+              "allowed_values": ["days", "weeks", "months", "trading_days"]
+            },
+            "alignment": {
+              "type": "string",
+              "allowed_values": ["calendar", "trading_days"]
+            }
+          }
+        },
+        "calendar_constraints": {
+          "type": "object",
+          "description": "Constraints involving the trading calendar.",
+          "properties": {
+            "only_open_days": { "type": "boolean" },
+            "exclude_holidays": { "type": "boolean" },
+            "last_trading_day_before": {
+              "type": "string",
+              "description": "Resolve to last trading day before this date."
+            },
+            "next_trading_day_after": {
+              "type": "string",
+              "description": "Resolve to next trading day after this date."
+            }
+          }
+        }
+      }
+    },
+
+    "filters": {
+      "type": "array",
+      "description": "Additional optional filters applied to the dataset.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field": { "type": "string" },
+          "op": {
+            "type": "string",
+            "description": "Comparison operator.",
+            "allowed_values": [
+              "=",
+              "!=",
+              ">",
+              "<",
+              ">=",
+              "<=",
+              "IN",
+              "NOT IN",
+              "LIKE",
+              "ILIKE",
+              "BETWEEN"
+            ]
+          },
+          "value": {
+            "description": "Literal value or list, depending on op."
+          }
+        },
+        "example": {
+          "field": "sector",
+          "op": "=",
+          "value": "Technology"
+        }
+      }
+    },
+
+    "joins": {
+      "type": "array",
+      "description": "Explicit join instructions (if not inferred from schema).",
+      "items": {
+        "type": "object",
+        "properties": {
+          "left": { "type": "string", "description": "Left table alias or logical entity." },
+          "right": { "type": "string", "description": "Right table alias or logical entity." },
+          "on": { "type": "string", "description": "Join condition or key (e.g. 'ticker', 'ticker AND date')." },
+          "type": {
+            "type": "string",
+            "allowed_values": ["inner", "left", "right", "full"],
+            "description": "Join type; default is inner."
+          }
+        }
+      }
+    },
+
+    "group_by": {
+      "type": "array",
+      "description": "Fields to group by in the final SQL.",
+      "items": { "type": "string" },
+      "example": ["ticker", "sector", "date"]
+    },
+
+    "having": {
+      "type": "array",
+      "description": "Conditions applied after aggregation.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field": { "type": "string" },
+          "op": {
+            "type": "string",
+            "allowed_values": [
+              "=",
+              "!=",
+              ">",
+              "<",
+              ">=",
+              "<="
+            ]
+          },
+          "value": {}
+        }
+      }
+    },
+
+    "output": {
+      "type": "object",
+      "description": "How the result should be presented.",
+      "properties": {
+        "format": {
+          "type": "string",
+          "allowed_values": ["table", "time_series", "single_value", "ranking"]
+        },
+        "fields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Columns to include in the SELECT clause."
+        },
+        "sort": {
+          "type": "object",
+          "properties": {
+            "field": { "type": "string" },
+            "order": {
+              "type": "string",
+              "allowed_values": ["asc", "desc"]
+            }
+          }
+        },
+        "limit": {
+          "type": "integer",
+          "description": "Maximum number of rows to return."
+        },
+        "ranking": {
+          "type": "object",
+          "description": "Ranking configuration for rank_assets / screen_universe.",
+          "properties": {
+            "by": { "type": "string", "description": "Field or metric used for ranking." },
+            "direction": {
+              "type": "string",
+              "allowed_values": ["asc", "desc"]
+            },
+            "top_k": { "type": "integer" },
+            "bottom_k": { "type": "integer" }
+          }
+        }
+      }
+    },
+
+    "options": {
+      "type": "object",
+      "description": "Execution flags and adjustments.",
+      "properties": {
+        "adjust_for_splits": {
+          "type": "boolean",
+          "description": "Use split-adjusted prices."
+        },
+        "adjust_for_dividends": {
+          "type": "boolean",
+          "description": "Use total-return (price plus dividends) if supported."
+        },
+        "include_benchmark": {
+          "type": "boolean",
+          "description": "Include benchmark series in the result."
+        },
+        "percent_format": {
+          "type": "boolean",
+          "description": "Return values in percent instead of decimal."
+        },
+        "normalize_by_market_cap": {
+          "type": "boolean",
+          "description": "Normalize values by market cap when available."
+        },
+        "include_cash_flows": {
+          "type": "boolean",
+          "description": "Include dividend/cash flows in portfolio metrics where applicable."
+        },
+        "debug": {
+          "type": "boolean",
+          "description": "If true, the system may return both SQL and intermediate steps for inspection."
+        }
+      }
+    }
+  }
+}
+
