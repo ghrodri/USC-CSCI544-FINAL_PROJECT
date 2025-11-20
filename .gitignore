@@ -6,7 +6,7 @@
 *.bin
 *.h5
 *.ckpt
-*.safetensors
+#*.safetensors
 
 # Specific large files
 src/sentiment-analysis/bert-models/best_model.pt
