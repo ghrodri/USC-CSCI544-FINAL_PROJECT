@@ -1,0 +1,20 @@
+Training Accuracy: 0.9686
+Validation Accuracy: 0.9167
+Testing Accuracy: 0.9505
+
+Classification Report:
+              precision    recall  f1-score   support
+
+    Negative       0.94      0.88      0.91        56
+     Neutral       0.95      0.98      0.96       272
+    Positive       0.96      0.91      0.94       116
+
+    accuracy                           0.95       444
+   macro avg       0.95      0.92      0.94       444
+weighted avg       0.95      0.95      0.95       444
+
+
+Confusion Matrix:
+[[ 49   6   1]
+ [  2 267   3]
+ [  1   9 106]]
