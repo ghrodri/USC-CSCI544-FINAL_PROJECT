@@ -4,7 +4,7 @@ import torch.nn as nn
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
-from sklearn.metrics import precision_recall_fscore_support, accuracy_score, classification_report, confusion_matrix
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from transformers import RobertaTokenizer, RobertaModel, get_linear_schedule_with_warmup
 from torch.utils.data import TensorDataset, DataLoader
 from torch.optim import AdamW
@@ -19,7 +19,7 @@ class RoBERTaSentimentClassifier(nn.Module):
 
     def forward(self, input_ids, attention_mask):
         x = self.roberta(input_ids, attention_mask)
-        x = cls_emb = x.last_hidden_state[:, 0]
+        cls_emb = x.last_hidden_state[:, 0]
         x = self.dropout(cls_emb)
 
         return self.fc(x)
@@ -37,13 +37,17 @@ def tokenize_text(text, tokenizer, max_length):
     return text
 
 
-def evaluate_model(model, data_loader, criterion):
+def evaluate_model(model, data_loader, criterion, device):
     model.eval()
     total_correct = 0
     losses = []
     
     with torch.no_grad():
         for input_ids, attention_mask, labels in data_loader:
+            input_ids = input_ids.to(device)
+            attention_mask = attention_mask.to(device)
+            labels = labels.to(device)
+
             outputs = model(input_ids, attention_mask)
             loss = criterion(outputs, labels)
             preds = torch.argmax(outputs, dim=1)
@@ -59,7 +63,7 @@ def evaluate_model(model, data_loader, criterion):
 
 def main():
     # ---- Import data ----
-    data_directory = '../data/sentiment_splits'
+    data_directory = '/src/data/sentiment_splits'
     output_directory = './roberta_results'
     os.makedirs(output_directory, exist_ok=True)
 
@@ -68,7 +72,7 @@ def main():
     test_df = pd.read_csv(os.path.join(data_directory, 'test.csv'))
 
     # ---- Tokenize input text ----
-    MAX_LENGTH = 64
+    MAX_LENGTH = 128
     tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
 
     train_text = tokenize_text(train_df['text'], tokenizer, MAX_LENGTH)
@@ -93,6 +97,9 @@ def main():
     # ---- Initialize RoBERTa and learning parameters ----
     model = RoBERTaSentimentClassifier(num_classes=3)
 
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    model.to(device)
+
     EPOCHS = 3
     LEARNING_RATE = 2e-5
 
@@ -105,55 +112,51 @@ def main():
         num_training_steps=total_steps
     )
 
-
     # ---- Training loop ----
     criterion = nn.CrossEntropyLoss()
     best_val_acc = 0.0
 
     for epoch in range(EPOCHS):
-        print(f'Epoch: {epoch + 1}')
+        print(f'\n====== Epoch: {epoch + 1} ======')
 
         model.train()
         total_correct = 0
         losses = []
 
-        for epoch in range(EPOCHS):
-            print(f'Epoch: {epoch + 1}')
+        for batch_idx, (input_ids, attention_mask, labels) in enumerate(train_loader):
+            input_ids = input_ids.to(device)
+            attention_mask = attention_mask.to(device)
+            labels = labels.to(device)
 
-            model.train()
-            total_correct = 0
-            losses = []
+            optimizer.zero_grad()
+            output = model(input_ids, attention_mask)
+            loss = criterion(output, labels)
+            
+            losses.append(loss.item())
+            preds = torch.argmax(output, dim=1)
+            total_correct += (preds == labels).sum().item()
 
-            for batch_idx, (input_ids, attention_mask, labels) in enumerate(train_loader):
-                optimizer.zero_grad()
-                output = model(input_ids, attention_mask)
-                loss = criterion(output, labels)
-                
-                losses.append(loss.item())
-                preds = torch.argmax(output, dim=1)
-                total_correct += (preds == labels).sum().item()
+            loss.backward()
+            nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+            optimizer.step()
+            scheduler.step()
+            
+            if batch_idx % 50 == 0 or batch_idx == len(train_loader):
+                print(f"  [Batch {batch_idx}/{len(train_loader)}] Loss: {loss.item():.4f}")
 
-                loss.backward()
-                nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-                optimizer.step()
-                scheduler.step()
-                
-                if batch_idx % 50 == 0 or batch_idx == len(train_loader):
-                    print(f"  [Batch {batch_idx}/{len(train_loader)}] Loss: {loss.item():.4f}")
+        train_acc = float(total_correct) / len(train_loader.dataset)
 
-            train_acc = float(total_correct) / len(train_loader.dataset)
+        # Save bast model
+        val_acc, val_loss = evaluate_model(model, val_loader, criterion, device)
 
-            # Save bast model
-            val_acc, val_loss = evaluate_model(model, val_loader, criterion)
-
-            if val_acc > best_val_acc:
-                best_val_acc = val_acc
-                torch.save(model.state_dict(), os.path.join(output_directory, 'best_roberta.pt'))
+        if val_acc > best_val_acc:
+            best_val_acc = val_acc
+            torch.save(model.state_dict(), os.path.join(output_directory, 'best_roberta.pt'))
 
 
     # ---- Evaluate model ----
     model.load_state_dict(torch.load(os.path.join(output_directory, 'best_roberta.pt')))
-    test_acc, test_loss = evaluate_model(model, test_loader, criterion)
+    test_acc, test_loss = evaluate_model(model, test_loader, criterion, device)
 
     print(f'Training Accuracy: {train_acc}')
     print(f'Validation Accuracy: {val_acc}')
@@ -164,11 +167,14 @@ def main():
 
     with torch.no_grad():
         for input_ids, attention_mask, labels in test_loader:
+            input_ids = input_ids.to(device)
+            attention_mask = attention_mask.to(device)
+            labels = labels.to(device)
+
             outputs = model(input_ids, attention_mask)
             preds = torch.argmax(outputs, dim=1).cpu().numpy()
             test_preds.extend(preds)
             test_true.extend(labels.numpy())
-
 
     results_path = os.path.join(output_directory, 'roberta_results.txt')
     report = classification_report(test_true, test_preds, target_names=['Negative', 'Neutral', 'Positive'])
@@ -185,7 +191,5 @@ def main():
         f.write(np.array2string(cm))
         
 
-
 if __name__ == "__main__":
     main()
-
