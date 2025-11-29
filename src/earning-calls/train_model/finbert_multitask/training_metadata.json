@@ -1,0 +1,26 @@
+{
+  "epochs": 10,
+  "learning_rate": 2e-05,
+  "batch_size": 16,
+  "max_length": 128,
+  "best_val_joint_acc": 0.9504504504504504,
+  "test_metrics": {
+    "uncertainty_acc": 0.9684684684684685,
+    "forward_acc": 0.9684684684684685,
+    "joint_acc": 0.9436936936936937,
+    "loss": 0.1061399696544478
+  },
+  "label2id": {
+    "none": 0,
+    "low": 1,
+    "medium": 2,
+    "high": 3
+  },
+  "id2label": {
+    "0": "none",
+    "1": "low",
+    "2": "medium",
+    "3": "high"
+  },
+  "model_name": "ProsusAI/finbert"
+}
