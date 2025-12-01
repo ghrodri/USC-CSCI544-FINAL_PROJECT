@@ -18,10 +18,24 @@ if TEXT_TO_SQL_CODE_DIR not in sys.path:
     sys.path.append(TEXT_TO_SQL_CODE_DIR)
 
 try:
-    from pipeline_api import run_financial_query 
+    from pipeline_api import run_financial_query
 except Exception as e:  
-    run_financial_query = None  
+    run_financial_query = None
     print(f"[STARTUP] Warning: text-to-SQL pipeline not available: {e}")
+
+EARNINGS_CODE_DIR = os.path.join(os.path.dirname(__file__), "..", "earning-calls", "code")
+if EARNINGS_CODE_DIR not in sys.path:
+    sys.path.append(EARNINGS_CODE_DIR)
+
+try:
+    # run_pipeline: main earnings-call analysis (summary + sentiment + recommendation)
+    # load_and_clean: extract & clean transcript text from a PDF
+    from pipeline import run_pipeline as run_earnings_pipeline  
+    from clean_transcript import load_and_clean as load_earnings_pdf  
+except Exception as e:  
+    run_earnings_pipeline = None  
+    load_earnings_pdf = None
+    print(f"[STARTUP] Warning: earnings-call pipeline not available: {e}")
 
 index_path = os.path.join(os.path.dirname(__file__), "faiss_index")
 
@@ -61,6 +75,18 @@ FINANCE_KEYWORDS = {
     "yield",
 }
 
+EARNINGS_KEYWORDS = {
+    "earnings call",
+    "earnings transcript",
+    "earnings summary",
+    "call summary",
+    "tone of the call",
+    "management tone",
+    "guidance",
+    "forward-looking",
+    "forward looking",
+}
+
 
 def is_financial_query(text: str) -> bool:
     """
@@ -77,6 +103,23 @@ def is_financial_query(text: str) -> bool:
     # Rough ticker pattern: 1–5 uppercase letters (e.g., AAPL, NTRS)
     has_ticker_pattern = bool(re.search(r"\b[A-Z]{1,5}\b", text))
     if has_ticker_pattern and any(kw in t for kw in {"return", "price", "portfolio", "yield", "dividend"}):
+        return True
+
+    return False
+
+
+def is_earnings_query(text: str) -> bool:
+    """
+    Heuristic router: decide if a message is about an earnings call
+    (sentiment / uncertainty / guidance) rather than generic finance.
+    """
+    t = text.lower()
+
+    if any(kw in t for kw in EARNINGS_KEYWORDS):
+        return True
+
+    # Also treat explicit mentions of "earnings" with a company name as earnings queries
+    if "earnings" in t and ("call" in t or "transcript" in t or "results" in t):
         return True
 
     return False
@@ -187,29 +230,58 @@ async def chat(message: ChatMessage):
 
         bot_response: Optional[str] = None
 
-        # 1) Try text-to-SQL when it looks like a financial data question
-        used_sql = False
-        print(
-            "[CHAT DEBUG] run_financial_query is None?:",
-            run_financial_query is None,
-            "| is_financial_query?:",
-            is_financial_query(message.message),
-        )
-
-        if run_financial_query is not None and is_financial_query(message.message):
+        # 1) Earnings-call analysis (sentiment + uncertainty + forward-looking) when appropriate
+        used_earnings = False
+        if run_earnings_pipeline is not None and load_earnings_pdf is not None and is_earnings_query(message.message):
             try:
-                print("[CHAT] Routing to text-to-SQL engine (Qwen)...")
-                sql_out = run_financial_query(message.message)
-                bot_response = sql_out.get("natural_answer") or ""
+                print("[CHAT] Routing to earnings-call analysis pipeline...")
 
-                used_sql = True
+                # For now, use the latest Apple earnings call PDF.
+                earnings_pdf = os.path.join(
+                    os.path.dirname(__file__),
+                    "..",
+                    "earning-calls",
+                    "AppleQ4-2025.pdf",
+                )
+
+                full_text, _, _ = load_earnings_pdf(earnings_pdf)
+                out = run_earnings_pipeline(full_text)
+
+                parts = [
+                    out.get("summary", "").strip(),
+                    out.get("analysis", "").strip(),
+                    out.get("recommendation", "").strip(),
+                ]
+                bot_response = "\n\n".join(p for p in parts if p)
+                used_earnings = True
             except Exception as e:
-                print(f"[CHAT] text-to-SQL engine failed, falling back to RAG/LLM: {e}")
+                print(f"[CHAT] earnings-call pipeline failed, falling back to other engines: {e}")
                 traceback.print_exc()
-                bot_response = None 
+                bot_response = None
 
-        # 2) If we didn't use SQL (or it failed), fall back to RAG/general llm
-        if not used_sql or not bot_response:
+        # 2) Text-to-SQL when it looks like a financial data question (and not already handled by earnings flow)
+        used_sql = False
+        if not used_earnings:
+            print(
+                "[CHAT DEBUG] run_financial_query is None?:",
+                run_financial_query is None,
+                "| is_financial_query?:",
+                is_financial_query(message.message),
+            )
+
+            if run_financial_query is not None and is_financial_query(message.message):
+                try:
+                    print("[CHAT] Routing to text-to-SQL engine (Qwen)...")
+                    sql_out = run_financial_query(message.message)
+                    bot_response = sql_out.get("natural_answer") or ""
+                    used_sql = True
+                except Exception as e:
+                    print(f"[CHAT] text-to-SQL engine failed, falling back to RAG/LLM: {e}")
+                    traceback.print_exc()
+                    bot_response = None
+
+        # 3) If we didn't use SQL or earnings (or they failed), fall back to RAG/general llm
+        if (not used_sql and not used_earnings) or not bot_response:
             if vectorstore is None:
                 print("[CHAT] No vectorstore available, using general LLM")
                 bot_response = generate_general_response(message.message, history_msgs)
